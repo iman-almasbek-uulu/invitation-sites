@@ -1,9 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+const base = import.meta.env.BASE_URL;
 ---
 <BaseLayout title="Бриф на сайт-приглашение">
   <main class="brief-page">
-    <a class="back-link" href="/">← Назад в каталог</a>
+    <a class="back-link" href={base}>← Назад в каталог</a>
     <section class="section compact">
       <p class="eyebrow">Заказ</p>
       <h1>Бриф на сайт-приглашение</h1>

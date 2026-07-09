@@ -1,5 +1,6 @@
 # Generated previews and screenshots
 *.png
+*.webm
 
 # Dependencies/build artifacts
 node_modules/

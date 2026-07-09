@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import templates from '../../data/templates.json';
+
+export function getStaticPaths() {
+  return templates.map((template) => ({ params: { slug: template.slug }, props: { template } }));
+}
+
+const { template } = Astro.props;
+const palette: Record<string, string[]> = {
+  luxury: ['#f7efe2', '#b68b45', '#2a2118'],
+  minimal: ['#f4f1ec', '#7c8a78', '#232621'],
+  elegant: ['#eef4ef', '#7fa081', '#1d2b22'],
+  party: ['#fff0d8', '#f28d35', '#321c13'],
+  soft: ['#eef6ff', '#8bb6d8', '#203040'],
+};
+const colors = palette[template.style] ?? palette.luxury;
+---
+<BaseLayout title={`${template.name} — демо приглашения`} description={template.description}>
+  <main class="invite-demo" style={`--paper:${colors[0]};--accent:${colors[1]};--ink:${colors[2]}`}>
+    <a class="back-link" href="/">← Назад в каталог</a>
+    <section class="invite-card">
+      <p class="eyebrow">{template.label}</p>
+      <h1>{template.name}</h1>
+      <p class="invite-lead">{template.description}</p>
+      <div class="names">Амина & Ислам</div>
+      <p class="date">24 августа 2026 · 18:00</p>
+      <div class="invite-details">
+        <article>
+          <span>📍</span>
+          <h2>Локация</h2>
+          <p>Ресторан “Алтын Сарай”, Бишкек</p>
+        </article>
+        <article>
+          <span>🗓️</span>
+          <h2>Программа</h2>
+          <p>Встреча гостей, церемония, ужин, фото и поздравления.</p>
+        </article>
+        <article>
+          <span>💌</span>
+          <h2>RSVP</h2>
+          <p>Подтвердите участие до 10 августа.</p>
+        </article>
+      </div>
+      <div class="hero-actions center">
+        <a class="button" href="/brief/">Заказать такой сайт</a>
+        <a class="button secondary" href="/">Другие шаблоны</a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

@@ -1,0 +1,112 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import catalogs from '../data/catalogs.json';
+import templates from '../data/templates.json';
+
+const readyCount = templates.length;
+const statusText: Record<string, string> = { ready: 'Есть шаблоны', soon: 'Скоро добавим' };
+---
+<BaseLayout title="Каталог цифровых приглашений" description="Каталог цифровых приглашений: свадьба, никах, кыз узатуу, день рождения, baby shower и другие события.">
+  <header class="hero">
+    <nav class="topbar" aria-label="Главная навигация">
+      <a class="brand" href="/">Invitation Sites</a>
+      <div class="nav-links">
+        <a href="#catalogs">Каталоги</a>
+        <a href="#templates">Шаблоны</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </nav>
+
+    <section class="hero-grid">
+      <div class="hero-content">
+        <p class="eyebrow">Digital Invitations</p>
+        <h1>Красивые сайты-приглашения для ваших событий</h1>
+        <p class="lead">Свадьба, никах, кыз узатуу, день рождения, baby shower и семейные мероприятия — выбирайте каталог, смотрите демо и заказывайте персональную версию.</p>
+        <div class="hero-actions">
+          <a class="button" href="#catalogs">Смотреть каталоги</a>
+          <a class="button secondary" href="#templates">Готовые демо</a>
+        </div>
+      </div>
+      <div class="hero-card" aria-label="Статистика каталога">
+        <span class="sparkle">✦</span>
+        <strong>{readyCount}</strong>
+        <p>готовых демо уже в каталоге</p>
+        <small>и ещё больше дизайнов можно добавить через данные, без копирования HTML</small>
+      </div>
+    </section>
+  </header>
+
+  <main>
+    <section id="catalogs" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">Каталоги</p>
+        <h2>Разделы для будущих шаблонов</h2>
+        <p>Каждый раздел — отдельный мини-каталог. Новые дизайны добавляются через JSON-данные.</p>
+      </div>
+      <div class="catalog-grid">
+        {catalogs.map((catalog) => {
+          const count = templates.filter((template) => template.category === catalog.id).length;
+          return (
+            <article class="catalog-card" style={`--accent:${catalog.accent}`}>
+              <div class="catalog-icon" aria-hidden="true">{catalog.icon}</div>
+              <span class:list={["status", { ready: catalog.status === 'ready' }]}>{statusText[catalog.status]}</span>
+              <h3>{catalog.title}</h3>
+              <p>{catalog.description}</p>
+              <p><strong>{count}</strong> шаблон(ов) сейчас</p>
+              <div class="actions">
+                <a href={`/#templates-${catalog.id}`}>Открыть</a>
+                <a class="ghost" href="/brief/">Заказать</a>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+
+    <section id="templates" class="section muted">
+      <div class="section-heading">
+        <p class="eyebrow">Все шаблоны</p>
+        <h2>Текущие готовые демо</h2>
+        <p>Первая база шаблонов. Дальше добавим превью-картинки, цены и отдельные страницы категорий.</p>
+      </div>
+      <div class="template-grid">
+        {templates.map((template) => (
+          <article class="template-card" id={`templates-${template.category}`}>
+            <p class="category">{template.label}</p>
+            <h3>{template.name}</h3>
+            <p>{template.description}</p>
+            <div class="actions">
+              <a href={`/templates/${template.slug}/`}>Посмотреть</a>
+              <a class="secondary" href="/brief/">Заказать</a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section id="faq" class="section faq-section">
+      <div class="section-heading">
+        <p class="eyebrow">FAQ</p>
+        <h2>Почему теперь Astro</h2>
+      </div>
+      <div class="faq-grid">
+        <article class="faq-card">
+          <h3>Чем лучше?</h3>
+          <p>Шаблоны, карточки и каталоги теперь можно собирать из компонентов и данных, а не копировать много HTML-файлов.</p>
+        </article>
+        <article class="faq-card">
+          <h3>Быстро ли работает?</h3>
+          <p>Да. Astro отлично подходит для быстрых статических сайтов-приглашений.</p>
+        </article>
+        <article class="faq-card">
+          <h3>Можно ли развивать?</h3>
+          <p>Да. Потом можно добавить формы заказа, CRM, оплату и админку.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© Invitation Sites — цифровые приглашения для ваших событий.</p>
+  </footer>
+</BaseLayout>

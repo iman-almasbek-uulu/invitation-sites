@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "wedding-luxury-01",
+    "name": "Wedding Luxury 01",
+    "category": "wedding",
+    "label": "Свадьба",
+    "description": "Премиальный бело-золотой свадебный шаблон.",
+    "style": "luxury"
+  },
+  {
+    "slug": "wedding-minimal-01",
+    "name": "Wedding Minimal 01",
+    "category": "wedding",
+    "label": "Свадьба",
+    "description": "Чистый минималистичный шаблон для современной свадьбы.",
+    "style": "minimal"
+  },
+  {
+    "slug": "nikah-elegant-01",
+    "name": "Nikah Elegant 01",
+    "category": "nikah",
+    "label": "Никах",
+    "description": "Спокойный и элегантный шаблон для никаха.",
+    "style": "elegant"
+  },
+  {
+    "slug": "birthday-party-01",
+    "name": "Birthday Party 01",
+    "category": "birthday",
+    "label": "День рождения",
+    "description": "Праздничный шаблон для дня рождения.",
+    "style": "party"
+  },
+  {
+    "slug": "baby-shower-01",
+    "name": "Baby Shower 01",
+    "category": "baby-shower",
+    "label": "Baby Shower",
+    "description": "Нежный шаблон для baby shower.",
+    "style": "soft"
+  }
+]

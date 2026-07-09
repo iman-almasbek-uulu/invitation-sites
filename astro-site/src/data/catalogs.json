@@ -1,0 +1,50 @@
+[
+  {
+    "id": "wedding",
+    "title": "Свадебные приглашения",
+    "description": "Luxury, minimal и photo-story сайты для свадьбы: дата, программа, карта, RSVP и dress-code.",
+    "icon": "💍",
+    "status": "ready",
+    "accent": "#c9a35f"
+  },
+  {
+    "id": "nikah",
+    "title": "Никах",
+    "description": "Элегантные и спокойные шаблоны для никаха с уважительным текстом, адресом и анкетой гостей.",
+    "icon": "🕌",
+    "status": "ready",
+    "accent": "#8fb39b"
+  },
+  {
+    "id": "kyz-uzatuu",
+    "title": "Кыз Узатуу",
+    "description": "Отдельный культурный каталог: тёплый стиль, программа, семья/родители, карта и RSVP.",
+    "icon": "🌺",
+    "status": "soon",
+    "accent": "#b85f66"
+  },
+  {
+    "id": "birthday",
+    "title": "День рождения",
+    "description": "Яркие приглашения для дня рождения, детских праздников и вечеринок.",
+    "icon": "🎂",
+    "status": "ready",
+    "accent": "#e0a24d"
+  },
+  {
+    "id": "baby-shower",
+    "title": "Baby Shower",
+    "description": "Нежные сайты для baby shower: дата, место, пожелания, дресс-код и RSVP.",
+    "icon": "🧸",
+    "status": "ready",
+    "accent": "#9bbad8"
+  },
+  {
+    "id": "jubilee",
+    "title": "Юбилей / Тушоо той",
+    "description": "Будущий каталог для юбилеев, тушоо той и семейных мероприятий.",
+    "icon": "✨",
+    "status": "soon",
+    "accent": "#9b7cc1"
+  }
+]

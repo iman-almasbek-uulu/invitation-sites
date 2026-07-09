@@ -8,7 +8,7 @@ export function getStaticPaths() {
 
 const { template } = Astro.props;
 const palette: Record<string, string[]> = {
-  luxury: ['#fbf4ea', '#b68b45', '#2a2118'],
+  luxury: ['#fffaf4', '#5b3428', '#2d1a13'],
   minimal: ['#f4f1ec', '#7c8a78', '#232621'],
   elegant: ['#eef4ef', '#7fa081', '#1d2b22'],
   party: ['#fff0d8', '#f28d35', '#321c13'],
@@ -19,25 +19,24 @@ const isLuxuryWedding = template.slug === 'wedding-luxury-01';
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 
 const event = {
-  couple: 'Амина & Ислам',
   bride: 'Амина',
   groom: 'Ислам',
+  couple: 'Амина & Ислам',
   date: '24 августа 2026',
   day: '24',
   month: 'Август',
   year: '2026',
   weekday: 'Понедельник',
   time: '18:00',
-  venue: 'Алтын Сарай',
+  venue: 'Ресторан “Алтын Сарай”',
   address: 'Бишкек · ул. Токтогула 125',
-  deadline: 'до 10 августа',
 };
 
 const program = [
-  ['17:30', 'Welcome', 'Сбор гостей, welcome drinks и первые фотографии'],
-  ['18:00', 'Ceremony', 'Красивое открытие вечера и поздравления'],
-  ['19:00', 'Dinner', 'Праздничный ужин, тосты и семейные моменты'],
-  ['20:30', 'Party', 'Музыка, танцы и незабываемая атмосфера'],
+  ['17:30', 'Сбор гостей'],
+  ['18:00', 'Начало торжества'],
+  ['19:00', 'Праздничный ужин'],
+  ['20:30', 'Танцы и поздравления'],
 ];
 ---
 <BaseLayout title={`${template.name} — демо приглашения`} description={template.description}>
@@ -46,172 +45,110 @@ const program = [
 
     {isLuxuryWedding ? (
       <>
-        <div class="lux-noise" aria-hidden="true"></div>
-        <div class="romance-effects" aria-hidden="true">
-          <span class="bokeh bokeh-one"></span>
-          <span class="bokeh bokeh-two"></span>
-          <span class="bokeh bokeh-three"></span>
-          <span class="petal petal-1">✦</span>
-          <span class="petal petal-2">❦</span>
-          <span class="petal petal-3">✧</span>
-          <span class="petal petal-4">❦</span>
-          <span class="petal petal-5">✦</span>
-          <span class="petal petal-6">✧</span>
-          <span class="petal petal-7">❦</span>
-          <span class="petal petal-8">✦</span>
-        </div>
-
-        <section class="lux-cover" id="top">
-          <button class="music-pill" type="button" aria-label="Включить музыку">
-            <span class="music-icon">♪</span>
-            <span>Включить музыку</span>
+        <section class="toi-page" id="top">
+          <button class="toi-music" type="button" aria-label="Включить музыку">
+            <span>♪</span> Музыка
           </button>
-          <div class="cover-photo" aria-hidden="true">
-            <span class="photo-bloom bloom-a"></span>
-            <span class="photo-bloom bloom-b"></span>
-            <span class="photo-arch"></span>
-            <span class="photo-couple">A · I</span>
-          </div>
-          <div class="cover-copy">
-            <p class="luxury-kicker">Wedding invitation</p>
-            <p class="save-date">Save the date</p>
-            <h1>{event.couple}</h1>
-            <div class="cover-date">
-              <span>{event.weekday}</span>
-              <strong>{event.day}</strong>
-              <span>{event.month} · {event.year}</span>
+
+          <section class="toi-cover">
+            <div class="toi-names-side">
+              <span>{event.bride}</span>
+              <span>{event.groom}</span>
             </div>
-            <p class="hero-note">Приглашаем вас разделить с нами вечер любви, семьи и красивых воспоминаний.</p>
-            <a class="scroll-cue" href="#invite">Открыть приглашение ↓</a>
-          </div>
-        </section>
+            <div class="toi-frame top" aria-hidden="true"><i></i><b>♡</b><i></i></div>
+            <div class="toi-envelope" aria-hidden="true">
+              <div class="toi-seal">БАСЫҢЫЗ</div>
+            </div>
+            <div class="toi-cover-title">
+              <p>Үйлөнүү үлпөт тойго чакыруу</p>
+              <h1>{event.bride}<br /><em>&</em><br />{event.groom}</h1>
+            </div>
+            <a class="toi-heart-date" href="#invite"><strong>{event.day}</strong></a>
+            <div class="toi-line" aria-hidden="true"></div>
+          </section>
 
-        <section class="invite-section statement-section reveal-card" id="invite">
-          <p class="script-label">Дорогие гости</p>
-          <h2>Мы хотим видеть вас рядом в самый важный день</h2>
-          <p>
-            Этот вечер мы собираем для самых близких людей. Ваше присутствие, улыбки и тёплые слова
-            сделают нашу свадьбу по-настоящему особенной.
-          </p>
-        </section>
+          <section class="toi-invite-card" id="invite">
+            <div class="toi-frame" aria-hidden="true"><i></i><b>♡</b><i></i></div>
+            <p class="toi-script">Урматтуу коноктор</p>
+            <h2>Сиздерди кубанычыбызга күбө болууга чакырабыз</h2>
+            <p>
+              Бул күн биз үчүн өзгөчө. Жакындарыбыздын батасы, жылуу сөзү жана катышуусу
+              майрамыбызды дагы да маңыздуу кылат.
+            </p>
+          </section>
 
-        <section class="invite-section names-section reveal-card">
-          <div class="name-card left">
-            <span>Невеста</span>
-            <h2>{event.bride}</h2>
-          </div>
-          <div class="name-divider">&</div>
-          <div class="name-card right">
-            <span>Жених</span>
-            <h2>{event.groom}</h2>
-          </div>
-        </section>
-
-        <section class="invite-section calendar-section reveal-card">
-          <div class="section-title-small">Дата торжества</div>
-          <div class="premium-date-card">
-            <span>{event.month}</span>
-            <strong>{event.day}</strong>
-            <em>{event.year}</em>
-            <p>{event.weekday} · {event.time}</p>
-          </div>
-          <div class="calendar-card" aria-label={`${event.date}`}>
-            <div class="calendar-grid">
+          <section class="toi-date-section">
+            <p class="toi-script">Save the date</p>
+            <div class="toi-month">{event.month}</div>
+            <div class="toi-calendar">
               <span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span>
               <em></em><em></em><em></em><em></em><em></em><b>1</b><b>2</b>
               <b>3</b><b>4</b><b>5</b><b>6</b><b>7</b><b>8</b><b>9</b>
               <b>10</b><b>11</b><b>12</b><b>13</b><b>14</b><b>15</b><b>16</b>
               <b>17</b><b>18</b><b>19</b><b>20</b><b>21</b><b>22</b><b>23</b>
-              <strong>24</strong><b>25</b><b>26</b><b>27</b><b>28</b><b>29</b><b>30</b>
+              <strong>{event.day}</strong><b>25</b><b>26</b><b>27</b><b>28</b><b>29</b><b>30</b>
               <b>31</b>
             </div>
-          </div>
-        </section>
+            <p class="toi-time">{event.weekday} · {event.time}</p>
+          </section>
 
-        <section class="invite-section timeline-section reveal-card">
-          <div class="section-title-small">Программа вечера</div>
-          <h2>Как пройдёт праздник</h2>
-          <div class="timeline-list premium-timeline">
-            {program.map(([time, title, text]) => (
+          <section class="toi-venue">
+            <p>Ресторан</p>
+            <h2>{event.venue}</h2>
+            <span>{event.address}</span>
+            <a href="https://2gis.kg/bishkek" target="_blank" rel="noreferrer">Картага өтүү</a>
+          </section>
+
+          <section class="toi-timeline">
+            <p class="toi-script">Программа</p>
+            {program.map(([time, title]) => (
               <article>
                 <time>{time}</time>
-                <div><h3>{title}</h3><p>{text}</p></div>
+                <span>{title}</span>
               </article>
             ))}
-          </div>
-        </section>
+          </section>
 
-        <section class="invite-section venue-section reveal-card">
-          <div class="venue-card premium-venue">
-            <p class="script-label">Локация</p>
-            <h2>{event.venue}</h2>
-            <p>{event.address}</p>
-            <div class="map-preview" aria-hidden="true">
-              <span></span><i></i><b></b>
+          <section class="toi-countdown" data-countdown="2026-08-24T18:00:00+06:00">
+            <p class="toi-script">Тойго чейин калды</p>
+            <div>
+              <article><strong data-days>00</strong><span>Күн</span></article>
+              <article><strong data-hours>00</strong><span>Саат</span></article>
+              <article><strong data-minutes>00</strong><span>Мүнөт</span></article>
+              <article><strong data-seconds>00</strong><span>Секунд</span></article>
             </div>
-            <div class="map-buttons">
-              <a href="https://2gis.kg/bishkek" target="_blank" rel="noreferrer">Открыть в 2GIS</a>
-              <a href="https://maps.google.com" target="_blank" rel="noreferrer">Google Maps</a>
+          </section>
+
+          <section class="toi-rsvp">
+            <div class="toi-frame" aria-hidden="true"><i></i><b>♡</b><i></i></div>
+            <h2>Тойго катыша аласызбы?</h2>
+            <form>
+              <label><input type="radio" name="rsvp" /> Ооба, барам</label>
+              <label><input type="radio" name="rsvp" /> Тилекке каршы, бара албайм</label>
+              <input type="text" placeholder="Сиздин атыңыз?" />
+              <button type="button">Жиберүү</button>
+            </form>
+          </section>
+
+          <section class="toi-final">
+            <p>Сүйүү жана урмат менен</p>
+            <h2>{event.couple}</h2>
+            <div class="hero-actions center">
+              <a class="button" href={`${base}brief/`}>Заказать такой сайт</a>
+              <a class="button secondary" href={base}>Другие шаблоны</a>
             </div>
-          </div>
-        </section>
-
-        <section class="invite-section dress-section reveal-card">
-          <div class="section-title-small">Dress code</div>
-          <h2>Палитра вечера</h2>
-          <p>Будем рады, если вы поддержите мягкие оттенки champagne, ivory, mocha и gold.</p>
-          <div class="dress-palette" aria-label="Палитра дресс-кода">
-            <span style="--swatch:#fff7ea"></span>
-            <span style="--swatch:#ead8bf"></span>
-            <span style="--swatch:#c9a56a"></span>
-            <span style="--swatch:#806448"></span>
-            <span style="--swatch:#24170f"></span>
-          </div>
-        </section>
-
-        <section class="invite-section countdown-section reveal-card">
-          <p class="script-label">До свадьбы осталось</p>
-          <div class="countdown" data-countdown="2026-08-24T18:00:00+06:00">
-            <div><strong data-days>00</strong><span>дней</span></div>
-            <div><strong data-hours>00</strong><span>часов</span></div>
-            <div><strong data-minutes>00</strong><span>минут</span></div>
-            <div><strong data-seconds>00</strong><span>секунд</span></div>
-          </div>
-        </section>
-
-        <section class="invite-section rsvp-section reveal-card">
-          <p class="script-label">RSVP</p>
-          <h2>Подтвердите присутствие {event.deadline}</h2>
-          <form class="rsvp-form">
-            <label>Ваше имя<input type="text" placeholder="Например: Айжан" /></label>
-            <label>Сможете прийти?<select><option>Да, с радостью приду</option><option>Отвечу позже</option><option>К сожалению, не смогу</option></select></label>
-            <label>Количество гостей<select><option>1 гость</option><option>2 гостя</option><option>3 гостя</option><option>4 гостя</option></select></label>
-            <button type="button">Отправить ответ</button>
-          </form>
-          <a class="whatsapp-cta" href="https://wa.me/?text=Здравствуйте,%20я%20подтверждаю%20участие%20на%20свадьбе" target="_blank" rel="noreferrer">Ответить через WhatsApp</a>
-        </section>
-
-        <section class="invite-section final-section reveal-card">
-          <p>С любовью и уважением,</p>
-          <h2>{event.couple}</h2>
-          <div class="hero-actions center">
-            <a class="button" href={`${base}brief/`}>Заказать такой сайт</a>
-            <a class="button secondary" href={base}>Другие шаблоны</a>
-          </div>
+          </section>
         </section>
 
         <script>
           const countdown = document.querySelector('[data-countdown]');
-          const musicButton = document.querySelector('.music-pill');
+          const musicButton = document.querySelector('.toi-music');
           let musicOn = false;
-
           musicButton?.addEventListener('click', () => {
             musicOn = !musicOn;
             musicButton.classList.toggle('is-playing', musicOn);
-            const musicLabel = musicButton.querySelector('span:last-child');
-            if (musicLabel) musicLabel.textContent = musicOn ? 'Музыка включена' : 'Включить музыку';
+            musicButton.innerHTML = musicOn ? '<span>♪</span> Музыка включена' : '<span>♪</span> Музыка';
           });
-
           function updateCountdown() {
             if (!countdown) return;
             const rawTarget = countdown.getAttribute('data-countdown');
@@ -222,24 +159,17 @@ const program = [
             const hours = Math.floor((diff % 86400000) / 3600000);
             const minutes = Math.floor((diff % 3600000) / 60000);
             const seconds = Math.floor((diff % 60000) / 1000);
-            countdown.querySelector('[data-days]')!.textContent = String(days).padStart(2, '0');
-            countdown.querySelector('[data-hours]')!.textContent = String(hours).padStart(2, '0');
-            countdown.querySelector('[data-minutes]')!.textContent = String(minutes).padStart(2, '0');
-            countdown.querySelector('[data-seconds]')!.textContent = String(seconds).padStart(2, '0');
+            const setText = (selector: string, value: number) => {
+              const node = countdown.querySelector(selector);
+              if (node) node.textContent = String(value).padStart(2, '0');
+            };
+            setText('[data-days]', days);
+            setText('[data-hours]', hours);
+            setText('[data-minutes]', minutes);
+            setText('[data-seconds]', seconds);
           }
           updateCountdown();
           setInterval(updateCountdown, 1000);
-
-          const cards = document.querySelectorAll('.reveal-card');
-          const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target);
-              }
-            });
-          }, { threshold: 0.16 });
-          cards.forEach((card) => observer.observe(card));
         </script>
       </>
     ) : (

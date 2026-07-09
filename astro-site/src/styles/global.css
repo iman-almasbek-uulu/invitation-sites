@@ -86,8 +86,61 @@ h3 { font-size: 1.35rem; }
   pointer-events: none;
   z-index: 0;
 }
-.luxury-invite::before { top: -180px; left: -140px; }
-.luxury-invite::after { right: -170px; bottom: -150px; }
+.luxury-invite::before { top: -180px; left: -140px; animation: slowSpin 28s linear infinite; }
+.luxury-invite::after { right: -170px; bottom: -150px; animation: slowSpin 34s linear reverse infinite; }
+.romance-effects {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+.bokeh,
+.petal,
+.floating-flower {
+  position: absolute;
+  display: block;
+  will-change: transform, opacity;
+}
+.bokeh {
+  width: 160px;
+  height: 160px;
+  border-radius: 999px;
+  filter: blur(3px);
+  background: radial-gradient(circle, rgba(255,255,255,.86), rgba(216,190,138,.16) 48%, transparent 72%);
+  mix-blend-mode: screen;
+  animation: breatheGlow 7s ease-in-out infinite;
+}
+.bokeh-one { top: 8%; left: -42px; }
+.bokeh-two { top: 39%; right: -58px; animation-delay: -2.5s; }
+.bokeh-three { bottom: 10%; left: 18%; width: 110px; height: 110px; animation-delay: -4s; }
+.floating-flower {
+  color: rgba(182,139,69,.42);
+  font-size: 3.1rem;
+  text-shadow: 0 12px 28px rgba(99,62,21,.12);
+  animation: flowerFloat 8s ease-in-out infinite;
+}
+.flower-one { top: 15%; left: max(10px, calc(50% - 235px)); }
+.flower-two { top: 47%; right: max(8px, calc(50% - 236px)); font-size: 2.4rem; animation-delay: -3s; }
+.flower-three { bottom: 10%; left: max(20px, calc(50% - 190px)); font-size: 2rem; animation-delay: -5s; }
+.petal {
+  top: -10vh;
+  color: rgba(182,139,69,.44);
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  text-shadow: 0 8px 16px rgba(90,54,18,.12);
+  animation-name: petalFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.petal-1 { left: 9%; animation-duration: 12s; animation-delay: -1s; }
+.petal-2 { left: 22%; animation-duration: 15s; animation-delay: -8s; }
+.petal-3 { left: 36%; animation-duration: 13s; animation-delay: -4s; }
+.petal-4 { left: 49%; animation-duration: 17s; animation-delay: -11s; }
+.petal-5 { left: 63%; animation-duration: 14s; animation-delay: -6s; }
+.petal-6 { left: 74%; animation-duration: 18s; animation-delay: -13s; }
+.petal-7 { left: 84%; animation-duration: 16s; animation-delay: -3s; }
+.petal-8 { left: 94%; animation-duration: 19s; animation-delay: -9s; }
 .luxury-invite .back-link {
   position: relative;
   z-index: 2;
@@ -453,4 +506,275 @@ h3 { font-size: 1.35rem; }
   .countdown div { min-height: 82px; border-radius: 18px; }
   .countdown strong { font-size: 1.55rem; }
   .timeline-list article { grid-template-columns: 64px 1fr; padding: 15px; }
+}
+
+
+/* WOW motion layer: romantic flowers, petals, glow and reveal animations */
+.luxury-hero {
+  background:
+    linear-gradient(rgba(255,250,242,.70), rgba(255,250,242,.84)),
+    radial-gradient(circle at 50% 20%, rgba(255,255,255,.94), transparent 30%),
+    radial-gradient(circle at 18% 20%, rgba(255,213,222,.36), transparent 26%),
+    radial-gradient(circle at 86% 70%, rgba(216,190,138,.42), transparent 28%),
+    linear-gradient(145deg, #ead0b0, #fff8ed 46%, #d5ad69);
+  animation: heroBreath 8s ease-in-out infinite;
+}
+.luxury-invite::before { animation: slowSpin 28s linear infinite; }
+.luxury-invite::after { animation: slowSpin 34s linear reverse infinite; }
+.romance-effects {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+.bokeh,
+.petal,
+.floating-flower {
+  position: absolute;
+  display: block;
+  will-change: transform, opacity;
+}
+.bokeh {
+  width: 160px;
+  height: 160px;
+  border-radius: 999px;
+  filter: blur(3px);
+  background: radial-gradient(circle, rgba(255,255,255,.86), rgba(216,190,138,.16) 48%, transparent 72%);
+  mix-blend-mode: screen;
+  animation: breatheGlow 7s ease-in-out infinite;
+}
+.bokeh-one { top: 8%; left: -42px; }
+.bokeh-two { top: 39%; right: -58px; animation-delay: -2.5s; }
+.bokeh-three { bottom: 10%; left: 18%; width: 110px; height: 110px; animation-delay: -4s; }
+.floating-flower {
+  color: rgba(182,139,69,.42);
+  font-size: 3.1rem;
+  text-shadow: 0 12px 28px rgba(99,62,21,.12);
+  animation: flowerFloat 8s ease-in-out infinite;
+}
+.flower-one { top: 15%; left: max(10px, calc(50% - 235px)); }
+.flower-two { top: 47%; right: max(8px, calc(50% - 236px)); font-size: 2.4rem; animation-delay: -3s; }
+.flower-three { bottom: 10%; left: max(20px, calc(50% - 190px)); font-size: 2rem; animation-delay: -5s; }
+.petal {
+  top: -10vh;
+  color: rgba(182,139,69,.44);
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  text-shadow: 0 8px 16px rgba(90,54,18,.12);
+  animation-name: petalFall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.petal-1 { left: 9%; animation-duration: 12s; animation-delay: -1s; }
+.petal-2 { left: 22%; animation-duration: 15s; animation-delay: -8s; }
+.petal-3 { left: 36%; animation-duration: 13s; animation-delay: -4s; }
+.petal-4 { left: 49%; animation-duration: 17s; animation-delay: -11s; }
+.petal-5 { left: 63%; animation-duration: 14s; animation-delay: -6s; }
+.petal-6 { left: 74%; animation-duration: 18s; animation-delay: -13s; }
+.petal-7 { left: 84%; animation-duration: 16s; animation-delay: -3s; }
+.petal-8 { left: 94%; animation-duration: 19s; animation-delay: -9s; }
+.music-pill { animation: pillFloat 3.6s ease-in-out infinite; }
+.music-pill.is-playing { box-shadow: 0 0 0 8px rgba(182,139,69,.12), 0 18px 30px rgba(42,33,24,.22); }
+.music-pill.is-playing .music-icon { animation: musicPulse 1s ease-in-out infinite; }
+.hero-glow {
+  position: absolute;
+  inset: 8% 8% auto;
+  height: 360px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255,255,255,.92), rgba(255,215,224,.34) 38%, transparent 66%);
+  filter: blur(6px);
+  opacity: .8;
+  animation: breatheGlow 5.8s ease-in-out infinite;
+}
+.floral-frame {
+  position: absolute;
+  inset: 46px 28px auto;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: rgba(182,139,69,.55);
+  font-size: 1.5rem;
+  letter-spacing: .4em;
+}
+.floral-frame span { animation: sparklePop 3.4s ease-in-out infinite; }
+.floral-frame span:nth-child(2) { animation-delay: -1.4s; font-size: 1rem; }
+.floral-frame span:nth-child(3) { animation-delay: -2.3s; }
+.ornament { animation: sparklePop 3.8s ease-in-out infinite; }
+.ornament.bottom-right { animation-delay: -1.7s; }
+.luxury-hero h1 {
+  color: transparent;
+  background: linear-gradient(100deg, #2c2017 0%, #7b5727 34%, #c59a54 49%, #2c2017 72%);
+  background-size: 220% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: 0 22px 42px rgba(72,44,16,.14);
+  animation: titleShimmer 6s ease-in-out infinite;
+}
+.ring-glow {
+  position: relative;
+  z-index: 2;
+  width: 108px;
+  height: 56px;
+  margin: -2px auto 10px;
+}
+.ring-glow span {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border: 2px solid rgba(182,139,69,.54);
+  border-radius: 50%;
+  box-shadow: 0 0 24px rgba(182,139,69,.22), inset 0 0 12px rgba(255,255,255,.55);
+  animation: ringPulse 3.8s ease-in-out infinite;
+}
+.ring-glow span:first-child { left: 23px; transform: rotate(-12deg); }
+.ring-glow span:last-child { right: 23px; transform: rotate(12deg); animation-delay: -1.4s; }
+.scroll-cue { animation: scrollCue 1.8s ease-in-out infinite; }
+.invite-section {
+  background: linear-gradient(180deg, rgba(255,250,242,.86), rgba(255,247,235,.74));
+  overflow: hidden;
+}
+.invite-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 0%, rgba(255,255,255,.32) 36%, transparent 58%);
+  transform: translateX(-120%);
+  animation: cardSheen 8s ease-in-out infinite;
+  pointer-events: none;
+}
+.reveal-card {
+  opacity: 0;
+  transform: translateY(38px) scale(.985);
+  transition: opacity .75s ease, transform .75s cubic-bezier(.2,.8,.2,1);
+}
+.reveal-card.is-visible {
+  opacity: 1;
+  transform: none;
+}
+.section-flower {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  color: rgba(182,139,69,.26);
+  font-size: 4.5rem;
+  line-height: 1;
+  transform: rotate(-18deg);
+  animation: flowerFloat 7s ease-in-out infinite;
+}
+.section-flower.right {
+  left: auto;
+  right: 18px;
+  transform: rotate(16deg);
+  animation-delay: -3s;
+}
+.calendar-grid strong { animation: datePulse 2.4s ease-in-out infinite; }
+.dress-palette span { animation: swatchFloat 3.6s ease-in-out infinite; }
+.dress-palette span:nth-child(2) { animation-delay: -.4s; }
+.dress-palette span:nth-child(3) { animation-delay: -.8s; }
+.dress-palette span:nth-child(4) { animation-delay: -1.2s; }
+.dress-palette span:nth-child(5) { animation-delay: -1.6s; }
+.countdown div { box-shadow: 0 14px 30px rgba(72,45,16,.07); }
+.final-sparkles {
+  color: rgba(182,139,69,.64);
+  letter-spacing: .35em;
+  margin-bottom: 12px;
+  animation: sparklePop 2.8s ease-in-out infinite;
+}
+@keyframes slowSpin { to { transform: rotate(360deg); } }
+@keyframes breatheGlow {
+  0%, 100% { transform: scale(.94); opacity: .54; }
+  50% { transform: scale(1.12); opacity: .92; }
+}
+@keyframes flowerFloat {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-8deg); }
+  50% { transform: translate3d(10px, -18px, 0) rotate(8deg); }
+}
+@keyframes petalFall {
+  0% { transform: translate3d(0, -12vh, 0) rotate(0deg); opacity: 0; }
+  10% { opacity: .75; }
+  50% { transform: translate3d(28px, 52vh, 0) rotate(160deg); }
+  90% { opacity: .65; }
+  100% { transform: translate3d(-18px, 112vh, 0) rotate(340deg); opacity: 0; }
+}
+@keyframes heroBreath {
+  0%, 100% { box-shadow: 0 28px 80px rgba(70,45,18,.14), inset 0 0 0 rgba(255,255,255,0); }
+  50% { box-shadow: 0 34px 96px rgba(118,75,26,.20), inset 0 0 80px rgba(255,255,255,.32); }
+}
+@keyframes pillFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+@keyframes musicPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.16); }
+}
+@keyframes sparklePop {
+  0%, 100% { transform: scale(.92) rotate(0deg); opacity: .42; }
+  50% { transform: scale(1.18) rotate(12deg); opacity: .95; }
+}
+@keyframes titleShimmer {
+  0%, 100% { background-position: 0% center; }
+  50% { background-position: 100% center; }
+}
+@keyframes ringPulse {
+  0%, 100% { opacity: .62; filter: drop-shadow(0 0 0 rgba(182,139,69,0)); }
+  50% { opacity: 1; filter: drop-shadow(0 0 12px rgba(182,139,69,.32)); }
+}
+@keyframes scrollCue {
+  0%, 100% { transform: translateY(0); opacity: .78; }
+  50% { transform: translateY(7px); opacity: 1; }
+}
+@keyframes cardSheen {
+  0%, 62%, 100% { transform: translateX(-120%); }
+  78% { transform: translateX(120%); }
+}
+@keyframes datePulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 8px 22px rgba(182,139,69,.35); }
+  50% { transform: scale(1.08); box-shadow: 0 12px 32px rgba(182,139,69,.52); }
+}
+@keyframes swatchFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .luxury-hero,
+  .luxury-invite::before,
+  .luxury-invite::after,
+  .bokeh,
+  .petal,
+  .floating-flower,
+  .music-pill,
+  .music-icon,
+  .hero-glow,
+  .floral-frame span,
+  .ornament,
+  .luxury-hero h1,
+  .ring-glow span,
+  .scroll-cue,
+  .invite-section::before,
+  .section-flower,
+  .calendar-grid strong,
+  .dress-palette span,
+  .final-sparkles {
+    animation: none !important;
+  }
+  .reveal-card { opacity: 1; transform: none; }
+}
+
+
+/* Keep sections visible in static screenshots while still animating in naturally */
+.reveal-card {
+  opacity: 1;
+  transform: none;
+  animation: revealUp .75s cubic-bezier(.2,.8,.2,1) both;
+}
+.reveal-card:nth-of-type(3) { animation-delay: .08s; }
+.reveal-card:nth-of-type(4) { animation-delay: .16s; }
+.reveal-card:nth-of-type(5) { animation-delay: .24s; }
+.reveal-card:nth-of-type(6) { animation-delay: .32s; }
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(34px) scale(.985); }
+  to { opacity: 1; transform: none; }
 }

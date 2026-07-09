@@ -35,7 +35,28 @@ const event = {
 
     {isLuxuryWedding ? (
       <>
+        <div class="romance-effects" aria-hidden="true">
+          <span class="bokeh bokeh-one"></span>
+          <span class="bokeh bokeh-two"></span>
+          <span class="bokeh bokeh-three"></span>
+          <span class="floating-flower flower-one">✿</span>
+          <span class="floating-flower flower-two">❀</span>
+          <span class="floating-flower flower-three">✾</span>
+          <span class="petal petal-1">♡</span>
+          <span class="petal petal-2">❦</span>
+          <span class="petal petal-3">♡</span>
+          <span class="petal petal-4">❦</span>
+          <span class="petal petal-5">♡</span>
+          <span class="petal petal-6">❦</span>
+          <span class="petal petal-7">♡</span>
+          <span class="petal petal-8">❦</span>
+        </div>
+
         <section class="luxury-hero" id="top">
+          <div class="hero-glow" aria-hidden="true"></div>
+          <div class="floral-frame" aria-hidden="true">
+            <span>❀</span><span>✦</span><span>❀</span>
+          </div>
           <button class="music-pill" type="button" aria-label="Включить музыку">
             <span class="music-icon">♪</span>
             <span>Музыка</span>
@@ -47,6 +68,9 @@ const event = {
           <p class="luxury-kicker">Wedding invitation</p>
           <p class="save-date">Save the date</p>
           <h1>{event.couple}</h1>
+          <div class="ring-glow" aria-hidden="true">
+            <span></span><span></span>
+          </div>
           <div class="hero-date-line">
             <span>{event.date}</span>
             <i></i>
@@ -58,7 +82,8 @@ const event = {
           <a class="scroll-cue" href="#details">Листайте вниз</a>
         </section>
 
-        <section class="invite-section intro-section" id="details">
+        <section class="invite-section intro-section reveal-card" id="details">
+          <div class="section-flower" aria-hidden="true">❦</div>
           <p class="script-label">Дорогие гости</p>
           <h2>Мы будем счастливы видеть вас на нашем торжестве</h2>
           <p>
@@ -67,7 +92,7 @@ const event = {
           </p>
         </section>
 
-        <section class="invite-section calendar-section">
+        <section class="invite-section calendar-section reveal-card">
           <div class="section-title-small">Дата торжества</div>
           <div class="calendar-card" aria-label={`${event.date}`}>
             <div class="calendar-top">
@@ -86,7 +111,7 @@ const event = {
           </div>
         </section>
 
-        <section class="invite-section timeline-section">
+        <section class="invite-section timeline-section reveal-card">
           <div class="section-title-small">Программа дня</div>
           <div class="timeline-list">
             <article>
@@ -104,7 +129,7 @@ const event = {
           </div>
         </section>
 
-        <section class="invite-section venue-section">
+        <section class="invite-section venue-section reveal-card">
           <div class="venue-card">
             <p class="script-label">Локация</p>
             <h2>{event.venue}</h2>
@@ -116,7 +141,8 @@ const event = {
           </div>
         </section>
 
-        <section class="invite-section dress-section">
+        <section class="invite-section dress-section reveal-card">
+          <div class="section-flower right" aria-hidden="true">✿</div>
           <div class="section-title-small">Dress code</div>
           <h2>Будем благодарны, если вы поддержите цветовую гамму вечера</h2>
           <div class="dress-palette" aria-label="Палитра дресс-кода">
@@ -128,7 +154,7 @@ const event = {
           </div>
         </section>
 
-        <section class="invite-section countdown-section">
+        <section class="invite-section countdown-section reveal-card">
           <p class="script-label">До нашей свадьбы осталось</p>
           <div class="countdown" data-countdown="2026-08-24T18:00:00+06:00">
             <div><strong data-days>00</strong><span>дней</span></div>
@@ -138,7 +164,7 @@ const event = {
           </div>
         </section>
 
-        <section class="invite-section rsvp-section">
+        <section class="invite-section rsvp-section reveal-card">
           <p class="script-label">RSVP</p>
           <h2>Пожалуйста, подтвердите присутствие {event.deadline}</h2>
           <form class="rsvp-form">
@@ -167,7 +193,8 @@ const event = {
           </form>
         </section>
 
-        <section class="invite-section final-section">
+        <section class="invite-section final-section reveal-card">
+          <div class="final-sparkles" aria-hidden="true">✦ ✿ ✦</div>
           <p>С любовью и уважением,</p>
           <h2>{event.couple}</h2>
           <div class="hero-actions center">
@@ -209,6 +236,17 @@ const event = {
           }
           updateCountdown();
           setInterval(updateCountdown, 1000);
+
+          const cards = document.querySelectorAll('.reveal-card');
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);
+              }
+            });
+          }, { threshold: 0.18 });
+          cards.forEach((card) => observer.observe(card));
         </script>
       </>
     ) : (

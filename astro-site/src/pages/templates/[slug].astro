@@ -8,44 +8,238 @@ export function getStaticPaths() {
 
 const { template } = Astro.props;
 const palette: Record<string, string[]> = {
-  luxury: ['#f7efe2', '#b68b45', '#2a2118'],
+  luxury: ['#fbf4ea', '#b68b45', '#2a2118'],
   minimal: ['#f4f1ec', '#7c8a78', '#232621'],
   elegant: ['#eef4ef', '#7fa081', '#1d2b22'],
   party: ['#fff0d8', '#f28d35', '#321c13'],
   soft: ['#eef6ff', '#8bb6d8', '#203040'],
 };
 const colors = palette[template.style] ?? palette.luxury;
+const isLuxuryWedding = template.slug === 'wedding-luxury-01';
+
+const event = {
+  couple: 'Амина & Ислам',
+  date: '24 августа 2026',
+  day: '24',
+  month: 'Август',
+  year: '2026',
+  time: '18:00',
+  venue: 'Ресторан «Алтын Сарай»',
+  address: 'г. Бишкек, ул. Токтогула 125',
+  deadline: 'до 10 августа',
+};
 ---
 <BaseLayout title={`${template.name} — демо приглашения`} description={template.description}>
-  <main class="invite-demo" style={`--paper:${colors[0]};--accent:${colors[1]};--ink:${colors[2]}`}>
+  <main class:list={['invite-demo', { 'luxury-invite': isLuxuryWedding }]} style={`--paper:${colors[0]};--accent:${colors[1]};--ink:${colors[2]}`}>
     <a class="back-link" href="/">← Назад в каталог</a>
-    <section class="invite-card">
-      <p class="eyebrow">{template.label}</p>
-      <h1>{template.name}</h1>
-      <p class="invite-lead">{template.description}</p>
-      <div class="names">Амина & Ислам</div>
-      <p class="date">24 августа 2026 · 18:00</p>
-      <div class="invite-details">
-        <article>
-          <span>📍</span>
-          <h2>Локация</h2>
-          <p>Ресторан “Алтын Сарай”, Бишкек</p>
-        </article>
-        <article>
-          <span>🗓️</span>
-          <h2>Программа</h2>
-          <p>Встреча гостей, церемония, ужин, фото и поздравления.</p>
-        </article>
-        <article>
-          <span>💌</span>
-          <h2>RSVP</h2>
-          <p>Подтвердите участие до 10 августа.</p>
-        </article>
-      </div>
-      <div class="hero-actions center">
-        <a class="button" href="/brief/">Заказать такой сайт</a>
-        <a class="button secondary" href="/">Другие шаблоны</a>
-      </div>
-    </section>
+
+    {isLuxuryWedding ? (
+      <>
+        <section class="luxury-hero" id="top">
+          <button class="music-pill" type="button" aria-label="Включить музыку">
+            <span class="music-icon">♪</span>
+            <span>Музыка</span>
+          </button>
+
+          <div class="ornament top-left">✦</div>
+          <div class="ornament bottom-right">✦</div>
+
+          <p class="luxury-kicker">Wedding invitation</p>
+          <p class="save-date">Save the date</p>
+          <h1>{event.couple}</h1>
+          <div class="hero-date-line">
+            <span>{event.date}</span>
+            <i></i>
+            <span>{event.time}</span>
+          </div>
+          <p class="hero-note">
+            С большой радостью приглашаем вас разделить с нами один из самых важных дней нашей жизни.
+          </p>
+          <a class="scroll-cue" href="#details">Листайте вниз</a>
+        </section>
+
+        <section class="invite-section intro-section" id="details">
+          <p class="script-label">Дорогие гости</p>
+          <h2>Мы будем счастливы видеть вас на нашем торжестве</h2>
+          <p>
+            Пусть этот вечер наполнится тёплыми словами, красивыми воспоминаниями,
+            улыбками родных и близких. Ваше присутствие сделает этот день ещё более особенным.
+          </p>
+        </section>
+
+        <section class="invite-section calendar-section">
+          <div class="section-title-small">Дата торжества</div>
+          <div class="calendar-card" aria-label={`${event.date}`}>
+            <div class="calendar-top">
+              <span>{event.month}</span>
+              <span>{event.year}</span>
+            </div>
+            <div class="calendar-grid">
+              <span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span>
+              <em></em><em></em><em></em><em></em><em></em><b>1</b><b>2</b>
+              <b>3</b><b>4</b><b>5</b><b>6</b><b>7</b><b>8</b><b>9</b>
+              <b>10</b><b>11</b><b>12</b><b>13</b><b>14</b><b>15</b><b>16</b>
+              <b>17</b><b>18</b><b>19</b><b>20</b><b>21</b><b>22</b><b>23</b>
+              <strong>24</strong><b>25</b><b>26</b><b>27</b><b>28</b><b>29</b><b>30</b>
+              <b>31</b>
+            </div>
+          </div>
+        </section>
+
+        <section class="invite-section timeline-section">
+          <div class="section-title-small">Программа дня</div>
+          <div class="timeline-list">
+            <article>
+              <time>17:30</time>
+              <div><h3>Сбор гостей</h3><p>Встреча гостей, welcome-зона и первые фотографии.</p></div>
+            </article>
+            <article>
+              <time>18:00</time>
+              <div><h3>Начало торжества</h3><p>Тёплые слова, поздравления и праздничный ужин.</p></div>
+            </article>
+            <article>
+              <time>20:00</time>
+              <div><h3>Фото и танцы</h3><p>Музыка, настроение, семейные кадры и красивый вечер.</p></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="invite-section venue-section">
+          <div class="venue-card">
+            <p class="script-label">Локация</p>
+            <h2>{event.venue}</h2>
+            <p>{event.address}</p>
+            <div class="map-buttons">
+              <a href="https://2gis.kg/bishkek" target="_blank" rel="noreferrer">Открыть в 2GIS</a>
+              <a href="https://maps.google.com" target="_blank" rel="noreferrer">Google Maps</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="invite-section dress-section">
+          <div class="section-title-small">Dress code</div>
+          <h2>Будем благодарны, если вы поддержите цветовую гамму вечера</h2>
+          <div class="dress-palette" aria-label="Палитра дресс-кода">
+            <span style="--swatch:#f4eadb"></span>
+            <span style="--swatch:#d7c1a2"></span>
+            <span style="--swatch:#b68b45"></span>
+            <span style="--swatch:#6f5a43"></span>
+            <span style="--swatch:#2a2118"></span>
+          </div>
+        </section>
+
+        <section class="invite-section countdown-section">
+          <p class="script-label">До нашей свадьбы осталось</p>
+          <div class="countdown" data-countdown="2026-08-24T18:00:00+06:00">
+            <div><strong data-days>00</strong><span>дней</span></div>
+            <div><strong data-hours>00</strong><span>часов</span></div>
+            <div><strong data-minutes>00</strong><span>минут</span></div>
+            <div><strong data-seconds>00</strong><span>секунд</span></div>
+          </div>
+        </section>
+
+        <section class="invite-section rsvp-section">
+          <p class="script-label">RSVP</p>
+          <h2>Пожалуйста, подтвердите присутствие {event.deadline}</h2>
+          <form class="rsvp-form">
+            <label>
+              Ваше имя
+              <input type="text" placeholder="Например: Айжан" />
+            </label>
+            <label>
+              Сможете прийти?
+              <select>
+                <option>Да, с радостью приду</option>
+                <option>Отвечу позже</option>
+                <option>К сожалению, не смогу</option>
+              </select>
+            </label>
+            <label>
+              Количество гостей
+              <select>
+                <option>1 гость</option>
+                <option>2 гостя</option>
+                <option>3 гостя</option>
+                <option>4 гостя</option>
+              </select>
+            </label>
+            <button type="button">Отправить ответ</button>
+          </form>
+        </section>
+
+        <section class="invite-section final-section">
+          <p>С любовью и уважением,</p>
+          <h2>{event.couple}</h2>
+          <div class="hero-actions center">
+            <a class="button" href="/brief/">Заказать такой сайт</a>
+            <a class="button secondary" href="/">Другие шаблоны</a>
+          </div>
+        </section>
+
+        <script>
+          const countdown = document.querySelector('[data-countdown]');
+          const musicButton = document.querySelector('.music-pill');
+          let musicOn = false;
+
+          musicButton?.addEventListener('click', () => {
+            musicOn = !musicOn;
+            musicButton.classList.toggle('is-playing', musicOn);
+            const musicLabel = musicButton.querySelector('span:last-child');
+            if (musicLabel) musicLabel.textContent = musicOn ? 'Музыка включена' : 'Музыка';
+          });
+
+          function updateCountdown() {
+            if (!countdown) return;
+            const rawTarget = countdown.getAttribute('data-countdown');
+            if (!rawTarget) return;
+            const target = new Date(rawTarget).getTime();
+            const diff = Math.max(target - Date.now(), 0);
+            const days = Math.floor(diff / 86400000);
+            const hours = Math.floor((diff % 86400000) / 3600000);
+            const minutes = Math.floor((diff % 3600000) / 60000);
+            const seconds = Math.floor((diff % 60000) / 1000);
+            const daysEl = countdown.querySelector('[data-days]');
+            const hoursEl = countdown.querySelector('[data-hours]');
+            const minutesEl = countdown.querySelector('[data-minutes]');
+            const secondsEl = countdown.querySelector('[data-seconds]');
+            if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+            if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+            if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+            if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+          }
+          updateCountdown();
+          setInterval(updateCountdown, 1000);
+        </script>
+      </>
+    ) : (
+      <section class="invite-card">
+        <p class="eyebrow">{template.label}</p>
+        <h1>{template.name}</h1>
+        <p class="invite-lead">{template.description}</p>
+        <div class="names">Амина & Ислам</div>
+        <p class="date">24 августа 2026 · 18:00</p>
+        <div class="invite-details">
+          <article>
+            <span>📍</span>
+            <h2>Локация</h2>
+            <p>Ресторан “Алтын Сарай”, Бишкек</p>
+          </article>
+          <article>
+            <span>🗓️</span>
+            <h2>Программа</h2>
+            <p>Встреча гостей, церемония, ужин, фото и поздравления.</p>
+          </article>
+          <article>
+            <span>💌</span>
+            <h2>RSVP</h2>
+            <p>Подтвердите участие до 10 августа.</p>
+          </article>
+        </div>
+        <div class="hero-actions center">
+          <a class="button" href="/brief/">Заказать такой сайт</a>
+          <a class="button secondary" href="/">Другие шаблоны</a>
+        </div>
+      </section>
+    )}
   </main>
 </BaseLayout>

@@ -5,3 +5,4 @@ dist/
 .env.*
 !.env.example
 astro-*-preview.png
+wedding-luxury-premium-*.png

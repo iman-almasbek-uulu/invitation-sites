@@ -1,18 +1,80 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Invitation Templates Catalog</title>
+  <title>Каталог пригласительных сайтов</title>
+  <meta name="description" content="Каталог цифровых приглашений: свадьба, никах, кыз узатуу, день рождения, baby shower и другие события." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <p class="eyebrow">Digital Invitations</p>
-    <h1>Choose your invitation website</h1>
-    <p>Wedding, nikah, birthday, baby shower and event templates.</p>
+  <header class="hero">
+    <nav class="topbar" aria-label="Главная навигация">
+      <a class="brand" href="./index.html">Invitation Sites</a>
+      <div class="nav-links">
+        <a href="#catalogs">Каталоги</a>
+        <a href="#templates">Шаблоны</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </nav>
+
+    <div class="hero-content">
+      <p class="eyebrow">Digital Invitations</p>
+      <h1>Выберите каталог приглашений</h1>
+      <p class="lead">Здесь будут все наши будущие каталоги: свадьба, никах, кыз узатуу, день рождения, baby shower, юбилей и другие события.</p>
+      <div class="hero-actions">
+        <a class="button" href="#catalogs">Смотреть каталоги</a>
+        <a class="button secondary" href="../docs/client-brief.md">Заполнить бриф</a>
+      </div>
+    </div>
   </header>
-  <main id="catalog" class="grid"></main>
+
+  <main>
+    <section id="catalogs" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">Каталоги</p>
+        <h2>Разделы, куда будем добавлять свои шаблоны</h2>
+        <p>Каждый раздел — это отдельный мини-каталог. Когда появится новый дизайн, мы просто добавим его в нужный раздел.</p>
+      </div>
+      <div id="catalogGrid" class="catalog-grid"></div>
+    </section>
+
+    <section id="templates" class="section muted">
+      <div class="section-heading">
+        <p class="eyebrow">Все шаблоны</p>
+        <h2>Текущие готовые демо</h2>
+        <p>Это первая база. Потом здесь будет больше карточек, фильтров и красивых превью.</p>
+      </div>
+      <div id="filterBar" class="filters" aria-label="Фильтр по категориям"></div>
+      <div id="templateGrid" class="template-grid"></div>
+    </section>
+
+    <section id="faq" class="section faq-section">
+      <div class="section-heading">
+        <p class="eyebrow">FAQ</p>
+        <h2>Как будем использовать каталог</h2>
+      </div>
+      <div class="faq-grid">
+        <article class="faq-card">
+          <h3>Как добавить новый каталог?</h3>
+          <p>Добавляем новую категорию в массив <code>catalogs</code> внутри <code>catalog/script.js</code>.</p>
+        </article>
+        <article class="faq-card">
+          <h3>Как добавить новый шаблон?</h3>
+          <p>Создаём папку в <code>templates/</code> и добавляем карточку в массив <code>templates</code>.</p>
+        </article>
+        <article class="faq-card">
+          <h3>Что будет видеть клиент?</h3>
+          <p>Клиент открывает каталог, выбирает раздел, смотрит демо и нажимает “Заказать”.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© Invitation Sites — цифровые приглашения для ваших событий.</p>
+  </footer>
+
   <script src="script.js"></script>
 </body>
 </html>

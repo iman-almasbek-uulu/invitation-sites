@@ -1,0 +1,16 @@
+{
+  "bride": "Amina",
+  "groom": "Islam",
+  "date": "25 August 2026",
+  "time": "18:00",
+  "venue": "Grand Hall",
+  "address": "Bishkek, Kyrgyzstan",
+  "mapUrl": "https://maps.google.com",
+  "whatsapp": "+996 000 000 000",
+  "message": "Dear guests, we are happy to invite you to our wedding celebration.",
+  "schedule": [
+    {"time": "18:00", "title": "Guest arrival"},
+    {"time": "19:00", "title": "Wedding ceremony"},
+    {"time": "20:00", "title": "Dinner and celebration"}
+  ]
+}

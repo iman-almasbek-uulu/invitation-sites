@@ -5,7 +5,7 @@ import templates from '../data/templates.json';
 
 const readyCount = templates.length;
 const statusText: Record<string, string> = { ready: 'Есть шаблоны', soon: 'Скоро добавим' };
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 ---
 <BaseLayout title="Каталог цифровых приглашений" description="Каталог цифровых приглашений: свадьба, никах, кыз узатуу, день рождения, baby shower и другие события.">
   <header class="hero">

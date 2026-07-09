@@ -20,15 +20,25 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 
 const event = {
   couple: 'Амина & Ислам',
+  bride: 'Амина',
+  groom: 'Ислам',
   date: '24 августа 2026',
   day: '24',
   month: 'Август',
   year: '2026',
+  weekday: 'Понедельник',
   time: '18:00',
-  venue: 'Ресторан «Алтын Сарай»',
-  address: 'г. Бишкек, ул. Токтогула 125',
+  venue: 'Алтын Сарай',
+  address: 'Бишкек · ул. Токтогула 125',
   deadline: 'до 10 августа',
 };
+
+const program = [
+  ['17:30', 'Welcome', 'Сбор гостей, welcome drinks и первые фотографии'],
+  ['18:00', 'Ceremony', 'Красивое открытие вечера и поздравления'],
+  ['19:00', 'Dinner', 'Праздничный ужин, тосты и семейные моменты'],
+  ['20:30', 'Party', 'Музыка, танцы и незабываемая атмосфера'],
+];
 ---
 <BaseLayout title={`${template.name} — демо приглашения`} description={template.description}>
   <main class:list={['invite-demo', { 'luxury-invite': isLuxuryWedding }]} style={`--paper:${colors[0]};--accent:${colors[1]};--ink:${colors[2]}`}>
@@ -36,70 +46,76 @@ const event = {
 
     {isLuxuryWedding ? (
       <>
+        <div class="lux-noise" aria-hidden="true"></div>
         <div class="romance-effects" aria-hidden="true">
           <span class="bokeh bokeh-one"></span>
           <span class="bokeh bokeh-two"></span>
           <span class="bokeh bokeh-three"></span>
-          <span class="floating-flower flower-one">✿</span>
-          <span class="floating-flower flower-two">❀</span>
-          <span class="floating-flower flower-three">✾</span>
-          <span class="petal petal-1">♡</span>
+          <span class="petal petal-1">✦</span>
           <span class="petal petal-2">❦</span>
-          <span class="petal petal-3">♡</span>
+          <span class="petal petal-3">✧</span>
           <span class="petal petal-4">❦</span>
-          <span class="petal petal-5">♡</span>
-          <span class="petal petal-6">❦</span>
-          <span class="petal petal-7">♡</span>
-          <span class="petal petal-8">❦</span>
+          <span class="petal petal-5">✦</span>
+          <span class="petal petal-6">✧</span>
+          <span class="petal petal-7">❦</span>
+          <span class="petal petal-8">✦</span>
         </div>
 
-        <section class="luxury-hero" id="top">
-          <div class="hero-glow" aria-hidden="true"></div>
-          <div class="floral-frame" aria-hidden="true">
-            <span>❀</span><span>✦</span><span>❀</span>
-          </div>
+        <section class="lux-cover" id="top">
           <button class="music-pill" type="button" aria-label="Включить музыку">
             <span class="music-icon">♪</span>
-            <span>Музыка</span>
+            <span>Включить музыку</span>
           </button>
-
-          <div class="ornament top-left">✦</div>
-          <div class="ornament bottom-right">✦</div>
-
-          <p class="luxury-kicker">Wedding invitation</p>
-          <p class="save-date">Save the date</p>
-          <h1>{event.couple}</h1>
-          <div class="ring-glow" aria-hidden="true">
-            <span></span><span></span>
+          <div class="cover-photo" aria-hidden="true">
+            <span class="photo-bloom bloom-a"></span>
+            <span class="photo-bloom bloom-b"></span>
+            <span class="photo-arch"></span>
+            <span class="photo-couple">A · I</span>
           </div>
-          <div class="hero-date-line">
-            <span>{event.date}</span>
-            <i></i>
-            <span>{event.time}</span>
+          <div class="cover-copy">
+            <p class="luxury-kicker">Wedding invitation</p>
+            <p class="save-date">Save the date</p>
+            <h1>{event.couple}</h1>
+            <div class="cover-date">
+              <span>{event.weekday}</span>
+              <strong>{event.day}</strong>
+              <span>{event.month} · {event.year}</span>
+            </div>
+            <p class="hero-note">Приглашаем вас разделить с нами вечер любви, семьи и красивых воспоминаний.</p>
+            <a class="scroll-cue" href="#invite">Открыть приглашение ↓</a>
           </div>
-          <p class="hero-note">
-            С большой радостью приглашаем вас разделить с нами один из самых важных дней нашей жизни.
-          </p>
-          <a class="scroll-cue" href="#details">Листайте вниз</a>
         </section>
 
-        <section class="invite-section intro-section reveal-card" id="details">
-          <div class="section-flower" aria-hidden="true">❦</div>
+        <section class="invite-section statement-section reveal-card" id="invite">
           <p class="script-label">Дорогие гости</p>
-          <h2>Мы будем счастливы видеть вас на нашем торжестве</h2>
+          <h2>Мы хотим видеть вас рядом в самый важный день</h2>
           <p>
-            Пусть этот вечер наполнится тёплыми словами, красивыми воспоминаниями,
-            улыбками родных и близких. Ваше присутствие сделает этот день ещё более особенным.
+            Этот вечер мы собираем для самых близких людей. Ваше присутствие, улыбки и тёплые слова
+            сделают нашу свадьбу по-настоящему особенной.
           </p>
+        </section>
+
+        <section class="invite-section names-section reveal-card">
+          <div class="name-card left">
+            <span>Невеста</span>
+            <h2>{event.bride}</h2>
+          </div>
+          <div class="name-divider">&</div>
+          <div class="name-card right">
+            <span>Жених</span>
+            <h2>{event.groom}</h2>
+          </div>
         </section>
 
         <section class="invite-section calendar-section reveal-card">
           <div class="section-title-small">Дата торжества</div>
+          <div class="premium-date-card">
+            <span>{event.month}</span>
+            <strong>{event.day}</strong>
+            <em>{event.year}</em>
+            <p>{event.weekday} · {event.time}</p>
+          </div>
           <div class="calendar-card" aria-label={`${event.date}`}>
-            <div class="calendar-top">
-              <span>{event.month}</span>
-              <span>{event.year}</span>
-            </div>
             <div class="calendar-grid">
               <span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span>
               <em></em><em></em><em></em><em></em><em></em><b>1</b><b>2</b>
@@ -113,28 +129,26 @@ const event = {
         </section>
 
         <section class="invite-section timeline-section reveal-card">
-          <div class="section-title-small">Программа дня</div>
-          <div class="timeline-list">
-            <article>
-              <time>17:30</time>
-              <div><h3>Сбор гостей</h3><p>Встреча гостей, welcome-зона и первые фотографии.</p></div>
-            </article>
-            <article>
-              <time>18:00</time>
-              <div><h3>Начало торжества</h3><p>Тёплые слова, поздравления и праздничный ужин.</p></div>
-            </article>
-            <article>
-              <time>20:00</time>
-              <div><h3>Фото и танцы</h3><p>Музыка, настроение, семейные кадры и красивый вечер.</p></div>
-            </article>
+          <div class="section-title-small">Программа вечера</div>
+          <h2>Как пройдёт праздник</h2>
+          <div class="timeline-list premium-timeline">
+            {program.map(([time, title, text]) => (
+              <article>
+                <time>{time}</time>
+                <div><h3>{title}</h3><p>{text}</p></div>
+              </article>
+            ))}
           </div>
         </section>
 
         <section class="invite-section venue-section reveal-card">
-          <div class="venue-card">
+          <div class="venue-card premium-venue">
             <p class="script-label">Локация</p>
             <h2>{event.venue}</h2>
             <p>{event.address}</p>
+            <div class="map-preview" aria-hidden="true">
+              <span></span><i></i><b></b>
+            </div>
             <div class="map-buttons">
               <a href="https://2gis.kg/bishkek" target="_blank" rel="noreferrer">Открыть в 2GIS</a>
               <a href="https://maps.google.com" target="_blank" rel="noreferrer">Google Maps</a>
@@ -143,20 +157,20 @@ const event = {
         </section>
 
         <section class="invite-section dress-section reveal-card">
-          <div class="section-flower right" aria-hidden="true">✿</div>
           <div class="section-title-small">Dress code</div>
-          <h2>Будем благодарны, если вы поддержите цветовую гамму вечера</h2>
+          <h2>Палитра вечера</h2>
+          <p>Будем рады, если вы поддержите мягкие оттенки champagne, ivory, mocha и gold.</p>
           <div class="dress-palette" aria-label="Палитра дресс-кода">
-            <span style="--swatch:#f4eadb"></span>
-            <span style="--swatch:#d7c1a2"></span>
-            <span style="--swatch:#b68b45"></span>
-            <span style="--swatch:#6f5a43"></span>
-            <span style="--swatch:#2a2118"></span>
+            <span style="--swatch:#fff7ea"></span>
+            <span style="--swatch:#ead8bf"></span>
+            <span style="--swatch:#c9a56a"></span>
+            <span style="--swatch:#806448"></span>
+            <span style="--swatch:#24170f"></span>
           </div>
         </section>
 
         <section class="invite-section countdown-section reveal-card">
-          <p class="script-label">До нашей свадьбы осталось</p>
+          <p class="script-label">До свадьбы осталось</p>
           <div class="countdown" data-countdown="2026-08-24T18:00:00+06:00">
             <div><strong data-days>00</strong><span>дней</span></div>
             <div><strong data-hours>00</strong><span>часов</span></div>
@@ -167,35 +181,17 @@ const event = {
 
         <section class="invite-section rsvp-section reveal-card">
           <p class="script-label">RSVP</p>
-          <h2>Пожалуйста, подтвердите присутствие {event.deadline}</h2>
+          <h2>Подтвердите присутствие {event.deadline}</h2>
           <form class="rsvp-form">
-            <label>
-              Ваше имя
-              <input type="text" placeholder="Например: Айжан" />
-            </label>
-            <label>
-              Сможете прийти?
-              <select>
-                <option>Да, с радостью приду</option>
-                <option>Отвечу позже</option>
-                <option>К сожалению, не смогу</option>
-              </select>
-            </label>
-            <label>
-              Количество гостей
-              <select>
-                <option>1 гость</option>
-                <option>2 гостя</option>
-                <option>3 гостя</option>
-                <option>4 гостя</option>
-              </select>
-            </label>
+            <label>Ваше имя<input type="text" placeholder="Например: Айжан" /></label>
+            <label>Сможете прийти?<select><option>Да, с радостью приду</option><option>Отвечу позже</option><option>К сожалению, не смогу</option></select></label>
+            <label>Количество гостей<select><option>1 гость</option><option>2 гостя</option><option>3 гостя</option><option>4 гостя</option></select></label>
             <button type="button">Отправить ответ</button>
           </form>
+          <a class="whatsapp-cta" href="https://wa.me/?text=Здравствуйте,%20я%20подтверждаю%20участие%20на%20свадьбе" target="_blank" rel="noreferrer">Ответить через WhatsApp</a>
         </section>
 
         <section class="invite-section final-section reveal-card">
-          <div class="final-sparkles" aria-hidden="true">✦ ✿ ✦</div>
           <p>С любовью и уважением,</p>
           <h2>{event.couple}</h2>
           <div class="hero-actions center">
@@ -213,7 +209,7 @@ const event = {
             musicOn = !musicOn;
             musicButton.classList.toggle('is-playing', musicOn);
             const musicLabel = musicButton.querySelector('span:last-child');
-            if (musicLabel) musicLabel.textContent = musicOn ? 'Музыка включена' : 'Музыка';
+            if (musicLabel) musicLabel.textContent = musicOn ? 'Музыка включена' : 'Включить музыку';
           });
 
           function updateCountdown() {
@@ -226,14 +222,10 @@ const event = {
             const hours = Math.floor((diff % 86400000) / 3600000);
             const minutes = Math.floor((diff % 3600000) / 60000);
             const seconds = Math.floor((diff % 60000) / 1000);
-            const daysEl = countdown.querySelector('[data-days]');
-            const hoursEl = countdown.querySelector('[data-hours]');
-            const minutesEl = countdown.querySelector('[data-minutes]');
-            const secondsEl = countdown.querySelector('[data-seconds]');
-            if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
-            if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
-            if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
-            if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+            countdown.querySelector('[data-days]')!.textContent = String(days).padStart(2, '0');
+            countdown.querySelector('[data-hours]')!.textContent = String(hours).padStart(2, '0');
+            countdown.querySelector('[data-minutes]')!.textContent = String(minutes).padStart(2, '0');
+            countdown.querySelector('[data-seconds]')!.textContent = String(seconds).padStart(2, '0');
           }
           updateCountdown();
           setInterval(updateCountdown, 1000);
@@ -246,7 +238,7 @@ const event = {
                 observer.unobserve(entry.target);
               }
             });
-          }, { threshold: 0.18 });
+          }, { threshold: 0.16 });
           cards.forEach((card) => observer.observe(card));
         </script>
       </>
@@ -258,21 +250,9 @@ const event = {
         <div class="names">Амина & Ислам</div>
         <p class="date">24 августа 2026 · 18:00</p>
         <div class="invite-details">
-          <article>
-            <span>📍</span>
-            <h2>Локация</h2>
-            <p>Ресторан “Алтын Сарай”, Бишкек</p>
-          </article>
-          <article>
-            <span>🗓️</span>
-            <h2>Программа</h2>
-            <p>Встреча гостей, церемония, ужин, фото и поздравления.</p>
-          </article>
-          <article>
-            <span>💌</span>
-            <h2>RSVP</h2>
-            <p>Подтвердите участие до 10 августа.</p>
-          </article>
+          <article><span>📍</span><h2>Локация</h2><p>Ресторан “Алтын Сарай”, Бишкек</p></article>
+          <article><span>🗓️</span><h2>Программа</h2><p>Встреча гостей, церемония, ужин, фото и поздравления.</p></article>
+          <article><span>💌</span><h2>RSVP</h2><p>Подтвердите участие до 10 августа.</p></article>
         </div>
         <div class="hero-actions center">
           <a class="button" href={`${base}brief/`}>Заказать такой сайт</a>

@@ -16,6 +16,7 @@ const palette: Record<string, string[]> = {
 };
 const colors = palette[template.style] ?? palette.luxury;
 const isLuxuryWedding = template.slug === 'wedding-luxury-01';
+const base = import.meta.env.BASE_URL;
 
 const event = {
   couple: 'Амина & Ислам',
@@ -31,7 +32,7 @@ const event = {
 ---
 <BaseLayout title={`${template.name} — демо приглашения`} description={template.description}>
   <main class:list={['invite-demo', { 'luxury-invite': isLuxuryWedding }]} style={`--paper:${colors[0]};--accent:${colors[1]};--ink:${colors[2]}`}>
-    <a class="back-link" href="/">← Назад в каталог</a>
+    <a class="back-link" href={base}>← Назад в каталог</a>
 
     {isLuxuryWedding ? (
       <>
@@ -198,8 +199,8 @@ const event = {
           <p>С любовью и уважением,</p>
           <h2>{event.couple}</h2>
           <div class="hero-actions center">
-            <a class="button" href="/brief/">Заказать такой сайт</a>
-            <a class="button secondary" href="/">Другие шаблоны</a>
+            <a class="button" href={`${base}brief/`}>Заказать такой сайт</a>
+            <a class="button secondary" href={base}>Другие шаблоны</a>
           </div>
         </section>
 
@@ -274,8 +275,8 @@ const event = {
           </article>
         </div>
         <div class="hero-actions center">
-          <a class="button" href="/brief/">Заказать такой сайт</a>
-          <a class="button secondary" href="/">Другие шаблоны</a>
+          <a class="button" href={`${base}brief/`}>Заказать такой сайт</a>
+          <a class="button secondary" href={base}>Другие шаблоны</a>
         </div>
       </section>
     )}

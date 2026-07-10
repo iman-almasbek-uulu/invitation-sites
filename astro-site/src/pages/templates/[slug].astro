@@ -19,120 +19,189 @@ const isLuxuryWedding = template.slug === 'wedding-luxury-01';
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 
 const event = {
-  bride: 'Амина',
-  groom: 'Ислам',
-  couple: 'Амина & Ислам',
-  date: '24 августа 2026',
-  day: '24',
-  month: 'Август',
+  bride: 'Айсулуу',
+  groom: 'Нурсултан',
+  monogram: 'A & N',
+  date: '15 июля 2026',
+  day: '15',
+  month: 'Июль',
   year: '2026',
-  weekday: 'Понедельник',
-  time: '18:00',
-  venue: 'Ресторан “Алтын Сарай”',
-  address: 'Бишкек · ул. Токтогула 125',
+  weekday: 'Среда',
+  time: '17:00',
+  venue: 'Ресторан “Ак-Кеме”',
+  address: 'г. Бишкек, ул. Токтогула 2/2',
+  phone: '+996 700 123 456',
 };
 
-const program = [
-  ['17:30', 'Сбор гостей'],
-  ['18:00', 'Начало торжества'],
-  ['19:00', 'Праздничный ужин'],
-  ['20:30', 'Танцы и поздравления'],
+const rail = [
+  ['01','WELCOME','Главный экран\nЗакрытый конверт'],
+  ['02','ОТКРЫТИЕ','Конверт открывается'],
+  ['03','ПРИГЛАШЕНИЕ','Основная информация\nо свадьбе'],
+  ['04','LOVE STORY','История любви пары'],
+  ['05','ТАЙМЕР','До нашей свадьбы'],
+  ['06','ПРОГРАММА ДНЯ','План мероприятия'],
+  ['07','ЛОКАЦИЯ','Место проведения'],
+  ['08','DRESS CODE','Дресс-код для гостей'],
+  ['09','ГАЛЕРЕЯ','Фотографии пары'],
+  ['10','ПОДТВЕРЖДЕНИЕ RSVP','Подтвердите участие'],
+  ['11','ПОЖЕЛАНИЯ','Пожелания и информация'],
+  ['12','ФИНАЛЬНЫЙ ЭКРАН','Спасибо!\nДо встречи на свадьбе'],
 ];
+
+const program = [
+  ['16:30', 'Сбор гостей'],
+  ['17:00', 'Церемония'],
+  ['18:00', 'Фотосессия'],
+  ['19:00', 'Банкет'],
+  ['22:00', 'Торт'],
+  ['23:00', 'Завершение вечера'],
+];
+
+const gallery = [
+  'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=420&q=85',
+  'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=420&q=85',
+  'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=420&q=85',
+  'https://images.unsplash.com/photo-1529636798458-92182e662485?auto=format&fit=crop&w=420&q=85',
+  'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=420&q=85',
+  'https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&w=420&q=85',
+];
+
+const phonePreviews = ['01','02','03','04','05','06','07','08','09','10','11','12'];
 ---
 <BaseLayout title={`${template.name} — демо приглашения`} description={template.description}>
   <main class:list={['invite-demo', { 'luxury-invite': isLuxuryWedding }]} style={`--paper:${colors[0]};--accent:${colors[1]};--ink:${colors[2]}`}>
     <a class="back-link" href={base}>← Назад в каталог</a>
 
     {isLuxuryWedding ? (
-      <>
-        <section class="toi-page" id="top">
-          <button class="toi-music" type="button" aria-label="Включить музыку">
-            <span>♪</span> Музыка
-          </button>
+      <section class="royal-page" data-royal-page>
+        <button class="royal-music" type="button" aria-label="Включить музыку"><span>♪</span> Музыка</button>
+        <div class="royal-ambience" aria-hidden="true">
+          {Array.from({ length: 16 }).map((_, i) => <i class={`royal-petal p${i + 1}`}>❦</i>)}
+          {Array.from({ length: 18 }).map((_, i) => <b class={`royal-spark s${i + 1}`}></b>)}
+        </div>
 
-          <section class="toi-cover">
-            <div class="toi-names-side">
-              <span>{event.bride}</span>
-              <span>{event.groom}</span>
+        <aside class="royal-left-rail" aria-label="Навигация по приглашению">
+          {rail.map(([num, title, text]) => (
+            <a href={`#section-${num}`}>
+              <strong>{num}</strong>
+              <span>{title}</span>
+              <small>{text}</small>
+            </a>
+          ))}
+        </aside>
+
+        <aside class="royal-phone-rail" aria-hidden="true">
+          {phonePreviews.map((n) => (
+            <a class={`royal-phone-shot shot-${n}`} href={`#section-${n}`}>
+              <em>{n}</em>
+              <span></span>
+              <i></i>
+            </a>
+          ))}
+        </aside>
+
+        <section class="royal-stage">
+          <section class="royal-panel royal-cover" id="section-01">
+            <div class="royal-corners"></div>
+            <div class="royal-envelope closed">
+              <div class="royal-envelope-text">Үйлөнүү тойго<br />Чакыруу</div>
+              <div class="royal-wax">бас</div>
+              <div class="royal-flower left"></div>
+              <div class="royal-flower right"></div>
             </div>
-            <div class="toi-frame top" aria-hidden="true"><i></i><b>♡</b><i></i></div>
-            <div class="toi-envelope" aria-hidden="true">
-              <div class="toi-seal">БАСЫҢЫЗ</div>
+            <p class="royal-scroll">Нажмите на печать</p>
+          </section>
+
+          <section class="royal-panel royal-open" id="section-02">
+            <div class="royal-paper">
+              <span>{event.monogram}</span>
             </div>
-            <div class="toi-cover-title">
-              <p>Үйлөнүү үлпөт тойго чакыруу</p>
-              <h1>{event.bride}<br /><em>&</em><br />{event.groom}</h1>
+            <div class="royal-envelope open"><div class="royal-wax">ачуу</div></div>
+          </section>
+
+          <section class="royal-panel royal-main-info" id="section-03">
+            <div class="royal-photo-card"></div>
+            <div class="royal-info-text">
+              <p>Биздин эң маанилүү күнгө<br />сизди чакырабыз!</p>
+              <h1>{event.groom} & {event.bride}</h1>
+              <div class="royal-facts">
+                <span><b>Дата</b>{event.date}</span>
+                <span><b>Убактысы</b>{event.time}</span>
+                <span><b>Өтүү жери</b>{event.venue}</span>
+              </div>
             </div>
-            <a class="toi-heart-date" href="#invite"><strong>{event.day}</strong></a>
-            <div class="toi-line" aria-hidden="true"></div>
           </section>
 
-          <section class="toi-invite-card" id="invite">
-            <div class="toi-frame" aria-hidden="true"><i></i><b>♡</b><i></i></div>
-            <p class="toi-script">Урматтуу коноктор</p>
-            <h2>Сиздерди кубанычыбызга күбө болууга чакырабыз</h2>
-            <p>
-              Бул күн биз үчүн өзгөчө. Жакындарыбыздын батасы, жылуу сөзү жана катышуусу
-              майрамыбызды дагы да маңыздуу кылат.
-            </p>
+          <section class="royal-panel royal-story" id="section-04">
+            <p class="royal-script">Наша история любви</p>
+            <h2>{event.groom} & {event.bride}</h2>
+            <div class="royal-couple-live"></div>
           </section>
 
-          <section class="toi-date-section">
-            <p class="toi-script">Save the date</p>
-            <div class="toi-month">{event.month}</div>
-            <div class="toi-calendar">
-              <span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span>
-              <em></em><em></em><em></em><em></em><em></em><b>1</b><b>2</b>
-              <b>3</b><b>4</b><b>5</b><b>6</b><b>7</b><b>8</b><b>9</b>
-              <b>10</b><b>11</b><b>12</b><b>13</b><b>14</b><b>15</b><b>16</b>
-              <b>17</b><b>18</b><b>19</b><b>20</b><b>21</b><b>22</b><b>23</b>
-              <strong>{event.day}</strong><b>25</b><b>26</b><b>27</b><b>28</b><b>29</b><b>30</b>
-              <b>31</b>
-            </div>
-            <p class="toi-time">{event.weekday} · {event.time}</p>
-          </section>
-
-          <section class="toi-venue">
-            <p>Ресторан</p>
-            <h2>{event.venue}</h2>
-            <span>{event.address}</span>
-            <a href="https://2gis.kg/bishkek" target="_blank" rel="noreferrer">Картага өтүү</a>
-          </section>
-
-          <section class="toi-timeline">
-            <p class="toi-script">Программа</p>
-            {program.map(([time, title]) => (
-              <article>
-                <time>{time}</time>
-                <span>{title}</span>
-              </article>
-            ))}
-          </section>
-
-          <section class="toi-countdown" data-countdown="2026-08-24T18:00:00+06:00">
-            <p class="toi-script">Тойго чейин калды</p>
-            <div>
-              <article><strong data-days>00</strong><span>Күн</span></article>
-              <article><strong data-hours>00</strong><span>Саат</span></article>
-              <article><strong data-minutes>00</strong><span>Мүнөт</span></article>
+          <section class="royal-panel royal-timer" id="section-05" data-countdown="2026-07-15T17:00:00+06:00">
+            <p class="royal-script">До нашей свадьбы осталось</p>
+            <div class="royal-counts">
+              <article><strong data-days>00</strong><span>Дней</span></article>
+              <article><strong data-hours>00</strong><span>Часов</span></article>
+              <article><strong data-minutes>00</strong><span>Минут</span></article>
               <article><strong data-seconds>00</strong><span>Секунд</span></article>
             </div>
           </section>
 
-          <section class="toi-rsvp">
-            <div class="toi-frame" aria-hidden="true"><i></i><b>♡</b><i></i></div>
-            <h2>Тойго катыша аласызбы?</h2>
+          <section class="royal-panel royal-program" id="section-06">
+            <p class="royal-script">Программа дня</p>
+            <div class="royal-program-list">
+              {program.map(([time, title]) => <article><time>{time}</time><span>{title}</span></article>)}
+            </div>
+          </section>
+
+          <section class="royal-panel royal-location" id="section-07">
+            <div class="royal-map"></div>
+            <div>
+              <p class="royal-script">Место проведения</p>
+              <h2>{event.venue}</h2>
+              <p>{event.address}<br />{event.phone}</p>
+              <a href="https://maps.google.com" target="_blank" rel="noreferrer">Открыть в Google Maps</a>
+            </div>
+          </section>
+
+          <section class="royal-panel royal-dress" id="section-08">
+            <p class="royal-script">Дресс-код</p>
+            <p>Мы будем рады, если вы поддержите цветовую гамму</p>
+            <div class="royal-dress-cards"><article>Для мужчин<br /><b>Классика</b></article><article>Для женщин<br /><b>Вечернее платье</b></article></div>
+            <div class="royal-palette"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+          </section>
+
+          <section class="royal-panel royal-gallery" id="section-09">
+            <p class="royal-script">Наша галерея</p>
+            <div class="royal-gallery-strip" aria-label="Живая галерея свадебных фото">
+              {gallery.map((src) => <div class="royal-gallery-photo" style={`background-image:url('${src}')`} role="img" aria-label="Свадебное фото"></div>)}
+            </div>
+          </section>
+
+          <section class="royal-panel royal-rsvp" id="section-10">
+            <p class="royal-script">Подтвердите ваше участие</p>
             <form>
-              <label><input type="radio" name="rsvp" /> Ооба, барам</label>
-              <label><input type="radio" name="rsvp" /> Тилекке каршы, бара албайм</label>
-              <input type="text" placeholder="Сиздин атыңыз?" />
-              <button type="button">Жиберүү</button>
+              <input placeholder="Ваше имя" />
+              <input placeholder="Телефон" />
+              <label><span>Будете присутствовать?</span><select><option>Да</option><option>Нет</option></select></label>
+              <label><span>Количество гостей</span><select><option>1</option><option>2</option><option>3+</option></select></label>
+              <button type="button">Подтвердить участие ♡</button>
             </form>
           </section>
 
-          <section class="toi-final">
-            <p>Сүйүү жана урмат менен</p>
-            <h2>{event.couple}</h2>
+          <section class="royal-panel royal-wishes" id="section-11">
+            <div class="royal-gift"></div>
+            <div>
+              <p class="royal-script">Пожелания</p>
+              <p>Самым главным подарком для нас станет ваше присутствие в этот день. Если вы планируете сделать подарок — мы будем благодарны вашему вниманию.</p>
+            </div>
+          </section>
+
+          <section class="royal-panel royal-final" id="section-12">
+            <div class="royal-final-logo">{event.monogram}</div>
+            <h2>Спасибо!</h2>
+            <p>До встречи на нашей свадьбе!</p>
             <div class="hero-actions center">
               <a class="button" href={`${base}brief/`}>Заказать такой сайт</a>
               <a class="button secondary" href={base}>Другие шаблоны</a>
@@ -142,7 +211,7 @@ const program = [
 
         <script>
           const countdown = document.querySelector('[data-countdown]');
-          const musicButton = document.querySelector('.toi-music');
+          const musicButton = document.querySelector('.royal-music');
           let musicOn = false;
           musicButton?.addEventListener('click', () => {
             musicOn = !musicOn;
@@ -163,15 +232,11 @@ const program = [
               const node = countdown.querySelector(selector);
               if (node) node.textContent = String(value).padStart(2, '0');
             };
-            setText('[data-days]', days);
-            setText('[data-hours]', hours);
-            setText('[data-minutes]', minutes);
-            setText('[data-seconds]', seconds);
+            setText('[data-days]', days); setText('[data-hours]', hours); setText('[data-minutes]', minutes); setText('[data-seconds]', seconds);
           }
-          updateCountdown();
-          setInterval(updateCountdown, 1000);
+          updateCountdown(); setInterval(updateCountdown, 1000);
         </script>
-      </>
+      </section>
     ) : (
       <section class="invite-card">
         <p class="eyebrow">{template.label}</p>

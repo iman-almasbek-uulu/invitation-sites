@@ -1,9 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import catalogs from '../data/catalogs.json';
-import templates from '../data/templates.json';
+import { readyTemplates, templates } from '../data/templates';
 
-const readyCount = templates.length;
+const readyCount = readyTemplates.length;
 const statusText: Record<string, string> = { ready: 'Есть шаблоны', soon: 'Скоро добавим' };
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 ---
@@ -73,12 +73,19 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       <div class="template-grid">
         {templates.map((template) => (
           <article class="template-card" id={`templates-${template.category}`}>
-            <p class="category">{template.label}</p>
+            <p class="category">{template.label} · {template.priceRange}</p>
             <h3>{template.name}</h3>
             <p>{template.description}</p>
+            <ul class="feature-list" aria-label="Функции шаблона">
+              {template.features.slice(0, 4).map((feature) => <li>{feature}</li>)}
+            </ul>
+            <p class="recommended-use">{template.recommendedUse}</p>
+            <div class="tag-list" aria-label="Теги шаблона">
+              {template.tags.slice(0, 5).map((tag) => <span>{tag}</span>)}
+            </div>
             <div class="actions">
               <a href={`${base}templates/${template.slug}/`}>Посмотреть</a>
-              <a class="secondary" href={`${base}brief/`}>Заказать</a>
+              <a class="secondary" href={`${base}brief/?template=${template.slug}`}>Заказать</a>
             </div>
           </article>
         ))}

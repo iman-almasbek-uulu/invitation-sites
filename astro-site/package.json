@@ -2,10 +2,16 @@
   "scripts": {
     "dev": "astro dev --host 0.0.0.0",
     "build": "astro build",
-    "preview": "astro preview --host 0.0.0.0"
+    "preview": "astro preview --host 0.0.0.0",
+    "smoke:brief": "node scripts/smoke-brief-submit.mjs",
+    "smoke:admin": "node scripts/smoke-admin-requests.mjs",
+    "smoke:generator": "node scripts/smoke-client-generator.mjs",
+    "verify:supabase-admin": "node scripts/verify-supabase-admin.mjs",
+    "verify:owner-api": "node scripts/verify-owner-api.mjs"
   },
   "dependencies": {
     "@astrojs/check": "latest",
+    "@supabase/supabase-js": "^2.110.2",
     "astro": "latest",
     "typescript": "latest"
   },

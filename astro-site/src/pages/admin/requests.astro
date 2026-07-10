@@ -1,0 +1,633 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+---
+<BaseLayout title="Admin: заявки" description="Внутренняя MVP-страница для просмотра заявок на digital invitation sites.">
+  <main class="admin-page">
+    <a class="back-link" href={base}>← Назад в каталог</a>
+
+    <section class="section compact admin-hero">
+      <p class="eyebrow">Owner dashboard</p>
+      <h1>Заявки клиентов</h1>
+      <p class="lead">MVP-админка для владельца: читает заявки через защищённый Supabase Edge Function с owner token. Если токена нет или API недоступен, остаётся localStorage/demo fallback.</p>
+
+      <div class="admin-stats" id="admin-stats">
+        <article>
+          <span>Всего</span>
+          <strong id="stat-total">0</strong>
+        </article>
+        <article>
+          <span>Новые</span>
+          <strong id="stat-new">0</strong>
+        </article>
+        <article>
+          <span>Источник</span>
+          <strong id="stat-source">Demo</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="section compact admin-panel">
+      <div class="admin-toolbar">
+        <div>
+          <h2>Список заявок</h2>
+          <p id="admin-status" class="form-note">Загружаю заявки...</p>
+        </div>
+        <div class="admin-actions">
+          <a class="button secondary" id="owner-login-link" href={`${base}admin/login/`}>Войти владельцу</a>
+          <button class="button ghost" id="clear-owner-token" type="button" hidden>Выйти</button>
+          <a class="button secondary" href={`${base}brief/?template=wedding-luxury-01`}>Создать тестовую заявку</a>
+          <button class="button" id="seed-demo" type="button">Добавить demo</button>
+        </div>
+      </div>
+
+      <div class="owner-auth-card" id="owner-auth-card" hidden>
+        <div>
+          <strong>Owner token не сохранён</strong>
+          <p class="form-note">Для реальных Supabase заявок откройте страницу входа владельца. Без token ниже доступен только localStorage/demo fallback.</p>
+        </div>
+        <a class="button" href={`${base}admin/login/`}>Ввести token</a>
+      </div>
+
+      <div class="admin-warning">
+        <strong>Важно:</strong> service role key не используется в Astro frontend. Реальное чтение Supabase идёт через Edge Function <code>owner-requests</code> с owner token; без токена показываем fallback/demo.
+      </div>
+
+      <div class="request-list" id="request-list" data-empty="true">
+        <div class="empty-state">
+          <h3>Пока заявок нет</h3>
+          <p>Отправьте тестовую заявку через /brief или нажмите “Добавить demo”.</p>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      type AdminRequest = {
+        request_id: string;
+        created_at: string;
+        status: string;
+        source: string;
+        template_slug: string;
+        template_select?: string;
+        client_name: string;
+        client_whatsapp: string;
+        event_type: string;
+        event_names: string;
+        event_date: string;
+        event_time?: string;
+        venue?: string;
+        invitation_text?: string;
+        language?: string;
+        rsvp_needed?: string;
+        assets_note?: string;
+        urgency?: string;
+        package_preference?: string;
+        submit_backend?: string;
+        submit_error?: string;
+      };
+
+      type GeneratedClientSite = {
+        id: string;
+        request_id: string;
+        generated_at: string;
+        template_slug: string;
+        package_preference: string;
+        title: string;
+        names: string;
+        client_name: string;
+        event_type: string;
+        event_date: string;
+        event_time: string;
+        venue: string;
+        language: string;
+        invitation_text: string;
+        rsvp_needed: string;
+        sections: Array<{ title: string; body: string }>;
+        next_steps: string[];
+      };
+
+      type SupabaseRequestRow = {
+        request_number: string;
+        created_at: string;
+        updated_at?: string;
+        status: string;
+        source: string;
+        template_slug: string;
+        template_select: string | null;
+        template_title?: string | null;
+        package_preference: string | null;
+        client_name: string;
+        client_whatsapp: string;
+        event_type: string;
+        event_names: string;
+        event_date: string;
+        event_time: string | null;
+        venue: string | null;
+        invitation_text: string | null;
+        language: string | null;
+        rsvp_needed: string | null;
+        assets_note: string | null;
+        urgency: string | null;
+        brief_payload?: Partial<AdminRequest> | null;
+      };
+
+      const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+      const appBase = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+
+      const listEl = document.getElementById('request-list');
+      const statusEl = document.getElementById('admin-status');
+      const totalEl = document.getElementById('stat-total');
+      const newEl = document.getElementById('stat-new');
+      const sourceEl = document.getElementById('stat-source');
+      const seedButton = document.getElementById('seed-demo') as HTMLButtonElement | null;
+      const clearOwnerTokenButton = document.getElementById('clear-owner-token') as HTMLButtonElement | null;
+      const ownerLoginLink = document.getElementById('owner-login-link') as HTMLAnchorElement | null;
+      const ownerAuthCard = document.getElementById('owner-auth-card') as HTMLElement | null;
+      const ownerTokenStorageKey = 'invitation_owner_api_token';
+
+      const statusLabels: Record<string, string> = {
+        brief_received: 'Новая заявка',
+        contacted: 'Связались',
+        missing_info: 'Ждём данные',
+        ready_to_build: 'Готово к сборке',
+        in_progress: 'В работе',
+        preview_sent: 'Preview отправлен',
+        revision_requested: 'Нужны правки',
+        delivered: 'Сдано',
+        paid: 'Оплачено',
+        cancelled: 'Отменено',
+      };
+
+      const statusFlow = Object.entries(statusLabels).map(([value, label]) => ({ value, label }));
+
+      function safeParseRequest(raw: string | null): AdminRequest | null {
+        if (!raw) return null;
+        try {
+          const parsed = JSON.parse(raw) as Partial<AdminRequest>;
+          if (!parsed.request_id || !parsed.client_name) return null;
+          return {
+            request_id: String(parsed.request_id),
+            created_at: String(parsed.created_at || new Date().toISOString()),
+            status: String(parsed.status || 'brief_received'),
+            source: String(parsed.source || 'localstorage'),
+            template_slug: String(parsed.template_slug || parsed.template_select || 'custom'),
+            template_select: String(parsed.template_select || parsed.template_slug || 'custom'),
+            client_name: String(parsed.client_name || ''),
+            client_whatsapp: String(parsed.client_whatsapp || ''),
+            event_type: String(parsed.event_type || ''),
+            event_names: String(parsed.event_names || ''),
+            event_date: String(parsed.event_date || ''),
+            event_time: String(parsed.event_time || ''),
+            venue: String(parsed.venue || ''),
+            invitation_text: String(parsed.invitation_text || ''),
+            language: String(parsed.language || 'ru'),
+            rsvp_needed: String(parsed.rsvp_needed || 'yes'),
+            assets_note: String(parsed.assets_note || ''),
+            urgency: String(parsed.urgency || 'normal'),
+            package_preference: String(parsed.package_preference || 'not-sure'),
+            submit_backend: String(parsed.submit_backend || 'localstorage'),
+            submit_error: parsed.submit_error ? String(parsed.submit_error) : undefined,
+          };
+        } catch {
+          return null;
+        }
+      }
+
+      function readLocalRequests(): AdminRequest[] {
+        try {
+          const indexRaw = window.localStorage.getItem('invitation_requests_index');
+          const parsedIndex = indexRaw ? JSON.parse(indexRaw) : [];
+          const ids = Array.isArray(parsedIndex) ? parsedIndex.map(String) : [];
+          return ids
+            .map((id) => safeParseRequest(window.localStorage.getItem(`invitation_request_${id}`)))
+            .filter((request): request is AdminRequest => Boolean(request));
+        } catch {
+          return [];
+        }
+      }
+
+      function mapSupabaseRow(row: SupabaseRequestRow): AdminRequest {
+        const payload = row.brief_payload || {};
+        return {
+          request_id: row.request_number,
+          created_at: row.created_at,
+          status: row.status || 'brief_received',
+          source: row.source || 'supabase',
+          template_slug: row.template_slug || payload.template_slug || 'custom',
+          template_select: row.template_select || payload.template_select || 'custom',
+          client_name: row.client_name,
+          client_whatsapp: row.client_whatsapp,
+          event_type: row.event_type,
+          event_names: row.event_names,
+          event_date: row.event_date,
+          event_time: row.event_time || payload.event_time || '',
+          venue: row.venue || payload.venue || '',
+          invitation_text: row.invitation_text || payload.invitation_text || '',
+          language: row.language || payload.language || 'ru',
+          rsvp_needed: row.rsvp_needed || payload.rsvp_needed || 'yes',
+          assets_note: row.assets_note || payload.assets_note || '',
+          urgency: row.urgency || payload.urgency || 'normal',
+          package_preference: row.package_preference || payload.package_preference || 'not-sure',
+          submit_backend: 'supabase',
+        };
+      }
+
+      async function readOwnerApiRequests(): Promise<{ requests: AdminRequest[]; error?: string }> {
+        if (!supabaseUrl) return { requests: [], error: 'PUBLIC_SUPABASE_URL не настроен' };
+        const ownerToken = window.localStorage.getItem(ownerTokenStorageKey)?.trim();
+        if (!ownerToken) return { requests: [], error: 'Owner API token не сохранён' };
+
+        const endpoint = `${String(supabaseUrl).replace(/\/$/, '')}/functions/v1/owner-requests?limit=50`;
+        try {
+          const response = await fetch(endpoint, {
+            headers: { 'x-owner-token': ownerToken },
+          });
+          const body = await response.json() as { ok?: boolean; requests?: SupabaseRequestRow[]; error?: string };
+          if (!response.ok || !body.ok) {
+            return { requests: [], error: body.error || `Owner API вернул ${response.status}` };
+          }
+          const rows = Array.isArray(body.requests) ? body.requests : [];
+          return { requests: rows.map(mapSupabaseRow) };
+        } catch (error) {
+          return { requests: [], error: error instanceof Error ? error.message : 'Owner API network error' };
+        }
+      }
+
+      async function updateOwnerApiStatus(requestId: string, status: string): Promise<{ ok: boolean; error?: string }> {
+        if (!supabaseUrl) return { ok: false, error: 'PUBLIC_SUPABASE_URL не настроен' };
+        const ownerToken = window.localStorage.getItem(ownerTokenStorageKey)?.trim();
+        if (!ownerToken) return { ok: false, error: 'Owner API token не сохранён' };
+
+        const endpoint = `${String(supabaseUrl).replace(/\/$/, '')}/functions/v1/owner-requests`;
+        try {
+          const response = await fetch(endpoint, {
+            method: 'PATCH',
+            headers: {
+              'content-type': 'application/json',
+              'x-owner-token': ownerToken,
+            },
+            body: JSON.stringify({ request_number: requestId, status }),
+          });
+          const body = await response.json() as { ok?: boolean; error?: string };
+          if (!response.ok || !body.ok) {
+            return { ok: false, error: body.error || `Owner API вернул ${response.status}` };
+          }
+          return { ok: true };
+        } catch (error) {
+          return { ok: false, error: error instanceof Error ? error.message : 'Owner API network error' };
+        }
+      }
+
+      async function saveGeneratedSiteToOwnerApi(requestId: string, draft: GeneratedClientSite): Promise<{ ok: boolean; error?: string; site_slug?: string }> {
+        if (!supabaseUrl) return { ok: false, error: 'PUBLIC_SUPABASE_URL не настроен' };
+        const ownerToken = window.localStorage.getItem(ownerTokenStorageKey)?.trim();
+        if (!ownerToken) return { ok: false, error: 'Owner API token не сохранён' };
+
+        const endpoint = `${String(supabaseUrl).replace(/\/$/, '')}/functions/v1/owner-requests`;
+        try {
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+              'x-owner-token': ownerToken,
+            },
+            body: JSON.stringify({
+              action: 'upsert_generated_site',
+              request_number: requestId,
+              draft,
+            }),
+          });
+          const body = await response.json() as { ok?: boolean; error?: string; generated_site?: { site_slug?: string } };
+          if (!response.ok || !body.ok) {
+            return { ok: false, error: body.error || `Owner API вернул ${response.status}` };
+          }
+          return { ok: true, site_slug: body.generated_site?.site_slug };
+        } catch (error) {
+          return { ok: false, error: error instanceof Error ? error.message : 'Owner API network error' };
+        }
+      }
+
+      async function publishGeneratedSiteToOwnerApi(requestId: string): Promise<{ ok: boolean; error?: string; site_slug?: string; status?: string }> {
+        if (!supabaseUrl) return { ok: false, error: 'PUBLIC_SUPABASE_URL не настроен' };
+        const ownerToken = window.localStorage.getItem(ownerTokenStorageKey)?.trim();
+        if (!ownerToken) return { ok: false, error: 'Owner API token не сохранён' };
+
+        const endpoint = `${String(supabaseUrl).replace(/\/$/, '')}/functions/v1/owner-requests`;
+        try {
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',
+              'x-owner-token': ownerToken,
+            },
+            body: JSON.stringify({
+              action: 'publish_generated_site',
+              request_number: requestId,
+              status: 'preview_sent',
+            }),
+          });
+          const body = await response.json() as { ok?: boolean; error?: string; public_site?: { site_slug?: string; status?: string } };
+          if (!response.ok || !body.ok) {
+            return { ok: false, error: body.error || `Owner API вернул ${response.status}` };
+          }
+          return { ok: true, site_slug: body.public_site?.site_slug, status: body.public_site?.status };
+        } catch (error) {
+          return { ok: false, error: error instanceof Error ? error.message : 'Owner API network error' };
+        }
+      }
+
+      function formatDate(value: string): string {
+        if (!value) return 'Дата не указана';
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return value;
+        return date.toLocaleString('ru-RU', { dateStyle: 'medium', timeStyle: 'short' });
+      }
+
+      function formatEventDate(value: string): string {
+        if (!value) return 'Дата уточняется';
+        const date = new Date(`${value}T00:00:00`);
+        if (Number.isNaN(date.getTime())) return value;
+        return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+      }
+
+      function eventTypeLabel(value: string): string {
+        const labels: Record<string, string> = {
+          wedding: 'Свадьба',
+          nikah: 'Никах',
+          'kyz-uzatuu': 'Кыз узатуу',
+          birthday: 'День рождения',
+          'baby-shower': 'Baby shower',
+          jubilee: 'Юбилей',
+          other: 'Мероприятие',
+        };
+        return labels[value] || value || 'Мероприятие';
+      }
+
+      function buildClientSiteDraft(request: AdminRequest): GeneratedClientSite {
+        const names = request.event_names || 'Имена будут уточнены';
+        const date = formatEventDate(request.event_date);
+        const time = request.event_time || 'Время уточняется';
+        const venue = request.venue || 'Локация уточняется';
+        const intro = request.invitation_text?.trim() || `С радостью приглашаем вас разделить с нами этот важный день. Будем счастливы видеть вас рядом.`;
+        const sections = [
+          { title: 'Главный экран', body: `${names} · ${date}` },
+          { title: 'Приглашение', body: intro },
+          { title: 'Дата и время', body: `${date}, ${time}` },
+          { title: 'Локация', body: venue },
+          { title: 'Программа', body: 'Сбор гостей → церемония/начало → банкет → финал вечера. Точные пункты можно уточнить с клиентом.' },
+          { title: 'RSVP', body: request.rsvp_needed === 'no' ? 'RSVP отключён по заявке клиента.' : 'Гости смогут подтвердить участие после подключения RSVP.' },
+        ];
+
+        return {
+          id: `SITE-${request.request_id}`,
+          request_id: request.request_id,
+          generated_at: new Date().toISOString(),
+          template_slug: request.template_slug || request.template_select || 'custom',
+          package_preference: request.package_preference || 'not-sure',
+          title: `${eventTypeLabel(request.event_type)} — ${names}`,
+          names,
+          client_name: request.client_name,
+          event_type: eventTypeLabel(request.event_type),
+          event_date: date,
+          event_time: time,
+          venue,
+          language: request.language || 'ru',
+          invitation_text: intro,
+          rsvp_needed: request.rsvp_needed || 'yes',
+          sections,
+          next_steps: [
+            'Проверить имена, дату, время и ресторан',
+            'Попросить фото/музыку/карту у клиента',
+            'Выбрать финальный стиль и цвета',
+            'После подтверждения — превратить preview в отдельный клиентский сайт',
+          ],
+        };
+      }
+
+      function renderRequests(requests: AdminRequest[], sourceLabel: string, note: string) {
+        if (totalEl) totalEl.textContent = String(requests.length);
+        if (newEl) newEl.textContent = String(requests.filter((request) => request.status === 'brief_received').length);
+        if (sourceEl) sourceEl.textContent = sourceLabel;
+        if (statusEl) statusEl.textContent = note;
+
+        if (!listEl) return;
+        listEl.innerHTML = '';
+        listEl.dataset.empty = requests.length ? 'false' : 'true';
+
+        if (!requests.length) {
+          const empty = document.createElement('div');
+          empty.className = 'empty-state';
+          empty.innerHTML = '<h3>Пока заявок нет</h3><p>Отправьте тестовую заявку через /brief или нажмите “Добавить demo”.</p>';
+          listEl.appendChild(empty);
+          return;
+        }
+
+        requests.forEach((request) => {
+          const card = document.createElement('article');
+          card.className = 'admin-request-card';
+          const statusLabel = statusLabels[request.status] || request.status;
+          const backend = request.submit_backend || request.source;
+          const statusOptions = statusFlow
+            .map((option) => `<option value="${option.value}" ${option.value === request.status ? 'selected' : ''}>${option.label}</option>`)
+            .join('');
+          card.innerHTML = `
+            <div class="request-card-top">
+              <div>
+                <span class="status ready">${statusLabel}</span>
+                <h3>${request.event_names || 'Без названия'}</h3>
+                <p>${request.client_name} · ${request.client_whatsapp || 'WhatsApp не указан'}</p>
+              </div>
+              <strong>${request.request_id}</strong>
+            </div>
+            <dl class="request-data-list admin-data-list">
+              <dt>Событие</dt><dd>${request.event_type || 'Не указано'}</dd>
+              <dt>Дата</dt><dd>${request.event_date || 'Не указано'}</dd>
+              <dt>Место</dt><dd>${request.venue || 'Не указано'}</dd>
+              <dt>Шаблон</dt><dd>${request.template_slug || 'custom'}</dd>
+              <dt>Пакет</dt><dd>${request.package_preference || 'not-sure'}</dd>
+              <dt>Источник</dt><dd>${backend}</dd>
+              <dt>Создано</dt><dd>${formatDate(request.created_at)}</dd>
+            </dl>
+            <div class="request-status-editor">
+              <label>
+                <span>Статус заказа</span>
+                <select data-status-select="${request.request_id}">
+                  ${statusOptions}
+                </select>
+              </label>
+              <button class="button secondary" type="button" data-save-status="${request.request_id}">Сохранить статус</button>
+              <p class="form-note" data-status-note="${request.request_id}">${request.submit_backend === 'supabase' ? 'Статус сохранится в Supabase.' : 'Fallback/demo: статус сохранится только в этом браузере.'}</p>
+            </div>
+            <div class="request-build-actions">
+              <button class="button" type="button" data-build-site="${request.request_id}">Собрать черновик сайта</button>
+              <a class="button secondary" href="${appBase}client-preview/?id=${encodeURIComponent(request.request_id)}" data-open-preview="${request.request_id}">Открыть owner preview</a>
+              <button class="button secondary" type="button" data-publish-site="${request.request_id}" ${request.submit_backend === 'supabase' ? '' : 'disabled'}>Отправить клиенту</button>
+              <a class="button ghost" href="#" data-public-link="${request.request_id}" hidden>Открыть клиентскую ссылку</a>
+              <p class="form-note" data-build-note="${request.request_id}">${request.submit_backend === 'supabase' ? 'Сначала соберите черновик, затем отправьте клиенту public-safe ссылку.' : 'Fallback/demo: публичная ссылка доступна только для Supabase заявок.'}</p>
+            </div>
+          `;
+          listEl.appendChild(card);
+
+          const saveButton = card.querySelector(`[data-save-status="${request.request_id}"]`) as HTMLButtonElement | null;
+          const select = card.querySelector(`[data-status-select="${request.request_id}"]`) as HTMLSelectElement | null;
+          const noteEl = card.querySelector(`[data-status-note="${request.request_id}"]`) as HTMLElement | null;
+          const buildButton = card.querySelector(`[data-build-site="${request.request_id}"]`) as HTMLButtonElement | null;
+          const publishButton = card.querySelector(`[data-publish-site="${request.request_id}"]`) as HTMLButtonElement | null;
+          const publicLink = card.querySelector(`[data-public-link="${request.request_id}"]`) as HTMLAnchorElement | null;
+          const buildNote = card.querySelector(`[data-build-note="${request.request_id}"]`) as HTMLElement | null;
+
+          buildButton?.addEventListener('click', async () => {
+            buildButton.disabled = true;
+            if (buildNote) buildNote.textContent = 'Собираю черновик сайта...';
+
+            const draft = buildClientSiteDraft(request);
+            window.localStorage.setItem(`generated_invitation_site_${request.request_id}`, JSON.stringify(draft));
+            window.localStorage.setItem('generated_invitation_last_id', request.request_id);
+
+            if (request.submit_backend === 'supabase') {
+              if (buildNote) buildNote.textContent = 'Черновик собран локально. Сохраняю в Supabase...';
+              const result = await saveGeneratedSiteToOwnerApi(request.request_id, draft);
+              if (!result.ok) {
+                if (buildNote) buildNote.textContent = `Черновик собран локально, но Supabase save не прошёл: ${result.error}`;
+                buildButton.disabled = false;
+                return;
+              }
+              if (result.site_slug && publicLink) {
+                publicLink.href = `${appBase}i/${encodeURIComponent(result.site_slug)}/`;
+                publicLink.hidden = true;
+              }
+              if (buildNote) buildNote.textContent = `Черновик собран и сохранён в Supabase: ${draft.sections.length} секций. Теперь можно отправить клиенту.`;
+              buildButton.disabled = false;
+              await boot();
+              return;
+            }
+
+            if (buildNote) buildNote.textContent = `Черновик собран: ${draft.sections.length} секций. Откройте preview.`;
+            buildButton.disabled = false;
+          });
+
+          publishButton?.addEventListener('click', async () => {
+            publishButton.disabled = true;
+            if (buildNote) buildNote.textContent = 'Готовлю public-safe ссылку для клиента...';
+
+            const result = await publishGeneratedSiteToOwnerApi(request.request_id);
+            if (!result.ok || !result.site_slug) {
+              if (buildNote) buildNote.textContent = `Не удалось отправить клиенту: ${result.error || 'site_slug не получен'}. Сначала нажмите “Собрать черновик сайта”.`;
+              publishButton.disabled = false;
+              return;
+            }
+
+            const href = `${appBase}i/${encodeURIComponent(result.site_slug)}/`;
+            if (publicLink) {
+              publicLink.href = href;
+              publicLink.hidden = false;
+            }
+            const absoluteUrl = new URL(href, window.location.origin).toString();
+            try {
+              await navigator.clipboard?.writeText(absoluteUrl);
+              if (buildNote) buildNote.textContent = `Клиентская ссылка готова и скопирована: ${absoluteUrl}`;
+            } catch {
+              if (buildNote) buildNote.textContent = `Клиентская ссылка готова: ${absoluteUrl}`;
+            }
+            await updateOwnerApiStatus(request.request_id, 'preview_sent');
+            publishButton.disabled = false;
+          });
+
+          saveButton?.addEventListener('click', async () => {
+            if (!select) return;
+            const nextStatus = select.value;
+            saveButton.disabled = true;
+            if (noteEl) noteEl.textContent = 'Сохраняю статус...';
+
+            if (request.submit_backend === 'supabase') {
+              const result = await updateOwnerApiStatus(request.request_id, nextStatus);
+              if (!result.ok) {
+                if (noteEl) noteEl.textContent = `Не удалось сохранить: ${result.error}`;
+                saveButton.disabled = false;
+                return;
+              }
+            } else {
+              const updatedRequest = { ...request, status: nextStatus };
+              window.localStorage.setItem(`invitation_request_${request.request_id}`, JSON.stringify(updatedRequest));
+            }
+
+            if (noteEl) noteEl.textContent = 'Статус сохранён.';
+            await boot();
+          });
+        });
+      }
+
+      function createDemoRequest(): AdminRequest {
+        const requestId = `REQ-DEMO-${Date.now().toString(36).toUpperCase()}`;
+        return {
+          request_id: requestId,
+          created_at: new Date().toISOString(),
+          status: 'brief_received',
+          source: 'admin-demo',
+          template_slug: 'wedding-luxury-01',
+          template_select: 'wedding-luxury-01',
+          client_name: 'Demo клиент',
+          client_whatsapp: '+996 000 000 000',
+          event_type: 'wedding',
+          event_names: 'Demo & Test',
+          event_date: '2026-09-12',
+          event_time: '18:00',
+          venue: 'Demo Restaurant',
+          invitation_text: 'Нежное luxury приглашение с программой и RSVP.',
+          language: 'ru-kg',
+          rsvp_needed: 'yes',
+          assets_note: 'Фото и музыка будут позже.',
+          urgency: 'normal',
+          package_preference: 'premium',
+          submit_backend: 'localstorage-demo',
+        };
+      }
+
+      function saveDemoRequest() {
+        const request = createDemoRequest();
+        window.localStorage.setItem(`invitation_request_${request.request_id}`, JSON.stringify(request));
+        const indexRaw = window.localStorage.getItem('invitation_requests_index');
+        const parsedIndex = indexRaw ? JSON.parse(indexRaw) : [];
+        const index = Array.isArray(parsedIndex) ? parsedIndex.map(String) : [];
+        window.localStorage.setItem('invitation_requests_index', JSON.stringify([request.request_id, ...index]));
+      }
+
+      async function boot() {
+        const localRequests = readLocalRequests();
+        const ownerApiResult = await readOwnerApiRequests();
+
+        if (ownerApiResult.requests.length) {
+          renderRequests(ownerApiResult.requests, 'Owner API', `Показаны защищённые заявки через Edge Function: ${ownerApiResult.requests.length}.`);
+          return;
+        }
+
+        const note = ownerApiResult.error
+          ? `Показан localStorage/demo fallback. Protected backend недоступен: ${ownerApiResult.error}`
+          : `Показан localStorage/demo fallback: ${localRequests.length}.`;
+        renderRequests(localRequests, localRequests.length ? 'Local' : 'Demo', note);
+      }
+
+      function syncOwnerAuthUi() {
+        const hasToken = Boolean(window.localStorage.getItem(ownerTokenStorageKey)?.trim());
+        if (ownerAuthCard) ownerAuthCard.hidden = hasToken;
+        if (clearOwnerTokenButton) clearOwnerTokenButton.hidden = !hasToken;
+        if (ownerLoginLink) ownerLoginLink.textContent = hasToken ? 'Token сохранён' : 'Войти владельцу';
+      }
+
+      clearOwnerTokenButton?.addEventListener('click', () => {
+        window.localStorage.removeItem(ownerTokenStorageKey);
+        syncOwnerAuthUi();
+        boot();
+      });
+
+      seedButton?.addEventListener('click', () => {
+        saveDemoRequest();
+        boot();
+      });
+
+      syncOwnerAuthUi();
+      boot();
+    </script>
+  </main>
+</BaseLayout>

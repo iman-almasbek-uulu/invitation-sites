@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+---
+<BaseLayout title="Приглашение" description="Публичная клиентская ссылка на digital invitation preview.">
+  <main class="client-preview-page public-invite-page">
+    <a class="back-link" href={base}>← Каталог</a>
+
+    <section class="client-preview-shell" id="public-invite-shell" data-state="loading" data-slug="">
+      <div class="preview-empty" id="public-empty">
+        <p class="eyebrow">Client link</p>
+        <h1>Приглашение загружается</h1>
+        <p class="lead" id="public-empty-note">Если ссылка верная, сайт появится через пару секунд.</p>
+      </div>
+
+      <article class="generated-invite" id="public-invite" hidden>
+        <header class="generated-hero">
+          <p class="eyebrow" id="public-source">Public preview</p>
+          <p class="eyebrow" id="public-event-type">Событие</p>
+          <h1 id="public-names">Имена</h1>
+          <p id="public-intro">Текст приглашения</p>
+          <div class="generated-facts">
+            <span><b>Дата</b><em id="public-date">—</em></span>
+            <span><b>Время</b><em id="public-time">—</em></span>
+            <span><b>Место</b><em id="public-venue">—</em></span>
+          </div>
+        </header>
+
+        <section class="generated-section-list" id="public-sections"></section>
+      </article>
+    </section>
+
+    <script>
+      type PublicClientSite = {
+        id?: string;
+        request_id?: string;
+        generated_at?: string;
+        template_slug: string;
+        package_preference: string;
+        title: string;
+        names: string;
+        event_type: string;
+        event_date: string;
+        event_time: string;
+        venue: string;
+        language: string;
+        invitation_text: string;
+        rsvp_needed: string;
+        sections: Array<{ title: string; body: string }>;
+      };
+
+      type PublicGeneratedSiteResponse = {
+        ok?: boolean;
+        error?: string;
+        generated_site?: {
+          site_slug: string;
+          status: string;
+          template_slug: string;
+          title: string;
+          public_payload: PublicClientSite;
+          published_at?: string | null;
+          updated_at?: string;
+        };
+      };
+
+      const shell = document.getElementById('public-invite-shell');
+      const slug = decodeURIComponent(window.location.pathname.split('/').filter(Boolean).pop() || new URLSearchParams(window.location.search).get('slug') || '');
+      const empty = document.getElementById('public-empty');
+      const emptyNote = document.getElementById('public-empty-note');
+      const invite = document.getElementById('public-invite');
+      const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+
+      function setText(selector: string, value: string) {
+        const node = document.querySelector(selector);
+        if (node) node.textContent = value;
+      }
+
+      function renderPublicSite(payload: PublicClientSite, status: string) {
+        document.title = `${payload.title || payload.names} — invitation`;
+        shell?.setAttribute('data-state', 'ready');
+        if (empty) empty.hidden = true;
+        if (invite) invite.hidden = false;
+        setText('#public-source', status === 'published' ? 'Published invitation' : 'Client preview');
+        setText('#public-event-type', `${payload.event_type} · ${payload.template_slug} · ${payload.package_preference}`);
+        setText('#public-names', payload.names);
+        setText('#public-intro', payload.invitation_text);
+        setText('#public-date', payload.event_date);
+        setText('#public-time', payload.event_time);
+        setText('#public-venue', payload.venue);
+
+        const sectionsEl = document.getElementById('public-sections');
+        if (sectionsEl) {
+          sectionsEl.innerHTML = '';
+          payload.sections.forEach((section, index) => {
+            const article = document.createElement('article');
+            article.className = 'generated-section-card';
+            article.innerHTML = `<span>${String(index + 1).padStart(2, '0')}</span><h2></h2><p></p>`;
+            const title = article.querySelector('h2');
+            const body = article.querySelector('p');
+            if (title) title.textContent = section.title;
+            if (body) body.textContent = section.body;
+            sectionsEl.appendChild(article);
+          });
+        }
+      }
+
+      async function bootPublicInvite() {
+        if (!slug) {
+          shell?.setAttribute('data-state', 'missing');
+          if (emptyNote) emptyNote.textContent = 'Slug не указан.';
+          return;
+        }
+        if (!supabaseUrl) {
+          shell?.setAttribute('data-state', 'missing');
+          if (emptyNote) emptyNote.textContent = 'PUBLIC_SUPABASE_URL не настроен.';
+          return;
+        }
+
+        const endpoint = `${String(supabaseUrl).replace(/\/$/, '')}/functions/v1/owner-requests?public_site=${encodeURIComponent(slug)}`;
+        try {
+          const response = await fetch(endpoint);
+          const body = await response.json() as PublicGeneratedSiteResponse;
+          if (!response.ok || !body.ok || !body.generated_site?.public_payload) {
+            throw new Error(body.error || `Public API вернул ${response.status}`);
+          }
+          renderPublicSite(body.generated_site.public_payload, body.generated_site.status);
+        } catch (error) {
+          shell?.setAttribute('data-state', 'missing');
+          if (emptyNote) emptyNote.textContent = error instanceof Error ? error.message : 'Public API network error';
+        }
+      }
+
+      bootPublicInvite();
+    </script>
+  </main>
+</BaseLayout>

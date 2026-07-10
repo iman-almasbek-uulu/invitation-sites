@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+---
+<BaseLayout title="Заявка принята" description="Подтверждение заявки на сайт-приглашение и следующие шаги.">
+  <main class="brief-page">
+    <a class="back-link" href={`${base}brief/`}>← Вернуться к брифу</a>
+
+    <section class="section compact success-hero">
+      <p class="eyebrow">Заявка</p>
+      <h1>Заявка собрана</h1>
+      <p class="lead">Это временное MVP-сохранение без backend: заявка записана в localStorage вашего браузера. Следующий этап — заменить это на Supabase.</p>
+
+      <div class="success-card" id="success-card" data-state="loading">
+        <div class="success-icon">✓</div>
+        <div>
+          <p class="eyebrow">Номер заявки</p>
+          <h2 id="request-id">Загружаю...</h2>
+          <p id="request-summary">Проверяю сохранённые данные заявки.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section compact success-details">
+      <div class="brief-submit-box">
+        <div>
+          <h3>Что дальше</h3>
+          <p>В реальной версии владелец увидит эту заявку в админке, уточнит детали в WhatsApp, примет оплату и создаст клиентский сайт.</p>
+        </div>
+        <a class="button" href={base}>Открыть каталог</a>
+      </div>
+
+      <div class="request-preview" id="request-preview">
+        <h3>Данные заявки</h3>
+        <p class="form-note">Если данные не отображаются, значит заявка была открыта в другом браузере или localStorage очищен.</p>
+      </div>
+    </section>
+
+    <script>
+      type StoredBrief = {
+        request_id: string;
+        created_at: string;
+        status: string;
+        source: string;
+        template_slug: string;
+        template_select: string;
+        client_name: string;
+        client_whatsapp: string;
+        event_type: string;
+        event_names: string;
+        event_date: string;
+        event_time: string;
+        venue: string;
+        invitation_text: string;
+        language: string;
+        rsvp_needed: string;
+        assets_note: string;
+        urgency: string;
+        package_preference: string;
+      };
+
+      const params = new URLSearchParams(window.location.search);
+      const requestId = params.get('id') || '';
+      const idEl = document.getElementById('request-id');
+      const summaryEl = document.getElementById('request-summary');
+      const card = document.getElementById('success-card');
+      const preview = document.getElementById('request-preview');
+
+      const readRequest = (id: string): StoredBrief | null => {
+        if (!id) return null;
+        try {
+          const raw = window.localStorage.getItem(`invitation_request_${id}`);
+          return raw ? JSON.parse(raw) as StoredBrief : null;
+        } catch {
+          return null;
+        }
+      };
+
+      const request = readRequest(requestId);
+
+      if (!request) {
+        card?.setAttribute('data-state', 'missing');
+        if (idEl) idEl.textContent = requestId || 'Не найдено';
+        if (summaryEl) summaryEl.textContent = 'Заявка не найдена в этом браузере. Можно вернуться к брифу и отправить форму ещё раз.';
+      } else {
+        card?.setAttribute('data-state', 'ready');
+        if (idEl) idEl.textContent = request.request_id;
+        if (summaryEl) {
+          summaryEl.textContent = `${request.client_name}, ${request.event_type}, ${request.event_names}, дата: ${request.event_date}.`;
+        }
+
+        const fields: Array<[string, string]> = [
+          ['Клиент', request.client_name],
+          ['WhatsApp', request.client_whatsapp],
+          ['Тип события', request.event_type],
+          ['Имена', request.event_names],
+          ['Дата', request.event_date],
+          ['Время', request.event_time || 'Не указано'],
+          ['Место', request.venue || 'Не указано'],
+          ['Шаблон', request.template_slug || request.template_select || 'custom'],
+          ['Язык', request.language],
+          ['RSVP', request.rsvp_needed],
+          ['Срочность', request.urgency],
+          ['Пакет', request.package_preference],
+        ];
+
+        const list = document.createElement('dl');
+        list.className = 'request-data-list';
+        fields.forEach(([label, value]) => {
+          const dt = document.createElement('dt');
+          dt.textContent = label;
+          const dd = document.createElement('dd');
+          dd.textContent = value;
+          list.append(dt, dd);
+        });
+        preview?.appendChild(list);
+      }
+    </script>
+  </main>
+</BaseLayout>

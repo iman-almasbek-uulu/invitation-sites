@@ -1,19 +1,383 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { readyTemplates } from '../data/templates';
+
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const briefTemplates = readyTemplates.map((template) => ({
+  slug: template.slug,
+  name: template.name,
+  label: template.label,
+  packageLevel: template.packageLevel,
+  priceRange: template.priceRange,
+  description: template.description,
+  demoPath: `${base}${template.demoPath.replace(/^\//, '')}`,
+  features: template.features,
+  recommendedUse: template.recommendedUse,
+}));
 ---
-<BaseLayout title="Бриф на сайт-приглашение">
+<BaseLayout title="Бриф на сайт-приглашение" description="Форма заявки на цифровое приглашение: выбранный шаблон, данные события, контакты и материалы клиента.">
   <main class="brief-page">
     <a class="back-link" href={base}>← Назад в каталог</a>
-    <section class="section compact">
+
+    <section class="section compact brief-hero">
       <p class="eyebrow">Заказ</p>
       <h1>Бриф на сайт-приглашение</h1>
-      <p class="lead">Эта страница пока как заготовка. Сюда позже добавим форму заказа или ссылку на WhatsApp/Instagram.</p>
-      <div class="faq-grid">
-        <article class="faq-card"><h3>1. Событие</h3><p>Свадьба, никах, кыз узатуу, день рождения или другое.</p></article>
-        <article class="faq-card"><h3>2. Данные</h3><p>Имена, дата, место, программа, фото, пожелания.</p></article>
-        <article class="faq-card"><h3>3. Дизайн</h3><p>Выбранный шаблон или индивидуальный стиль.</p></article>
+      <p class="lead">Заполните данные события. Сейчас форма подготовлена как структура заявки под будущую базу/Supabase; выбранный шаблон берётся из ссылки.</p>
+
+      <div class="selected-template-card" id="selected-template-card" data-empty="true">
+        <div>
+          <p class="eyebrow">Выбранный шаблон</p>
+          <h2 id="selected-template-name">Шаблон не выбран</h2>
+          <p id="selected-template-description">Выберите шаблон из каталога или оставьте поле “Индивидуальный стиль”.</p>
+        </div>
+        <div class="selected-template-meta">
+          <span id="selected-template-label">Custom</span>
+          <strong id="selected-template-price">По запросу</strong>
+          <a id="selected-template-demo" class="button secondary" href={`${base}#templates`}>Выбрать шаблон</a>
+        </div>
       </div>
     </section>
+
+    <section class="section compact brief-form-section">
+      <form class="brief-form" id="brief-form" name="invitation-brief" data-base={base}>
+        <input type="hidden" name="template_slug" id="template-slug" value="" />
+
+        <div class="form-grid two">
+          <label>
+            <span>Ваше имя *</span>
+            <input name="client_name" type="text" placeholder="Например: Айдана" required />
+          </label>
+          <label>
+            <span>WhatsApp / телефон *</span>
+            <input name="client_whatsapp" type="tel" placeholder="+996 ..." required />
+          </label>
+        </div>
+
+        <div class="form-grid two">
+          <label>
+            <span>Тип события *</span>
+            <select name="event_type" required>
+              <option value="">Выберите</option>
+              <option value="wedding">Свадьба</option>
+              <option value="nikah">Никах</option>
+              <option value="kyz-uzatuu">Кыз узатуу</option>
+              <option value="birthday">День рождения</option>
+              <option value="baby-shower">Baby shower</option>
+              <option value="jubilee">Юбилей</option>
+              <option value="other">Другое</option>
+            </select>
+          </label>
+          <label>
+            <span>Выбранный шаблон</span>
+            <select name="template_select" id="template-select">
+              <option value="custom">Индивидуальный / пока не выбрал</option>
+              {readyTemplates.map((template) => (
+                <option value={template.slug}>{template.name} — {template.label}</option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <div class="form-grid two">
+          <label>
+            <span>Имена на приглашении *</span>
+            <input name="event_names" type="text" placeholder="Айдана & Бекзат" required />
+          </label>
+          <label>
+            <span>Дата события *</span>
+            <input name="event_date" type="date" required />
+          </label>
+        </div>
+
+        <div class="form-grid two">
+          <label>
+            <span>Время</span>
+            <input name="event_time" type="time" />
+          </label>
+          <label>
+            <span>Адрес / ресторан</span>
+            <input name="venue" type="text" placeholder="Название и адрес места" />
+          </label>
+        </div>
+
+        <label>
+          <span>Текст приглашения / пожелания</span>
+          <textarea name="invitation_text" rows="5" placeholder="Если текста пока нет — напишите стиль: официальный, нежный, luxury, кыргызский/русский и т.д."></textarea>
+        </label>
+
+        <div class="form-grid two">
+          <label>
+            <span>Язык приглашения</span>
+            <select name="language">
+              <option value="ru">Русский</option>
+              <option value="kg">Кыргызский</option>
+              <option value="ru-kg">Русский + Кыргызский</option>
+              <option value="en">Английский</option>
+            </select>
+          </label>
+          <label>
+            <span>RSVP нужен?</span>
+            <select name="rsvp_needed">
+              <option value="yes">Да, гости должны ответить</option>
+              <option value="no">Нет, только приглашение</option>
+              <option value="later">Решим позже</option>
+            </select>
+          </label>
+        </div>
+
+        <label>
+          <span>Фото / музыка / материалы</span>
+          <textarea name="assets_note" rows="4" placeholder="Напишите, что уже есть: фото пары, музыка, видео, карта, список гостей. Файлы позже можно будет загрузить через Storage."></textarea>
+        </label>
+
+        <div class="form-grid two">
+          <label>
+            <span>Срочность</span>
+            <select name="urgency">
+              <option value="normal">Обычно: 3–5 дней</option>
+              <option value="fast">Срочно: 1–2 дня</option>
+              <option value="same-day">Очень срочно: сегодня</option>
+            </select>
+          </label>
+          <label>
+            <span>Бюджет / пакет</span>
+            <select name="package_preference">
+              <option value="starter">Starter</option>
+              <option value="standard">Standard</option>
+              <option value="premium">Premium</option>
+              <option value="not-sure">Пока не знаю</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="brief-submit-box">
+          <div>
+            <h3>Отправка заявки</h3>
+            <p>Если Supabase настроен, заявка уйдёт в базу. Если нет — форма безопасно сохранит заявку в браузере через localStorage.</p>
+          </div>
+          <button class="button" type="submit">Отправить заявку</button>
+        </div>
+
+        <p class="form-note" id="brief-result" role="status">Заполните поля — после отправки откроется страница подтверждения.</p>
+      </form>
+    </section>
+
+    <script is:inline type="application/json" id="brief-template-data" set:html={JSON.stringify(briefTemplates)} />
+    <script>
+      import { createClient } from '@supabase/supabase-js';
+
+      type BriefTemplate = {
+        slug: string;
+        name: string;
+        label: string;
+        priceRange: string;
+        description: string;
+        demoPath: string;
+      };
+
+      type BriefRequest = {
+        request_id: string;
+        created_at: string;
+        status: string;
+        source: string;
+        template_slug: string;
+        template_select: string;
+        client_name: string;
+        client_whatsapp: string;
+        event_type: string;
+        event_names: string;
+        event_date: string;
+        event_time: string;
+        venue: string;
+        invitation_text: string;
+        language: string;
+        rsvp_needed: string;
+        assets_note: string;
+        urgency: string;
+        package_preference: string;
+        submit_backend: 'supabase' | 'localstorage';
+        submit_error?: string;
+      };
+
+      type InvitationRequestInsert = {
+        request_number: string;
+        template_slug: string;
+        template_select: string;
+        package_preference: string;
+        client_name: string;
+        client_whatsapp: string;
+        event_type: string;
+        event_names: string;
+        event_date: string;
+        event_time: string | null;
+        venue: string | null;
+        invitation_text: string | null;
+        language: string;
+        rsvp_needed: string;
+        assets_note: string | null;
+        urgency: string;
+        status: string;
+        source: string;
+        brief_payload: BriefRequest;
+      };
+
+      const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
+      const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+      const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
+
+      const templateDataElement = document.getElementById('brief-template-data');
+      const templates = (templateDataElement ? JSON.parse(templateDataElement.textContent || '[]') : []) as BriefTemplate[];
+      const params = new URLSearchParams(window.location.search);
+      const initialTemplate = params.get('template') || 'custom';
+
+      const card = document.getElementById('selected-template-card');
+      const nameEl = document.getElementById('selected-template-name');
+      const descriptionEl = document.getElementById('selected-template-description');
+      const labelEl = document.getElementById('selected-template-label');
+      const priceEl = document.getElementById('selected-template-price');
+      const demoEl = document.getElementById('selected-template-demo') as HTMLAnchorElement | null;
+      const slugInput = document.getElementById('template-slug') as HTMLInputElement | null;
+      const select = document.getElementById('template-select') as HTMLSelectElement | null;
+      const form = document.getElementById('brief-form') as HTMLFormElement | null;
+      const result = document.getElementById('brief-result');
+
+      function setTemplate(slug: string) {
+        const template = templates.find((item) => item.slug === slug);
+        if (!template) {
+          card?.setAttribute('data-empty', 'true');
+          if (nameEl) nameEl.textContent = 'Индивидуальный стиль';
+          if (descriptionEl) descriptionEl.textContent = 'Клиент пока не выбрал готовый шаблон или хочет индивидуальный дизайн.';
+          if (labelEl) labelEl.textContent = 'Custom';
+          if (priceEl) priceEl.textContent = 'По запросу';
+          if (demoEl) {
+            demoEl.textContent = 'Выбрать шаблон';
+            demoEl.href = `${window.location.origin}${window.location.pathname.replace(/brief\/?$/, '')}#templates`;
+          }
+          if (slugInput) slugInput.value = 'custom';
+          if (select) select.value = 'custom';
+          return;
+        }
+
+        card?.setAttribute('data-empty', 'false');
+        if (nameEl) nameEl.textContent = template.name;
+        if (descriptionEl) descriptionEl.textContent = template.description;
+        if (labelEl) labelEl.textContent = template.label;
+        if (priceEl) priceEl.textContent = template.priceRange;
+        if (demoEl) {
+          demoEl.textContent = 'Открыть демо';
+          demoEl.href = template.demoPath;
+        }
+        if (slugInput) slugInput.value = template.slug;
+        if (select) select.value = template.slug;
+      }
+
+      function saveRequestLocally(request: BriefRequest) {
+        window.localStorage.setItem(`invitation_request_${request.request_id}`, JSON.stringify(request));
+        const indexRaw = window.localStorage.getItem('invitation_requests_index');
+        const parsedIndex = indexRaw ? JSON.parse(indexRaw) : [];
+        const index = Array.isArray(parsedIndex) ? parsedIndex.map(String) : [];
+        const nextIndex = [request.request_id, ...index.filter((id) => id !== request.request_id)].slice(0, 20);
+        window.localStorage.setItem('invitation_requests_index', JSON.stringify(nextIndex));
+      }
+
+      async function submitToSupabase(request: BriefRequest) {
+        if (!supabase) {
+          return { ok: false, reason: 'Supabase env не настроен' };
+        }
+
+        const payload: InvitationRequestInsert = {
+          request_number: request.request_id,
+          template_slug: request.template_slug,
+          template_select: request.template_select,
+          package_preference: request.package_preference,
+          client_name: request.client_name,
+          client_whatsapp: request.client_whatsapp,
+          event_type: request.event_type,
+          event_names: request.event_names,
+          event_date: request.event_date,
+          event_time: request.event_time || null,
+          venue: request.venue || null,
+          invitation_text: request.invitation_text || null,
+          language: request.language,
+          rsvp_needed: request.rsvp_needed,
+          assets_note: request.assets_note || null,
+          urgency: request.urgency,
+          status: 'brief_received',
+          source: 'astro-brief',
+          brief_payload: request,
+        };
+
+        const { error } = await supabase.from('invitation_requests').insert(payload);
+        if (error) {
+          return { ok: false, reason: error.message };
+        }
+
+        return { ok: true, reason: 'saved-to-supabase' };
+      }
+
+      setTemplate(initialTemplate);
+      select?.addEventListener('change', () => setTemplate(select.value));
+
+      form?.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const data = new FormData(form);
+        const requiredFields = ['client_name', 'client_whatsapp', 'event_type', 'event_names', 'event_date'];
+        const missing = requiredFields.filter((field) => !String(data.get(field) || '').trim());
+        if (missing.length > 0) {
+          if (result) result.textContent = 'Заполните обязательные поля: имя, WhatsApp, тип события, имена и дату.';
+          return;
+        }
+
+        const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+        if (submitButton) submitButton.disabled = true;
+        if (result) result.textContent = 'Отправляю заявку...';
+
+        const requestId = `REQ-${Date.now().toString(36).toUpperCase()}`;
+        const request: BriefRequest = {
+          request_id: requestId,
+          created_at: new Date().toISOString(),
+          status: 'brief_received',
+          source: 'astro-brief',
+          template_slug: String(data.get('template_slug') || 'custom'),
+          template_select: String(data.get('template_select') || 'custom'),
+          client_name: String(data.get('client_name') || '').trim(),
+          client_whatsapp: String(data.get('client_whatsapp') || '').trim(),
+          event_type: String(data.get('event_type') || '').trim(),
+          event_names: String(data.get('event_names') || '').trim(),
+          event_date: String(data.get('event_date') || '').trim(),
+          event_time: String(data.get('event_time') || '').trim(),
+          venue: String(data.get('venue') || '').trim(),
+          invitation_text: String(data.get('invitation_text') || '').trim(),
+          language: String(data.get('language') || 'ru'),
+          rsvp_needed: String(data.get('rsvp_needed') || 'yes'),
+          assets_note: String(data.get('assets_note') || '').trim(),
+          urgency: String(data.get('urgency') || 'normal'),
+          package_preference: String(data.get('package_preference') || 'not-sure'),
+          submit_backend: 'localstorage',
+        };
+
+        const supabaseResult = await submitToSupabase(request);
+        if (supabaseResult.ok) {
+          request.submit_backend = 'supabase';
+        } else {
+          request.submit_backend = 'localstorage';
+          request.submit_error = supabaseResult.reason;
+        }
+
+        try {
+          saveRequestLocally(request);
+          if (result) {
+            result.textContent = supabaseResult.ok
+              ? `Заявка отправлена в Supabase: ${requestId}. Открываю подтверждение...`
+              : `Supabase недоступен, заявка сохранена локально: ${requestId}. Открываю подтверждение...`;
+          }
+          const formBase = form.dataset.base || '/';
+          window.location.href = `${formBase}brief/success/?id=${encodeURIComponent(requestId)}`;
+        } catch {
+          if (submitButton) submitButton.disabled = false;
+          if (result) result.textContent = 'Не получилось сохранить заявку в браузере. Проверьте режим приватного просмотра или настройки localStorage.';
+        }
+      });
+    </script>
   </main>
 </BaseLayout>

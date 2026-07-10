@@ -1,12 +1,12 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import templates from '../../data/templates.json';
+import { templates, type InvitationTemplate } from '../../data/templates';
 
 export function getStaticPaths() {
   return templates.map((template) => ({ params: { slug: template.slug }, props: { template } }));
 }
 
-const { template } = Astro.props;
+const { template } = Astro.props as { template: InvitationTemplate };
 const palette: Record<string, string[]> = {
   luxury: ['#fffaf4', '#5b3428', '#2d1a13'],
   minimal: ['#f4f1ec', '#7c8a78', '#232621'],

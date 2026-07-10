@@ -1,11 +1,28 @@
-# Generated previews and screenshots
-*.png
-*.webm
-
-# Dependencies/build artifacts
+# Dependencies
 node_modules/
+
+# Build outputs
 dist/
 .astro/
+supabase/.temp/
+
+# Environment files
 .env
 .env.*
 !.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Local previews / screenshots / recordings
+*-preview.png
+*-preview.webm
+*wedding-luxury-wow*.png
+*wedding-luxury-wow*.webm
+
+# OS/editor
+.DS_Store
+.vscode/

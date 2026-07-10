@@ -1,0 +1,4 @@
+project_id = "sbsxvihpdodxgujezcaa"
+
+[functions.owner-requests]
+verify_jwt = false

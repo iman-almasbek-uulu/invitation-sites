@@ -161,6 +161,73 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
 
       const statusFlow = Object.entries(statusLabels).map(([value, label]) => ({ value, label }));
 
+      type OwnerCrmFields = {
+        price: string;
+        prepayment: string;
+        paymentStatus: string;
+        paymentNote: string;
+      };
+
+      const paymentStatusLabels: Record<string, string> = {
+        not_set: 'Не указано',
+        quote_sent: 'Цена отправлена',
+        prepayment_waiting: 'Ждём предоплату',
+        prepayment_paid: 'Предоплата получена',
+        paid_full: 'Полностью оплачено',
+      };
+
+      function escapeHtml(value: unknown): string {
+        return String(value ?? '')
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;')
+          .replaceAll('"', '&quot;')
+          .replaceAll("'", '&#39;');
+      }
+
+      function crmStorageKey(requestId: string): string {
+        return `invitation_owner_crm_${requestId}`;
+      }
+
+      function readCrmFields(requestId: string): OwnerCrmFields {
+        try {
+          const raw = window.localStorage.getItem(crmStorageKey(requestId));
+          const parsed = raw ? JSON.parse(raw) as Partial<OwnerCrmFields> : {};
+          return {
+            price: String(parsed.price || ''),
+            prepayment: String(parsed.prepayment || ''),
+            paymentStatus: String(parsed.paymentStatus || 'not_set'),
+            paymentNote: String(parsed.paymentNote || ''),
+          };
+        } catch {
+          return { price: '', prepayment: '', paymentStatus: 'not_set', paymentNote: '' };
+        }
+      }
+
+      function saveCrmFields(requestId: string, fields: OwnerCrmFields) {
+        window.localStorage.setItem(crmStorageKey(requestId), JSON.stringify(fields));
+      }
+
+      function formatMoney(value: string): string {
+        const clean = value.trim();
+        if (!clean) return 'Цена не указана';
+        return clean.match(/[a-zа-я$€₽₸с]/i) ? clean : `${clean} сом`;
+      }
+
+      function safeUrlForPublicLink(slugOrHref: string): string {
+        const href = slugOrHref.startsWith('http') ? slugOrHref : `${appBase}i/${encodeURIComponent(slugOrHref)}/`;
+        return new URL(href, window.location.origin).toString();
+      }
+
+      async function copyTextToClipboard(text: string): Promise<boolean> {
+        try {
+          await navigator.clipboard?.writeText(text);
+          return true;
+        } catch {
+          return false;
+        }
+      }
+
       function safeParseRequest(raw: string | null): AdminRequest | null {
         if (!raw) return null;
         try {
@@ -428,43 +495,82 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
           card.className = 'admin-request-card';
           const statusLabel = statusLabels[request.status] || request.status;
           const backend = request.submit_backend || request.source;
+          const crm = readCrmFields(request.request_id);
           const statusOptions = statusFlow
-            .map((option) => `<option value="${option.value}" ${option.value === request.status ? 'selected' : ''}>${option.label}</option>`)
+            .map((option) => `<option value="${escapeHtml(option.value)}" ${option.value === request.status ? 'selected' : ''}>${escapeHtml(option.label)}</option>`)
             .join('');
+          const paymentStatusOptions = Object.entries(paymentStatusLabels)
+            .map(([value, label]) => `<option value="${escapeHtml(value)}" ${value === crm.paymentStatus ? 'selected' : ''}>${escapeHtml(label)}</option>`)
+            .join('');
+          const publicUrlPreview = safeUrlForPublicLink(request.request_id);
           card.innerHTML = `
             <div class="request-card-top">
               <div>
-                <span class="status ready">${statusLabel}</span>
-                <h3>${request.event_names || 'Без названия'}</h3>
-                <p>${request.client_name} · ${request.client_whatsapp || 'WhatsApp не указан'}</p>
+                <span class="status ready">${escapeHtml(statusLabel)}</span>
+                <h3>${escapeHtml(request.event_names || 'Без названия')}</h3>
+                <p>${escapeHtml(request.client_name)} · ${escapeHtml(request.client_whatsapp || 'WhatsApp не указан')}</p>
               </div>
-              <strong>${request.request_id}</strong>
+              <strong>${escapeHtml(request.request_id)}</strong>
             </div>
+
+            <div class="request-card-summary">
+              <article><span>Дата</span><strong>${escapeHtml(request.event_date || 'Не указано')}</strong></article>
+              <article><span>Пакет</span><strong>${escapeHtml(request.package_preference || 'not-sure')}</strong></article>
+              <article><span>Оплата</span><strong data-payment-summary="${escapeHtml(request.request_id)}">${escapeHtml(paymentStatusLabels[crm.paymentStatus] || 'Не указано')}</strong></article>
+            </div>
+
             <dl class="request-data-list admin-data-list">
-              <dt>Событие</dt><dd>${request.event_type || 'Не указано'}</dd>
-              <dt>Дата</dt><dd>${request.event_date || 'Не указано'}</dd>
-              <dt>Место</dt><dd>${request.venue || 'Не указано'}</dd>
-              <dt>Шаблон</dt><dd>${request.template_slug || 'custom'}</dd>
-              <dt>Пакет</dt><dd>${request.package_preference || 'not-sure'}</dd>
-              <dt>Источник</dt><dd>${backend}</dd>
-              <dt>Создано</dt><dd>${formatDate(request.created_at)}</dd>
+              <dt>Событие</dt><dd>${escapeHtml(request.event_type || 'Не указано')}</dd>
+              <dt>Место</dt><dd>${escapeHtml(request.venue || 'Не указано')}</dd>
+              <dt>Шаблон</dt><dd>${escapeHtml(request.template_slug || 'custom')}</dd>
+              <dt>Источник</dt><dd>${escapeHtml(backend)}</dd>
+              <dt>Создано</dt><dd>${escapeHtml(formatDate(request.created_at))}</dd>
+              <dt>Текст/заметки</dt><dd>${escapeHtml(request.invitation_text || request.assets_note || 'Нет заметок')}</dd>
             </dl>
-            <div class="request-status-editor">
-              <label>
-                <span>Статус заказа</span>
-                <select data-status-select="${request.request_id}">
-                  ${statusOptions}
-                </select>
-              </label>
-              <button class="button secondary" type="button" data-save-status="${request.request_id}">Сохранить статус</button>
-              <p class="form-note" data-status-note="${request.request_id}">${request.submit_backend === 'supabase' ? 'Статус сохранится в Supabase.' : 'Fallback/demo: статус сохранится только в этом браузере.'}</p>
+
+            <div class="owner-crm-grid">
+              <section class="request-status-editor">
+                <label>
+                  <span>Статус заказа</span>
+                  <select data-status-select="${escapeHtml(request.request_id)}">
+                    ${statusOptions}
+                  </select>
+                </label>
+                <button class="button secondary" type="button" data-save-status="${escapeHtml(request.request_id)}">Сохранить статус</button>
+                <p class="form-note" data-status-note="${escapeHtml(request.request_id)}">${request.submit_backend === 'supabase' ? 'Статус сохранится в Supabase.' : 'Fallback/demo: статус сохранится только в этом браузере.'}</p>
+              </section>
+
+              <section class="request-payment-editor">
+                <div class="form-grid two compact-fields">
+                  <label>
+                    <span>Цена</span>
+                    <input data-price-input="${escapeHtml(request.request_id)}" value="${escapeHtml(crm.price)}" placeholder="например 2500" />
+                  </label>
+                  <label>
+                    <span>Предоплата</span>
+                    <input data-prepayment-input="${escapeHtml(request.request_id)}" value="${escapeHtml(crm.prepayment)}" placeholder="например 1000" />
+                  </label>
+                </div>
+                <label>
+                  <span>Оплата</span>
+                  <select data-payment-status="${escapeHtml(request.request_id)}">${paymentStatusOptions}</select>
+                </label>
+                <label>
+                  <span>Заметка</span>
+                  <textarea data-payment-note="${escapeHtml(request.request_id)}" rows="2" placeholder="например: ждём чек в WhatsApp">${escapeHtml(crm.paymentNote)}</textarea>
+                </label>
+                <button class="button secondary" type="button" data-save-crm="${escapeHtml(request.request_id)}">Сохранить оплату</button>
+                <p class="form-note" data-crm-note="${escapeHtml(request.request_id)}">${escapeHtml(formatMoney(crm.price))} · ${escapeHtml(crm.prepayment ? `предоплата ${formatMoney(crm.prepayment)}` : 'предоплата не указана')}</p>
+              </section>
             </div>
+
             <div class="request-build-actions">
-              <button class="button" type="button" data-build-site="${request.request_id}">Собрать черновик сайта</button>
-              <a class="button secondary" href="${appBase}client-preview/?id=${encodeURIComponent(request.request_id)}" data-open-preview="${request.request_id}">Открыть owner preview</a>
-              <button class="button secondary" type="button" data-publish-site="${request.request_id}" ${request.submit_backend === 'supabase' ? '' : 'disabled'}>Отправить клиенту</button>
-              <a class="button ghost" href="#" data-public-link="${request.request_id}" hidden>Открыть клиентскую ссылку</a>
-              <p class="form-note" data-build-note="${request.request_id}">${request.submit_backend === 'supabase' ? 'Сначала соберите черновик, затем отправьте клиенту public-safe ссылку.' : 'Fallback/demo: публичная ссылка доступна только для Supabase заявок.'}</p>
+              <button class="button" type="button" data-build-site="${escapeHtml(request.request_id)}">Собрать черновик сайта</button>
+              <a class="button secondary" href="${appBase}client-preview/?id=${encodeURIComponent(request.request_id)}" data-open-preview="${escapeHtml(request.request_id)}">Открыть owner preview</a>
+              <button class="button secondary" type="button" data-publish-site="${escapeHtml(request.request_id)}" ${request.submit_backend === 'supabase' ? '' : 'disabled'}>Отправить клиенту</button>
+              <button class="button secondary" type="button" data-copy-public-link="${escapeHtml(request.request_id)}">Скопировать ссылку</button>
+              <a class="button ghost" href="${escapeHtml(publicUrlPreview)}" data-public-link="${escapeHtml(request.request_id)}" hidden>Открыть клиентскую ссылку</a>
+              <p class="form-note" data-build-note="${escapeHtml(request.request_id)}">${request.submit_backend === 'supabase' ? 'Сначала соберите черновик, затем отправьте клиенту public-safe ссылку.' : 'Fallback/demo: можно копировать только demo-ссылку; реальная public-ссылка доступна для Supabase заявок.'}</p>
             </div>
           `;
           listEl.appendChild(card);
@@ -475,7 +581,39 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
           const buildButton = card.querySelector(`[data-build-site="${request.request_id}"]`) as HTMLButtonElement | null;
           const publishButton = card.querySelector(`[data-publish-site="${request.request_id}"]`) as HTMLButtonElement | null;
           const publicLink = card.querySelector(`[data-public-link="${request.request_id}"]`) as HTMLAnchorElement | null;
+          const copyPublicLinkButton = card.querySelector(`[data-copy-public-link="${request.request_id}"]`) as HTMLButtonElement | null;
           const buildNote = card.querySelector(`[data-build-note="${request.request_id}"]`) as HTMLElement | null;
+          const priceInput = card.querySelector(`[data-price-input="${request.request_id}"]`) as HTMLInputElement | null;
+          const prepaymentInput = card.querySelector(`[data-prepayment-input="${request.request_id}"]`) as HTMLInputElement | null;
+          const paymentStatusSelect = card.querySelector(`[data-payment-status="${request.request_id}"]`) as HTMLSelectElement | null;
+          const paymentNoteInput = card.querySelector(`[data-payment-note="${request.request_id}"]`) as HTMLTextAreaElement | null;
+          const saveCrmButton = card.querySelector(`[data-save-crm="${request.request_id}"]`) as HTMLButtonElement | null;
+          const crmNote = card.querySelector(`[data-crm-note="${request.request_id}"]`) as HTMLElement | null;
+          const paymentSummary = card.querySelector(`[data-payment-summary="${request.request_id}"]`) as HTMLElement | null;
+
+          saveCrmButton?.addEventListener('click', () => {
+            const fields: OwnerCrmFields = {
+              price: priceInput?.value.trim() || '',
+              prepayment: prepaymentInput?.value.trim() || '',
+              paymentStatus: paymentStatusSelect?.value || 'not_set',
+              paymentNote: paymentNoteInput?.value.trim() || '',
+            };
+            saveCrmFields(request.request_id, fields);
+            if (paymentSummary) paymentSummary.textContent = paymentStatusLabels[fields.paymentStatus] || 'Не указано';
+            if (crmNote) crmNote.textContent = `Сохранено: ${formatMoney(fields.price)} · ${fields.prepayment ? `предоплата ${formatMoney(fields.prepayment)}` : 'предоплата не указана'}`;
+          });
+
+          copyPublicLinkButton?.addEventListener('click', async () => {
+            if (!publicLink || publicLink.hidden || publicLink.getAttribute('href') === '#') {
+              if (buildNote) buildNote.textContent = request.submit_backend === 'supabase'
+                ? 'Сначала нажмите “Отправить клиенту”, потом можно копировать public-safe ссылку.'
+                : 'Demo/fallback не создаёт настоящую public-safe ссылку. Для клиента нужна Supabase заявка.';
+              return;
+            }
+            const href = safeUrlForPublicLink(publicLink.href);
+            const copied = await copyTextToClipboard(href);
+            if (buildNote) buildNote.textContent = copied ? `Ссылка скопирована: ${href}` : `Скопируйте ссылку вручную: ${href}`;
+          });
 
           buildButton?.addEventListener('click', async () => {
             buildButton.disabled = true;

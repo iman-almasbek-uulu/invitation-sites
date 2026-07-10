@@ -214,7 +214,63 @@ h3 { font-size: 1.35rem; }
 .request-list { display: grid; gap: 14px; }
 .empty-state { padding: 28px; text-align: center; }
 .empty-state p { color: var(--muted); }
-.admin-request-card { padding: 22px; }
+.admin-request-card { padding: 22px; display: grid; gap: 18px; }
+.request-card-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.request-card-summary article,
+.request-status-editor,
+.request-payment-editor {
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(255,255,255,.58);
+  padding: 16px;
+}
+.request-card-summary span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: .78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.request-card-summary strong { font-size: 1rem; }
+.owner-crm-grid {
+  display: grid;
+  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+  gap: 14px;
+  align-items: start;
+}
+.request-status-editor,
+.request-payment-editor {
+  display: grid;
+  gap: 12px;
+}
+.request-status-editor label,
+.request-payment-editor label {
+  display: grid;
+  gap: 8px;
+  font-weight: 800;
+}
+.request-status-editor select,
+.request-payment-editor select,
+.request-payment-editor input,
+.request-payment-editor textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255,255,255,.95);
+  color: var(--ink);
+  padding: 12px 13px;
+  outline: none;
+}
+.request-payment-editor textarea { resize: vertical; line-height: 1.5; }
+.compact-fields { gap: 10px; }
+.request-build-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.request-build-actions .form-note { flex-basis: 100%; }
 .request-card-top {
   display: flex;
   gap: 16px;

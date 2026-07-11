@@ -2505,10 +2505,10 @@ h3 { font-size: 1.35rem; }
 .wedding-first-hero.is-opening .right-flap { z-index: 29; transform: translateX(5%) rotateY(12deg); }
 .wedding-first-hero.is-opening .bottom-flap { transform: translateY(1.5%); }
 .wedding-first-hero.is-revealing .wedding-first-title { opacity: 0; transform: translateY(-12px); }
-.wedding-first-hero.is-revealing .invitation-card { z-index: 45; transform: translateY(-48%) scale(.96); }
-.wedding-first-hero.is-revealing .card-shadow { opacity: .42; transform: translateY(-37%) scale(.96); }
+.wedding-first-hero.is-revealing .invitation-card { z-index: 45; transform: translateY(-72%) scale(.96); }
+.wedding-first-hero.is-revealing .card-shadow { opacity: .42; transform: translateY(-60%) scale(.96); }
 .wedding-first-hero.is-revealing .invitation-card-copy { opacity: 1; transform: translateY(0); transition-delay: .22s; }
-.wedding-first-hero.is-opened .invitation-card { transform: translateY(-50%) scale(.96); }
+.wedding-first-hero.is-opened .invitation-card { transform: translateY(-74%) scale(.96); }
 .wedding-first-hero.is-opened .view-invitation-button { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
 @media (min-width: 700px) {

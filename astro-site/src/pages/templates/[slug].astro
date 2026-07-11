@@ -21,7 +21,7 @@ const firstSectionAsset = (file: string) => `${base}assets/wedding-first-section
 ---
 <BaseLayout title={`${template.name} — демо приглашения`} description={template.description}>
   <main class:list={['invite-demo', { 'luxury-invite': isLuxuryWedding }]} style={`--paper:${colors[0]};--accent:${colors[1]};--ink:${colors[2]}`}>
-    <a class="back-link" href={base}>← Назад в каталог</a>
+    {!isLuxuryWedding && <a class="back-link" href={base}>← Назад в каталог</a>}
 
     {isLuxuryWedding ? (
       <section
@@ -29,7 +29,6 @@ const firstSectionAsset = (file: string) => `${base}assets/wedding-first-section
         data-wedding-first-hero
         style={`--first-bg:url(${firstSectionAsset('background.png')});--gold-frame:url(${firstSectionAsset('gold-frame.svg')});--flowers-tr:url(${firstSectionAsset('flowers-top-right.png')});--flowers-bl:url(${firstSectionAsset('flowers-bottom-left.png')});--light-overlay:url(${firstSectionAsset('light-overlay.svg')});--envelope-shadow:url(${firstSectionAsset('envelope-shadow.png')});--envelope-back:url(${firstSectionAsset('envelope-back.png')});--card-shadow:url(${firstSectionAsset('card-shadow.png')});--invitation-card:url(${firstSectionAsset('invitation-card.png')});--bottom-flap:url(${firstSectionAsset('envelope-bottom-flap.png')});--left-flap:url(${firstSectionAsset('envelope-left-flap.png')});--right-flap:url(${firstSectionAsset('envelope-right-flap.png')});--top-flap:url(${firstSectionAsset('envelope-top-flap.png')});--seal-shadow:url(${firstSectionAsset('seal-shadow.png')});--wax-seal:url(${firstSectionAsset('wax-seal.png')});--gold-divider:url(${firstSectionAsset('gold-divider.svg')});--botanical:url(${firstSectionAsset('botanical-ornament.svg')});`}
       >
-        <a class="wedding-first-back" href={base}>← Назад в каталог</a>
         <div class="wedding-first-frame" aria-hidden="true"></div>
         <img class="wedding-first-flower top" src={firstSectionAsset('flowers-top-right.png')} alt="" loading="eager" />
         <img class="wedding-first-flower bottom" src={firstSectionAsset('flowers-bottom-left.png')} alt="" loading="eager" />

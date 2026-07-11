@@ -2338,17 +2338,19 @@ h3 { font-size: 1.35rem; }
 
 .wedding-first-title {
   position: absolute;
-  opacity: 0;
+  z-index: 78;
+  top: 7.4svh;
+  left: 50%;
+  width: min(82vw, 560px);
+  text-align: center;
+  transform: translateX(-50%);
   pointer-events: none;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
 }
 
 .wedding-first-title p {
-  margin: 0 0 4px;
+  margin: 0 0 3px;
   color: #9a7138;
-  font-size: clamp(1.22rem, 4.8vw, 1.58rem);
+  font-size: clamp(1.28rem, 4.9vw, 1.72rem);
   font-weight: 600;
   letter-spacing: .035em;
 }
@@ -2358,7 +2360,7 @@ h3 { font-size: 1.35rem; }
   max-width: none;
   color: #9a7138;
   font-family: Allura, 'Brush Script MT', cursive;
-  font-size: clamp(3.3rem, 15vw, 5.2rem);
+  font-size: clamp(3.7rem, 16vw, 6.1rem);
   font-weight: 400;
   line-height: .88;
   letter-spacing: normal;
@@ -2367,14 +2369,14 @@ h3 { font-size: 1.35rem; }
 
 .wedding-first-title img {
   display: block;
-  width: min(41vw, 170px);
-  margin: 8px auto 7px;
+  width: min(44vw, 188px);
+  margin: 7px auto 6px;
 }
 
 .wedding-first-title time {
   display: block;
   color: #6e5949;
-  font-size: clamp(1rem, 4vw, 1.24rem);
+  font-size: clamp(1.04rem, 4vw, 1.34rem);
   font-weight: 600;
   letter-spacing: .02em;
 }
@@ -2565,73 +2567,4 @@ h3 { font-size: 1.35rem; }
     animation: none !important;
     transition-duration: .001ms !important;
   }
-}
-
-/* Reference-composite mode for high-fidelity first wedding hero */
-.wedding-first-frame,
-.wedding-first-flower,
-.wedding-first-light {
-  display: none !important;
-}
-
-.wedding-reference-composite {
-  position: absolute;
-  z-index: 3;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  pointer-events: none;
-}
-
-.wedding-reference-img {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: min(100vw, 853px);
-  height: auto;
-  min-height: 100svh;
-  object-fit: cover;
-  object-position: top center;
-  transform: translateX(-50%);
-  transition: opacity .5s ease;
-}
-
-.wedding-reference-open { opacity: 0; }
-.wedding-first-hero.is-revealing .wedding-reference-closed,
-.wedding-first-hero.is-opened .wedding-reference-closed { opacity: 0; }
-.wedding-first-hero.is-revealing .wedding-reference-open,
-.wedding-first-hero.is-opened .wedding-reference-open { opacity: 1; }
-
-.wedding-reference-composite + .wedding-first-shell {
-  z-index: 20;
-}
-
-.wedding-reference-composite + .wedding-first-shell .wedding-envelope-scene,
-.wedding-reference-composite + .wedding-first-shell .wedding-first-title {
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-.wedding-reference-composite + .wedding-first-shell .open-invitation-button,
-.wedding-reference-composite + .wedding-first-shell .view-invitation-button {
-  color: transparent !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  border: 0 !important;
-}
-
-.wedding-reference-composite + .wedding-first-shell .open-invitation-button {
-  opacity: 1 !important;
-  pointer-events: auto !important;
-}
-
-.wedding-first-hero.is-unsealing .wedding-reference-composite + .wedding-first-shell .open-invitation-button {
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-.wedding-first-hero.is-opened .wedding-reference-composite + .wedding-first-shell .view-invitation-button {
-  opacity: .01 !important;
-  pointer-events: auto !important;
 }

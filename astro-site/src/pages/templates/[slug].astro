@@ -17,245 +17,90 @@ const palette: Record<string, string[]> = {
 const colors = palette[template.style] ?? palette.luxury;
 const isLuxuryWedding = template.slug === 'wedding-luxury-01';
 const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
-const luxuryAsset = (file: string) => `${base}assets/luxury/${file}`;
-
-const event = {
-  bride: 'Айсулуу',
-  groom: 'Нурсултан',
-  monogram: 'A & N',
-  date: '15 июля 2026',
-  day: '15',
-  month: 'Июль',
-  year: '2026',
-  weekday: 'Среда',
-  time: '17:00',
-  venue: 'Ресторан “Ак-Кеме”',
-  address: 'г. Бишкек, ул. Токтогула 2/2',
-  phone: '+996 700 123 456',
-};
-
-const rail = [
-  ['01','WELCOME','Главный экран\nЗакрытый конверт'],
-  ['02','ОТКРЫТИЕ','Конверт открывается'],
-  ['03','ПРИГЛАШЕНИЕ','Основная информация\nо свадьбе'],
-  ['04','LOVE STORY','История любви пары'],
-  ['05','ТАЙМЕР','До нашей свадьбы'],
-  ['06','ПРОГРАММА ДНЯ','План мероприятия'],
-  ['07','ЛОКАЦИЯ','Место проведения'],
-  ['08','DRESS CODE','Дресс-код для гостей'],
-  ['09','ГАЛЕРЕЯ','Фотографии пары'],
-  ['10','ПОДТВЕРЖДЕНИЕ RSVP','Подтвердите участие'],
-  ['11','ПОЖЕЛАНИЯ','Пожелания и информация'],
-  ['12','ФИНАЛЬНЫЙ ЭКРАН','Спасибо!\nДо встречи на свадьбе'],
-];
-
-const program = [
-  ['16:30', 'Сбор гостей'],
-  ['17:00', 'Церемония'],
-  ['18:00', 'Фотосессия'],
-  ['19:00', 'Банкет'],
-  ['22:00', 'Торт'],
-  ['23:00', 'Завершение вечера'],
-];
-
-const gallery = [
-  luxuryAsset('couple-muslim.jpg'),
-  'https://images.unsplash.com/photo-1651093192393-6f517b943911?auto=format&fit=crop&w=640&q=85',
-  'https://images.unsplash.com/photo-1607190074257-dd4b7af0309f?auto=format&fit=crop&w=640&q=85',
-  'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=640&q=85',
-  'https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=640&q=85',
-  'https://images.unsplash.com/photo-1469371670807-013ccf25f16a?auto=format&fit=crop&w=640&q=85',
-];
-
-const phonePreviews = ['01','02','03','04','05','06','07','08','09','10','11','12'];
+const firstSectionAsset = (file: string) => `${base}assets/wedding-first-section/${file}`;
 ---
 <BaseLayout title={`${template.name} — демо приглашения`} description={template.description}>
   <main class:list={['invite-demo', { 'luxury-invite': isLuxuryWedding }]} style={`--paper:${colors[0]};--accent:${colors[1]};--ink:${colors[2]}`}>
     <a class="back-link" href={base}>← Назад в каталог</a>
 
     {isLuxuryWedding ? (
-      <section class="royal-page" data-royal-page style={`--luxury-paper:url(${luxuryAsset('paper-brown.jpg')});--luxury-couple:url(${luxuryAsset('couple-muslim.jpg')});--luxury-wax:url(${luxuryAsset('gold-wax.png')});--luxury-corner:url(${luxuryAsset('floral-corner.png')});--luxury-frame:url(${luxuryAsset('vintage-border.png')});--luxury-petals:url(${luxuryAsset('rose-petals.png')});`}>
-        <button class="royal-music" type="button" aria-label="Включить музыку"><span>♪</span> Музыка</button>
-        <div class="royal-ambience" aria-hidden="true">
-          {Array.from({ length: 16 }).map((_, i) => <i class={`royal-petal p${i + 1}`}></i>)}
-          {Array.from({ length: 18 }).map((_, i) => <b class={`royal-spark s${i + 1}`}></b>)}
+      <section
+        class="wedding-first-hero"
+        data-wedding-first-hero
+        style={`--first-bg:url(${firstSectionAsset('background.png')});--gold-frame:url(${firstSectionAsset('gold-frame.svg')});--flowers-tr:url(${firstSectionAsset('flowers-top-right.png')});--flowers-bl:url(${firstSectionAsset('flowers-bottom-left.png')});--light-overlay:url(${firstSectionAsset('light-overlay.svg')});--envelope-shadow:url(${firstSectionAsset('envelope-shadow.png')});--envelope-back:url(${firstSectionAsset('envelope-back.png')});--card-shadow:url(${firstSectionAsset('card-shadow.png')});--invitation-card:url(${firstSectionAsset('invitation-card.png')});--bottom-flap:url(${firstSectionAsset('envelope-bottom-flap.png')});--left-flap:url(${firstSectionAsset('envelope-left-flap.png')});--right-flap:url(${firstSectionAsset('envelope-right-flap.png')});--top-flap:url(${firstSectionAsset('envelope-top-flap.png')});--seal-shadow:url(${firstSectionAsset('seal-shadow.png')});--wax-seal:url(${firstSectionAsset('wax-seal.png')});--gold-divider:url(${firstSectionAsset('gold-divider.svg')});--botanical:url(${firstSectionAsset('botanical-ornament.svg')});`}
+      >
+        <a class="wedding-first-back" href={base}>← Назад в каталог</a>
+        <div class="wedding-first-frame" aria-hidden="true"></div>
+        <img class="wedding-first-flower top" src={firstSectionAsset('flowers-top-right.png')} alt="" loading="eager" />
+        <img class="wedding-first-flower bottom" src={firstSectionAsset('flowers-bottom-left.png')} alt="" loading="eager" />
+        <span class="wedding-first-light" aria-hidden="true"></span>
+
+        <div class="wedding-first-shell">
+          <header class="wedding-first-title">
+            <p>Wedding Invitation</p>
+            <h1>Ayan & Amina</h1>
+            <img src={firstSectionAsset('gold-divider.svg')} alt="" />
+            <time datetime="2026-09-12">12 September 2026</time>
+          </header>
+
+          <div class="wedding-envelope-scene" data-envelope-scene aria-live="polite">
+            <img class="env-layer env-shadow" src={firstSectionAsset('envelope-shadow.png')} alt="" />
+            <img class="env-layer env-back" src={firstSectionAsset('envelope-back.png')} alt="" />
+            <img class="env-layer card-shadow" src={firstSectionAsset('card-shadow.png')} alt="" />
+            <div class="env-layer invitation-card">
+              <img src={firstSectionAsset('invitation-card.png')} alt="" />
+              <div class="invitation-card-copy">
+                <p>Together with our families</p>
+                <strong>Ayan & Amina</strong>
+                <span>invite you to celebrate our wedding</span>
+                <time datetime="2026-09-12">12 September 2026</time>
+              </div>
+            </div>
+            <img class="env-layer bottom-flap" src={firstSectionAsset('envelope-bottom-flap.png')} alt="" />
+            <img class="env-layer left-flap" src={firstSectionAsset('envelope-left-flap.png')} alt="" />
+            <img class="env-layer right-flap" src={firstSectionAsset('envelope-right-flap.png')} alt="" />
+            <div class="env-layer top-flap-wrap">
+              <img class="top-flap" src={firstSectionAsset('envelope-top-flap.png')} alt="" />
+              <div class="top-flap-copy">
+                <span>A & A</span>
+                <small>save the date</small>
+              </div>
+            </div>
+            <img class="env-layer seal-shadow" src={firstSectionAsset('seal-shadow.png')} alt="" />
+            <button class="env-layer wax-seal-button" type="button" data-open-first-envelope aria-label="Open wedding invitation envelope" aria-expanded="false">
+              <img src={firstSectionAsset('wax-seal.png')} alt="" />
+            </button>
+          </div>
+
+          <div class="wedding-first-actions">
+            <button class="open-invitation-button" type="button" data-open-first-envelope aria-expanded="false">Open Invitation</button>
+            <a class="view-invitation-button" href={`${base}brief/?template=${template.slug}`} data-view-invitation>View Invitation</a>
+          </div>
         </div>
 
-        <aside class="royal-left-rail" aria-label="Навигация по приглашению">
-          {rail.map(([num, title, text]) => (
-            <a href={`#section-${num}`}>
-              <strong>{num}</strong>
-              <span>{title}</span>
-              <small>{text}</small>
-            </a>
-          ))}
-        </aside>
-
-        <aside class="royal-phone-rail" aria-hidden="true">
-          {phonePreviews.map((n) => (
-            <a class={`royal-phone-shot shot-${n}`} href={`#section-${n}`}>
-              <em>{n}</em>
-              <span></span>
-              <i></i>
-            </a>
-          ))}
-        </aside>
-
-        <section class="royal-stage">
-          <section class="royal-panel royal-cover" id="section-01">
-            <div class="royal-corners"></div>
-            <div class="royal-real-frame" aria-hidden="true"></div>
-            <div class="royal-envelope closed" data-envelope>
-              <div class="royal-envelope-letter" aria-hidden="true">
-                <span>{event.monogram}</span>
-                <strong>{event.groom} & {event.bride}</strong>
-                <small>{event.date} · {event.time}</small>
-              </div>
-              <div class="royal-envelope-flap" aria-hidden="true"></div>
-              <div class="royal-envelope-pocket" aria-hidden="true"></div>
-              <div class="royal-envelope-text">Үйлөнүү тойго<br />Чакыруу</div>
-              <button class="royal-wax" type="button" data-open-envelope aria-label="Открыть конверт"><span>бас</span></button>
-              <div class="royal-flower left"></div>
-              <div class="royal-flower right"></div>
-            </div>
-            <p class="royal-scroll" data-open-hint>Нажмите на печать</p>
-          </section>
-
-          <section class="royal-panel royal-open" id="section-02">
-            <div class="royal-paper">
-              <span>{event.monogram}</span>
-            </div>
-            <div class="royal-envelope open"><div class="royal-wax"><span>ачуу</span></div></div>
-          </section>
-
-          <section class="royal-panel royal-main-info" id="section-03">
-            <div class="royal-photo-card" role="img" aria-label="Фотография пары из Pexels"></div>
-            <div class="royal-info-text">
-              <p>Биздин эң маанилүү күнгө<br />сизди чакырабыз!</p>
-              <h1>{event.groom} & {event.bride}</h1>
-              <div class="royal-facts">
-                <span><b>Дата</b>{event.date}</span>
-                <span><b>Убактысы</b>{event.time}</span>
-                <span><b>Өтүү жери</b>{event.venue}</span>
-              </div>
-            </div>
-          </section>
-
-          <section class="royal-panel royal-story" id="section-04">
-            <p class="royal-script">Наша история любви</p>
-            <h2>{event.groom} & {event.bride}</h2>
-            <div class="royal-couple-live"></div>
-          </section>
-
-          <section class="royal-panel royal-timer" id="section-05" data-countdown="2026-07-15T17:00:00+06:00">
-            <p class="royal-script">До нашей свадьбы осталось</p>
-            <div class="royal-counts">
-              <article><strong data-days>00</strong><span>Дней</span></article>
-              <article><strong data-hours>00</strong><span>Часов</span></article>
-              <article><strong data-minutes>00</strong><span>Минут</span></article>
-              <article><strong data-seconds>00</strong><span>Секунд</span></article>
-            </div>
-          </section>
-
-          <section class="royal-panel royal-program" id="section-06">
-            <p class="royal-script">Программа дня</p>
-            <div class="royal-program-list">
-              {program.map(([time, title]) => <article><time>{time}</time><span>{title}</span></article>)}
-            </div>
-          </section>
-
-          <section class="royal-panel royal-location" id="section-07">
-            <div class="royal-map"></div>
-            <div>
-              <p class="royal-script">Место проведения</p>
-              <h2>{event.venue}</h2>
-              <p>{event.address}<br />{event.phone}</p>
-              <a href="https://maps.google.com" target="_blank" rel="noreferrer">Открыть в Google Maps</a>
-            </div>
-          </section>
-
-          <section class="royal-panel royal-dress" id="section-08">
-            <p class="royal-script">Дресс-код</p>
-            <p>Мы будем рады, если вы поддержите цветовую гамму</p>
-            <div class="royal-dress-cards"><article>Для мужчин<br /><b>Классика</b></article><article>Для женщин<br /><b>Вечернее платье</b></article></div>
-            <div class="royal-palette"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-          </section>
-
-          <section class="royal-panel royal-gallery" id="section-09">
-            <p class="royal-script">Наша галерея</p>
-            <div class="royal-gallery-strip" aria-label="Живая галерея свадебных фото">
-              {gallery.map((src) => <div class="royal-gallery-photo" style={`background-image:url('${src}')`} role="img" aria-label="Свадебное фото"></div>)}
-            </div>
-          </section>
-
-          <section class="royal-panel royal-rsvp" id="section-10">
-            <p class="royal-script">Подтвердите ваше участие</p>
-            <form>
-              <input placeholder="Ваше имя" />
-              <input placeholder="Телефон" />
-              <label><span>Будете присутствовать?</span><select><option>Да</option><option>Нет</option></select></label>
-              <label><span>Количество гостей</span><select><option>1</option><option>2</option><option>3+</option></select></label>
-              <button type="button">Подтвердить участие ♡</button>
-            </form>
-          </section>
-
-          <section class="royal-panel royal-wishes" id="section-11">
-            <div class="royal-gift"></div>
-            <div>
-              <p class="royal-script">Пожелания</p>
-              <p>Самым главным подарком для нас станет ваше присутствие в этот день. Если вы планируете сделать подарок — мы будем благодарны вашему вниманию.</p>
-            </div>
-          </section>
-
-          <section class="royal-panel royal-final" id="section-12">
-            <div class="royal-final-logo">{event.monogram}</div>
-            <h2>Спасибо!</h2>
-            <p>До встречи на нашей свадьбе!</p>
-            <div class="hero-actions center">
-              <a class="button" href={`${base}brief/`}>Заказать такой сайт</a>
-              <a class="button secondary" href={base}>Другие шаблоны</a>
-            </div>
-          </section>
-        </section>
-
         <script>
-          const countdown = document.querySelector('[data-countdown]');
-          const musicButton = document.querySelector('.royal-music');
-          const royalPage = document.querySelector('[data-royal-page]');
-          const openEnvelopeButton = document.querySelector('[data-open-envelope]');
-          const openHint = document.querySelector('[data-open-hint]');
-          let musicOn = false;
-          musicButton?.addEventListener('click', () => {
-            musicOn = !musicOn;
-            musicButton.classList.toggle('is-playing', musicOn);
-            musicButton.innerHTML = musicOn ? '<span>♪</span> Музыка включена' : '<span>♪</span> Музыка';
-          });
-          openEnvelopeButton?.addEventListener('click', () => {
-            royalPage?.classList.add('is-envelope-open');
-            const waxLabel = openEnvelopeButton.querySelector('span');
-            if (waxLabel) waxLabel.textContent = 'ачылды';
-            if (openHint) openHint.textContent = 'Письмо открылось';
-            setTimeout(() => {
-              document.querySelector('#section-02')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }, 1150);
-          });
-          function updateCountdown() {
-            if (!countdown) return;
-            const rawTarget = countdown.getAttribute('data-countdown');
-            if (!rawTarget) return;
-            const target = new Date(rawTarget).getTime();
-            const diff = Math.max(target - Date.now(), 0);
-            const days = Math.floor(diff / 86400000);
-            const hours = Math.floor((diff % 86400000) / 3600000);
-            const minutes = Math.floor((diff % 3600000) / 60000);
-            const seconds = Math.floor((diff % 60000) / 1000);
-            const setText = (selector: string, value: number) => {
-              const node = countdown.querySelector(selector);
-              if (node) node.textContent = String(value).padStart(2, '0');
-            };
-            setText('[data-days]', days); setText('[data-hours]', hours); setText('[data-minutes]', minutes); setText('[data-seconds]', seconds);
+          const hero = document.querySelector('[data-wedding-first-hero]');
+          const openButtons = document.querySelectorAll('[data-open-first-envelope]');
+          let openingStarted = false;
+          const openInvitation = () => {
+            if (!hero || openingStarted) return;
+            openingStarted = true;
+            hero.classList.add('is-unsealing');
+            openButtons.forEach((button) => {
+              button.setAttribute('aria-expanded', 'true');
+              if (button instanceof HTMLButtonElement) button.disabled = true;
+            });
+            window.setTimeout(() => hero.classList.add('is-opening'), 220);
+            window.setTimeout(() => hero.classList.add('is-revealing'), 700);
+            window.setTimeout(() => hero.classList.add('is-opened'), 1500);
+          };
+          const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (prefersReducedMotion) {
+            hero?.classList.add('is-unsealing', 'is-opening', 'is-revealing', 'is-opened', 'is-reduced-motion');
+            openButtons.forEach((button) => button.setAttribute('aria-expanded', 'true'));
+          } else {
+            openButtons.forEach((button) => button.addEventListener('click', openInvitation));
           }
-          updateCountdown(); setInterval(updateCountdown, 1000);
         </script>
       </section>
     ) : (

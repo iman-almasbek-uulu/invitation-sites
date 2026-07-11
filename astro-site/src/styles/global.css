@@ -2330,19 +2330,19 @@ h3 { font-size: 1.35rem; }
 .wedding-first-shell {
   position: relative;
   z-index: 10;
-  width: min(100%, 460px);
-  min-height: calc(100svh - 46px);
-  display: grid;
-  grid-template-rows: auto minmax(236px, 1fr) auto;
-  align-items: center;
-  justify-items: center;
-  padding: 44px 6px 20px;
+  width: min(100%, 760px);
+  min-height: 100svh;
+  display: block;
+  padding: 0;
 }
 
 .wedding-first-title {
-  text-align: center;
-  transform: translateY(2px);
-  transition: opacity .45s ease, transform .45s ease;
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 
 .wedding-first-title p {
@@ -2380,12 +2380,15 @@ h3 { font-size: 1.35rem; }
 }
 
 .wedding-envelope-scene {
-  position: relative;
-  width: min(92vw, 390px);
-  aspect-ratio: 3 / 2;
+  position: absolute;
+  top: 30.2svh;
+  left: 50%;
+  width: min(84vw, 720px);
+  aspect-ratio: 4 / 3;
   perspective: 1200px;
+  transform: translateX(-50%);
   transform-style: preserve-3d;
-  margin: clamp(10px, 2svh, 22px) auto 8px;
+  margin: 0;
 }
 
 .env-layer,
@@ -2401,20 +2404,37 @@ h3 { font-size: 1.35rem; }
 
 .env-shadow { z-index: 9; opacity: .9; transform: translateY(6%); }
 .env-back { z-index: 10; }
-.card-shadow { z-index: 18; opacity: .15; transform: translateY(8%) scale(.94); transition: opacity .7s ease, transform .7s ease; }
+.card-shadow { z-index: 18; opacity: 0; transform: translateY(8%) scale(.94); transition: opacity .7s ease, transform .7s ease; }
 .invitation-card {
   z-index: 20;
+  opacity: 0;
   transform: translateY(10%) scale(.97);
-  transition: transform .85s cubic-bezier(.2,.8,.2,1), z-index 0s linear .58s;
+  transition: opacity .45s ease, transform .85s cubic-bezier(.2,.8,.2,1), z-index 0s linear .58s;
 }
 .bottom-flap { z-index: 30; }
-.left-flap { z-index: 34; transform-origin: 42% 56%; transition: transform .7s cubic-bezier(.22,.8,.2,1); }
-.right-flap { z-index: 35; transform-origin: 58% 56%; transition: transform .7s cubic-bezier(.22,.8,.2,1); }
+.left-flap { z-index: 34; opacity: 0; transform-origin: 42% 56%; transition: opacity .38s ease, transform .7s cubic-bezier(.22,.8,.2,1); }
+.right-flap { z-index: 35; opacity: 0; transform-origin: 58% 56%; transition: opacity .38s ease, transform .7s cubic-bezier(.22,.8,.2,1); }
 .top-flap-wrap { z-index: 50; transform-origin: 50% 0%; transform-style: preserve-3d; transition: transform .74s cubic-bezier(.22,.8,.2,1), z-index 0s linear .42s; }
 .top-flap { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; backface-visibility: hidden; }
-.seal-shadow { z-index: 58; opacity: .82; transition: opacity .22s ease, transform .22s ease; }
+.seal-shadow {
+  z-index: 58;
+  inset: auto;
+  left: 39%;
+  top: 51%;
+  width: 22%;
+  height: auto;
+  aspect-ratio: 1;
+  opacity: .82;
+  transition: opacity .22s ease, transform .22s ease;
+}
 .wax-seal-button {
   z-index: 60;
+  inset: auto;
+  left: 39%;
+  top: 49%;
+  width: 22%;
+  height: auto;
+  aspect-ratio: 1;
   border: 0;
   padding: 0;
   background: transparent;
@@ -2440,8 +2460,8 @@ h3 { font-size: 1.35rem; }
   pointer-events: none;
   transition: opacity .28s ease;
 }
-.top-flap-copy span { font-family: Allura, cursive; font-size: clamp(1.25rem, 5vw, 1.7rem); line-height: 1; }
-.top-flap-copy small { font-family: 'Cormorant Garamond', serif; font-size: .78rem; letter-spacing: .12em; }
+.top-flap-copy span { font-family: Allura, cursive; font-size: clamp(2.6rem, 8.6vw, 4.8rem); line-height: .92; }
+.top-flap-copy small { font-family: 'Cormorant Garamond', serif; font-size: clamp(.95rem, 2.4vw, 1.28rem); letter-spacing: .12em; }
 
 .invitation-card-copy {
   position: absolute;
@@ -2464,29 +2484,34 @@ h3 { font-size: 1.35rem; }
 .invitation-card-copy time { margin-top: 2px; color: #9a7138; letter-spacing: .035em; }
 
 .wedding-first-actions {
-  position: relative;
+  position: absolute;
   z-index: 80;
-  min-height: 60px;
+  top: 68.5svh;
+  left: 50%;
+  width: min(55vw, 450px);
+  min-height: 96px;
   display: grid;
   place-items: center;
-  margin-top: clamp(4px, 1svh, 12px);
+  margin: 0;
+  transform: translateX(-50%);
 }
 .open-invitation-button,
 .view-invitation-button {
-  min-width: min(72vw, 248px);
-  min-height: 52px;
+  width: 100%;
+  min-width: 0;
+  min-height: 82px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 24px;
+  padding: 22px 34px;
   border-radius: 999px;
   border: 0;
   background: #dfa19a;
   color: #fff;
-  font-family: Inter, system-ui, sans-serif;
-  font-size: .95rem;
-  font-weight: 800;
-  box-shadow: 0 14px 32px rgba(178, 102, 94, .24);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1.35rem, 3.4vw, 2rem);
+  font-weight: 700;
+  box-shadow: 0 16px 28px rgba(178, 102, 94, .22);
   cursor: pointer;
   transition: opacity .3s ease, transform .3s ease, background .2s ease;
 }
@@ -2501,21 +2526,20 @@ h3 { font-size: 1.35rem; }
 .wedding-first-hero.is-unsealing .seal-shadow { opacity: 0; transform: scale(.88); }
 .wedding-first-hero.is-opening .top-flap-wrap { z-index: 14; transform: rotateX(178deg); }
 .wedding-first-hero.is-opening .top-flap-copy { opacity: 0; }
-.wedding-first-hero.is-opening .left-flap { z-index: 28; transform: translateX(-5%) rotateY(-12deg); }
-.wedding-first-hero.is-opening .right-flap { z-index: 29; transform: translateX(5%) rotateY(12deg); }
+.wedding-first-hero.is-opening .left-flap { opacity: 1; z-index: 28; transform: translateX(-5%) rotateY(-12deg); }
+.wedding-first-hero.is-opening .right-flap { opacity: 1; z-index: 29; transform: translateX(5%) rotateY(12deg); }
 .wedding-first-hero.is-opening .bottom-flap { transform: translateY(1.5%); }
 .wedding-first-hero.is-revealing .wedding-first-title { opacity: 0; transform: translateY(-12px); }
-.wedding-first-hero.is-revealing .invitation-card { z-index: 45; transform: translateY(-72%) scale(.96); }
-.wedding-first-hero.is-revealing .card-shadow { opacity: .42; transform: translateY(-60%) scale(.96); }
+.wedding-first-hero.is-revealing .invitation-card { opacity: 1; z-index: 45; transform: translateY(-50%) scale(1.04); }
+.wedding-first-hero.is-revealing .card-shadow { opacity: .34; transform: translateY(-42%) scale(1.02); }
 .wedding-first-hero.is-revealing .invitation-card-copy { opacity: 1; transform: translateY(0); transition-delay: .22s; }
-.wedding-first-hero.is-opened .invitation-card { transform: translateY(-74%) scale(.96); }
+.wedding-first-hero.is-opened .invitation-card { transform: translateY(-52%) scale(1.04); }
 .wedding-first-hero.is-opened .view-invitation-button { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
 @media (min-width: 700px) {
   .wedding-first-hero { padding-inline: 24px; }
   .wedding-first-shell {
     border-radius: 38px;
-    min-height: min(860px, calc(100svh - 46px));
   }
 }
 
@@ -2528,10 +2552,10 @@ h3 { font-size: 1.35rem; }
 }
 
 @media (max-height: 690px) {
-  .wedding-first-shell { padding-top: 44px; }
-  .wedding-first-title img { margin-block: 4px; }
-  .wedding-envelope-scene { width: min(84vw, 360px); margin-block: 2px; }
-  .wedding-first-actions { margin-top: 0; }
+  .wedding-envelope-scene { width: min(82vw, 620px); }
+  .wedding-first-actions { width: min(55vw, 390px); min-height: 66px; }
+  .open-invitation-button,
+  .view-invitation-button { min-height: 58px; font-size: 1.12rem; padding: 16px 26px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2541,4 +2565,73 @@ h3 { font-size: 1.35rem; }
     animation: none !important;
     transition-duration: .001ms !important;
   }
+}
+
+/* Reference-composite mode for high-fidelity first wedding hero */
+.wedding-first-frame,
+.wedding-first-flower,
+.wedding-first-light {
+  display: none !important;
+}
+
+.wedding-reference-composite {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.wedding-reference-img {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(100vw, 853px);
+  height: auto;
+  min-height: 100svh;
+  object-fit: cover;
+  object-position: top center;
+  transform: translateX(-50%);
+  transition: opacity .5s ease;
+}
+
+.wedding-reference-open { opacity: 0; }
+.wedding-first-hero.is-revealing .wedding-reference-closed,
+.wedding-first-hero.is-opened .wedding-reference-closed { opacity: 0; }
+.wedding-first-hero.is-revealing .wedding-reference-open,
+.wedding-first-hero.is-opened .wedding-reference-open { opacity: 1; }
+
+.wedding-reference-composite + .wedding-first-shell {
+  z-index: 20;
+}
+
+.wedding-reference-composite + .wedding-first-shell .wedding-envelope-scene,
+.wedding-reference-composite + .wedding-first-shell .wedding-first-title {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.wedding-reference-composite + .wedding-first-shell .open-invitation-button,
+.wedding-reference-composite + .wedding-first-shell .view-invitation-button {
+  color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+}
+
+.wedding-reference-composite + .wedding-first-shell .open-invitation-button {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.wedding-first-hero.is-unsealing .wedding-reference-composite + .wedding-first-shell .open-invitation-button {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.wedding-first-hero.is-opened .wedding-reference-composite + .wedding-first-shell .view-invitation-button {
+  opacity: .01 !important;
+  pointer-events: auto !important;
 }

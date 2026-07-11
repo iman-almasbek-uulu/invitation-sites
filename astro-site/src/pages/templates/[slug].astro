@@ -33,6 +33,10 @@ const firstSectionAsset = (file: string) => `${base}assets/wedding-first-section
         <img class="wedding-first-flower top" src={firstSectionAsset('flowers-top-right.png')} alt="" loading="eager" />
         <img class="wedding-first-flower bottom" src={firstSectionAsset('flowers-bottom-left.png')} alt="" loading="eager" />
         <span class="wedding-first-light" aria-hidden="true"></span>
+        <picture class="wedding-reference-composite" aria-hidden="true">
+          <img class="wedding-reference-img wedding-reference-closed" src={firstSectionAsset('hero-closed-reference.png')} alt="" />
+          <img class="wedding-reference-img wedding-reference-open" src={firstSectionAsset('hero-opening-reference.png')} alt="" />
+        </picture>
 
         <div class="wedding-first-shell">
           <header class="wedding-first-title">

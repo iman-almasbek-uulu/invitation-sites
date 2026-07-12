@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { recoveredSites } from '../data/recoveredSites';
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+---
+<BaseLayout title="Восстановленные сайты — Invitation Sites" description="Пять восстановленных опубликованных сайтов-приглашений из каталога.">
+  <main class="recovery-page">
+    <header class="recovery-hero">
+      <a class="back-link" href={base}>← Назад в каталог</a>
+      <p class="eyebrow">Архив · 12 июля 2026</p>
+      <h1>Восстановленные приглашения</h1>
+      <p>Пять опубликованных сайтов из предоставленного каталога сохранены локально: HTML, стили и доступные публичные медиа. Нажмите «Открыть локальную копию», чтобы проверить каждый вариант.</p>
+    </header>
+
+    <section class="recovery-grid" aria-label="Восстановленные сайты">
+      {recoveredSites.map((site) => (
+        <article class="recovery-card">
+          <div class="recovery-cover">
+            <img src={site.previewImage} alt={`Обложка ${site.title}`} loading="lazy" />
+            <span>{site.language}</span>
+          </div>
+          <div class="recovery-card-copy">
+            <p class="eyebrow">{site.style}</p>
+            <h2>{site.title}</h2>
+            <p class="recovery-meta">Сохранено доступных медиа: {site.assets}</p>
+            <div class="actions">
+              <a href={`${base}${site.archivedPath.replace(/^\//, '')}`}>Открыть локальную копию</a>
+              <a class="ghost" href={site.sourceUrl} target="_blank" rel="noreferrer">Источник</a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </section>
+
+    <aside class="recovery-note">
+      <strong>Что уже сохранено:</strong> опубликованные страницы и доступные ресурсы из браузерной версии. Следующий этап — заменить имена, даты, фото, контакты и карту, затем убрать зависимость от Tilda-ресурсов там, где это нужно для продажи шаблонов.
+    </aside>
+  </main>
+</BaseLayout>

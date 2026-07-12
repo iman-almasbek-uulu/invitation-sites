@@ -13,6 +13,7 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
       <a class="brand" href={base}>Invitation Sites</a>
       <div class="nav-links">
         <a href="#catalogs">Каталоги</a>
+        <a href="#recovered">Восстановлено</a>
         <a href="#templates">Шаблоны</a>
         <a href="#faq">FAQ</a>
       </div>
@@ -62,6 +63,15 @@ const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL :
           );
         })}
       </div>
+    </section>
+
+    <section id="recovered" class="section recovery-strip">
+      <div class="section-heading">
+        <p class="eyebrow">Восстановление</p>
+        <h2>5 сайтов возвращены в каталог</h2>
+        <p>Сохранены опубликованные версии из вашего Tilda-каталога: страницы, доступные стили и медиа. Их можно открыть локально и дальше адаптировать под новые заказы.</p>
+      </div>
+      <a class="button" href={`${base}recovered/`}>Открыть восстановленные сайты →</a>
     </section>
 
     <section id="templates" class="section muted">

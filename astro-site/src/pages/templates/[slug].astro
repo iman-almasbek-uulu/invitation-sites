@@ -27,12 +27,13 @@ const firstSectionAsset = (file: string) => `${base}assets/wedding-first-section
       <section
         class="wedding-first-hero"
         data-wedding-first-hero
-        style={`--first-bg:url(${firstSectionAsset('background.png')});--gold-frame:url(${firstSectionAsset('gold-frame.svg')});--flowers-tr:url(${firstSectionAsset('flowers-top-right.png')});--flowers-bl:url(${firstSectionAsset('flowers-bottom-left.png')});--light-overlay:url(${firstSectionAsset('light-overlay.svg')});--envelope-shadow:url(${firstSectionAsset('envelope-shadow.png')});--envelope-back:url(${firstSectionAsset('envelope-back.png')});--card-shadow:url(${firstSectionAsset('card-shadow.png')});--invitation-card:url(${firstSectionAsset('invitation-card.png')});--bottom-flap:url(${firstSectionAsset('envelope-bottom-flap.png')});--left-flap:url(${firstSectionAsset('envelope-left-flap.png')});--right-flap:url(${firstSectionAsset('envelope-right-flap.png')});--top-flap:url(${firstSectionAsset('envelope-top-flap.png')});--seal-shadow:url(${firstSectionAsset('seal-shadow.png')});--wax-seal:url(${firstSectionAsset('wax-seal.png')});--gold-divider:url(${firstSectionAsset('gold-divider.svg')});--botanical:url(${firstSectionAsset('botanical-ornament.svg')});`}
+        style={`--gold-divider:url(${firstSectionAsset('gold-divider.svg')});`}
       >
-        <div class="wedding-first-frame" aria-hidden="true"></div>
-        <img class="wedding-first-flower top" src={firstSectionAsset('flowers-top-right.png')} alt="" loading="eager" />
-        <img class="wedding-first-flower bottom" src={firstSectionAsset('flowers-bottom-left.png')} alt="" loading="eager" />
-        <span class="wedding-first-light" aria-hidden="true"></span>
+        <div class="wedding-layered-stage" aria-hidden="true">
+          <img class="wedding-stage-background" src={firstSectionAsset('background.png')} alt="" loading="eager" />
+          <img class="wedding-stage-flower wedding-stage-flower--top" src={firstSectionAsset('flowers-top-right.png')} alt="" loading="eager" />
+          <img class="wedding-stage-flower wedding-stage-flower--bottom" src={firstSectionAsset('flowers-bottom-left.png')} alt="" loading="eager" />
+        </div>
         <div class="wedding-first-shell">
           <header class="wedding-first-title">
             <p>Wedding Invitation</p>
@@ -41,37 +42,36 @@ const firstSectionAsset = (file: string) => `${base}assets/wedding-first-section
             <time datetime="2026-09-12">12 September 2026</time>
           </header>
 
-          <div class="wedding-envelope-scene" data-envelope-scene aria-live="polite">
-            <img class="env-layer env-shadow" src={firstSectionAsset('envelope-shadow.png')} alt="" />
+          <div class="wedding-envelope-scene">
             <img class="env-layer env-back" src={firstSectionAsset('envelope-back.png')} alt="" />
-            <img class="env-layer card-shadow" src={firstSectionAsset('card-shadow.png')} alt="" />
-            <div class="env-layer invitation-card">
-              <img src={firstSectionAsset('invitation-card.png')} alt="" />
-              <div class="invitation-card-copy">
+            <div class="layer-card">
+              <img class="layer-card-shadow" src={firstSectionAsset('card-shadow.png')} alt="" />
+              <img class="layer-card-art" src={firstSectionAsset('invitation-card.png')} alt="" />
+              <article class="layer-card-copy" aria-live="polite">
                 <p>Together with our families</p>
                 <strong>Ayan & Amina</strong>
                 <span>invite you to celebrate our wedding</span>
                 <time datetime="2026-09-12">12 September 2026</time>
-              </div>
+              </article>
             </div>
-            <img class="env-layer bottom-flap" src={firstSectionAsset('envelope-bottom-flap.png')} alt="" />
-            <img class="env-layer left-flap" src={firstSectionAsset('envelope-left-flap.png')} alt="" />
-            <img class="env-layer right-flap" src={firstSectionAsset('envelope-right-flap.png')} alt="" />
-            <div class="env-layer top-flap-wrap">
-              <img class="top-flap" src={firstSectionAsset('envelope-top-flap.png')} alt="" />
-              <div class="top-flap-copy">
-                <span>A & A</span>
-                <small>save the date</small>
-              </div>
+            <img class="env-layer env-side env-side--left" src={firstSectionAsset('envelope-left-flap.png')} alt="" />
+            <img class="env-layer env-side env-side--right" src={firstSectionAsset('envelope-right-flap.png')} alt="" />
+            <img class="env-layer env-front-pocket" src={firstSectionAsset('envelope-bottom-flap.png')} alt="" />
+            <div class="env-top-flap">
+              <img class="env-top-face env-top-face--outside" src={firstSectionAsset('envelope-top-flap.png')} alt="" />
+              <img class="env-top-face env-top-face--inside" src={firstSectionAsset('envelope-top-flap.png')} alt="" />
             </div>
-            <img class="env-layer seal-shadow" src={firstSectionAsset('seal-shadow.png')} alt="" />
-            <button class="env-layer wax-seal-button" type="button" data-open-first-envelope aria-label="Open wedding invitation envelope" aria-expanded="false">
-              <img src={firstSectionAsset('wax-seal.png')} alt="" />
+            <button class="wax-seal-button" type="button" data-open-first-envelope aria-label="Open wedding invitation envelope" aria-expanded="false">
+              <img class="wax-seal-intact" src={firstSectionAsset('wax-seal.png')} alt="" />
+              <img class="wax-seal-half wax-seal-half--left" src={firstSectionAsset('wax-seal-left.png')} alt="" />
+              <img class="wax-seal-half wax-seal-half--right" src={firstSectionAsset('wax-seal-right.png')} alt="" />
+              <span class="sr-only">Open envelope</span>
             </button>
           </div>
 
           <div class="wedding-first-actions">
             <button class="open-invitation-button" type="button" data-open-first-envelope aria-expanded="false">Open Invitation</button>
+            <button class="replay-invitation-button" type="button" data-replay-first-envelope>Replay opening</button>
             <a class="view-invitation-button" href={`${base}brief/?template=${template.slug}`} data-view-invitation>View Invitation</a>
           </div>
         </div>
@@ -79,7 +79,9 @@ const firstSectionAsset = (file: string) => `${base}assets/wedding-first-section
         <script>
           const hero = document.querySelector('[data-wedding-first-hero]');
           const openButtons = document.querySelectorAll('[data-open-first-envelope]');
+          const replayButton = document.querySelector('[data-replay-first-envelope]');
           let openingStarted = false;
+          let timeline: number[] = [];
           const openInvitation = () => {
             if (!hero || openingStarted) return;
             openingStarted = true;
@@ -88,9 +90,23 @@ const firstSectionAsset = (file: string) => `${base}assets/wedding-first-section
               button.setAttribute('aria-expanded', 'true');
               if (button instanceof HTMLButtonElement) button.disabled = true;
             });
-            window.setTimeout(() => hero.classList.add('is-opening'), 220);
-            window.setTimeout(() => hero.classList.add('is-revealing'), 700);
-            window.setTimeout(() => hero.classList.add('is-opened'), 1500);
+            timeline = [
+              window.setTimeout(() => hero.classList.add('is-opening'), 280),
+              window.setTimeout(() => hero.classList.add('is-revealing'), 860),
+              window.setTimeout(() => hero.classList.add('is-opened'), 1850),
+            ];
+          };
+          const replayInvitation = () => {
+            if (!hero || prefersReducedMotion) return;
+            timeline.forEach((id) => window.clearTimeout(id));
+            timeline = [];
+            openingStarted = false;
+            hero.classList.remove('is-unsealing', 'is-opening', 'is-revealing', 'is-opened');
+            openButtons.forEach((button) => {
+              button.setAttribute('aria-expanded', 'false');
+              if (button instanceof HTMLButtonElement) button.disabled = false;
+            });
+            window.requestAnimationFrame(() => window.requestAnimationFrame(openInvitation));
           };
           const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           if (prefersReducedMotion) {
@@ -98,6 +114,7 @@ const firstSectionAsset = (file: string) => `${base}assets/wedding-first-section
             openButtons.forEach((button) => button.setAttribute('aria-expanded', 'true'));
           } else {
             openButtons.forEach((button) => button.addEventListener('click', openInvitation));
+            replayButton?.addEventListener('click', replayInvitation);
           }
         </script>
       </section>

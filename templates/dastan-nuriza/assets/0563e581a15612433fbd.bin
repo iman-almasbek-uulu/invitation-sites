@@ -1,0 +1,47 @@
+
+        <html>
+          <style>a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,main,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;color:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section{display:block}[hidden]{display:none}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}table{border-collapse:collapse;border-spacing:0}button{box-sizing:content-box;background:0 0;border:none;color:inherit;font:inherit;line-height:normal;overflow:visible;padding:0;user-select:none;-webkit-appearance:button;cursor:pointer;margin:0}button::-moz-focus-inner{border:none;padding:0}button:disabled{cursor:default}body:not(._ki) button{outline:0}a{text-decoration:none}body{line-height:17px;font-size:14px;letter-spacing:-0.6px;font-variant-numeric:normal;font-weight:400}input{font-family:inherit;-webkit-appearance:none;-moz-appearance:none}input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin: 0}input[type=number]{-moz-appearance:textfield}textarea{font-family:inherit}</style>
+          <style>
+            @font-face {
+                font-family: SBSansText;
+                font-weight: 400;
+                font-style: normal;
+                font-display: swap;
+                src: url("https://d-assets.2gis.ru/fonts/SBSansText-Regular.woff2") format("woff2");
+            }
+            @font-face {
+                font-family: SBSansText;
+                font-weight: 600;
+                font-style: normal;
+                font-display: swap;
+                src: url("https://d-assets.2gis.ru/fonts/SBSansText-Semibold.woff2") format("woff2");
+            }
+          </style>
+          <style>
+            body {
+              overflow: hidden;
+              font-family: SBSansText, Helvetica, Arial, sans-serif;
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;
+              -webkit-tap-highlight-color: rgba(0,0,0,0);
+            }
+
+            @media (max-width: 767px), (max-height: 411px) {
+              body {
+                overflow: auto;
+              }
+            }
+          </style>
+          <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+          <body>
+            <div id="root"></div>
+            <script>window.__dynamic_config_sso__ = JSON.parse('{"mode":"production","authUrl":"https://api.auth.2gis.com/2.1/","accessTokenCookieName":"access_token","refreshTokenCookieName":"refresh_token","staticPath":"https://d-assets.2gis.ru/","jurisdictionCode":"ru_sng"}')</script>
+            <script src="https://d-assets.2gis.ru/inline.6fe90b3928e61e1daa7f.js"></script>
+            <script>!function(n,e){var t,o,i,c=[],f={passive:!0,capture:!0},r=new Date,a="pointerup",u="pointercancel";function p(n,c){t||(t=c,o=n,i=new Date,w(e),s())}function s(){o>=0&&o<i-r&&(c.forEach(function(n){n(o,t)}),c=[])}function l(t){if(t.cancelable){var o=(t.timeStamp>1e12?new Date:performance.now())-t.timeStamp;"pointerdown"==t.type?function(t,o){function i(){p(t,o),r()}function c(){r()}function r(){e(a,i,f),e(u,c,f)}n(a,i,f),n(u,c,f)}(o,t):p(o,t)}}function w(n){["click","mousedown","keydown","touchstart","pointerdown"].forEach(function(e){n(e,l,f)})}w(n),self.perfMetrics=self.perfMetrics||{},self.perfMetrics.onFirstInputDelay=function(n){c.push(n),s()}}(addEventListener,removeEventListener);;var __features=[];try{if(!Array.prototype.flat || !Array.prototype.flatMap){__features.push("Array.flatMapAndFlat")}if(false){__features.push("firstInputDelay")}if(!window.IntersectionObserver){__features.push("IntersectionObserver")}if(!Object.assign){__features.push("Object.assign")}if(!window.requestIdleCallback){__features.push("requestIdleCallback")}if(!window.Worker){__features.push("Worker")}if(!window.ResizeObserver){__features.push("ResizeObserver")}}catch(e){};if (__features.length){document.write('<script src="/_/polyfills.min.js?features='+__features.join(',')+'"></scr'+'ipt>')}</script>
+            <script src="https://d-assets.2gis.ru/vendor.28a427473b23574aa87a.js"></script>
+            <script src="https://d-assets.2gis.ru/core.84e40caf87c4a7cc848f.js"></script>
+            <script src="https://d-assets.2gis.ru/sso.c1b64bde59470d348f65.js"></script>
+            <script src="https://d-assets.2gis.ru/react.73aed46cec595fcc5c25.js"></script><script src="https://d-assets.2gis.ru/redux.a9fb667d5e219459c725.js"></script><script src="https://d-assets.2gis.ru/jquery-1.3.2.b446af196d464853347f.js"></script>
+          </body>
+        </html>
+      

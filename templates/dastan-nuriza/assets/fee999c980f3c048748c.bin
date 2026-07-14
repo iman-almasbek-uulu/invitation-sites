@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>2GIS</title>
+
+    <link rel="stylesheet" href="css/styles.css" />
+    <!--[if lt IE 9]>
+        <script src="js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body class="page">
+
+    <header class="header">
+        <div class="header__in">
+            <div class="header__try">Try 2GIS now on <a href="http://2gis.ae/" target="_blank" class="header__link link">2gis.ae</a></div>
+            <div class="logo logo_2gis">
+                <a href="#" class="logo__link">
+                    <img src="img/2gis_logo.png" alt="2GIS Smart City Map" class="logo__img" style="width: 141px; height: 60px;"/>
+                </a>
+
+            </div>
+
+            <h1 class="header__welcome">2GIS is a free business listings with a city map.</h1>
+        </div>
+    </header>
+
+    <section class="features">
+        <ul class="features__list">
+            <li class="features__item feature">
+                <h2 class="feature__title">Most detailed city map</h2>
+                <ins class="feature__icon feature__icon_map"></ins>
+                <p class="feature__description">A 3D city map showing the finest details, including driveways and fences. It is available online and can be downloaded as an offline application for PC and smartphones.</p>
+            </li>
+            <li class="features__item feature">
+                <h2 class="feature__title">Contact details of all organizations</h2>
+                <ins class="feature__icon feature__icon_contacts"></ins>
+                <p class="feature__description">A user-friendly search engine and detailed information on all city companies, from state agencies to nearby kiosks, including addresses, phone numbers and working hours.</p>
+            </li>
+            <li class="features__item feature">
+                <h2 class="feature__title">Public transport routes</h2>
+                <ins class="feature__icon feature__icon_transport"></ins>
+                <p class="feature__description">2GIS shows the exact location of transport stops with correspondent transport routes. You can see the whole transportation network of the city.</p>
+            </li>
+        </ul>
+    </section>
+
+    <footer class="footer">
+        <div class="footer__in">
+            <address class="footer__contacts">
+                2GIS L.L.C.<br />
+				<a href="mailto:razr@2gis.ru" class="link">razr@2gis.ru</a>
+            </address>
+
+
+            <div class="footer__copyright">
+                &copy;&nbsp;2GIS, 2019<br/>
+                <div class="langSwitcher">
+                    <a href="/index_ru.html" class="langSwitcher__item link">ru</a>/<a href="/index_en.html" class="langSwitcher__item">en</a>/<a href="/index_es.html" class="langSwitcher__item link">es</a>/<a href="/index_az.html" class="langSwitcher__item link">az</a>
+                </div>
+			</div>
+        </div>
+		<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter25038986 = new Ya.Metrika({id:25038986,
+                    webvisor:true,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/25038986" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
+    <title>Metarubrick / Eat / Cafe</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="New-meta-draft" transform="translate(-84.000000, -584.000000)">
+            <g id="Slice" transform="translate(84.000000, 84.000000)"></g>
+            <g id="Icon" transform="translate(51.000000, 42.000000)" stroke="#FF8D00" stroke-width="2">
+                <g id="Eat" transform="translate(28.000000, 494.000000)">
+                    <g id="Cafe" transform="translate(6.710007, 50.000000)">
+                        <path d="M24.2915,13 C24.2915,18.523 19.8145,23 14.2915,23 C8.7685,23 4.2915,18.523 4.2915,13 L4.2915,10 L24.2915,10 L24.2915,13 Z" id="Stroke-1"></path>
+                        <path d="M0.2915,25 C4.4765,26.275 9.2365,27 14.2915,27 C19.3465,27 24.1065,26.275 28.2915,25" id="Stroke-3"></path>
+                        <path d="M24.2915,12 L26.2915,12 C27.9485,12 29.2915,13.343 29.2915,15 L29.2915,15 C29.2915,16.657 27.9485,18 26.2915,18 L22.9535,18" id="Stroke-5"></path>
+                        <path d="M9.2915,6 L9.2915,2" id="Stroke-7"></path>
+                        <path d="M14.2915,6 L14.2915,0" id="Stroke-9"></path>
+                        <path d="M19.2915,6 L19.2915,2" id="Stroke-11"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

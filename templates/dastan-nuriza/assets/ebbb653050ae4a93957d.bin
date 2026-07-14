@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Uploadcare CDN</title>
+<style>
+    body {
+        text-align: center;
+        font-family: -apple-system, BlinkMacSystemFont, Helvetica, sans-serif;
+        margin: 10px;
+        background-color: black;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+    }
+    h1, p, a {
+        font-size: 16px;
+        color: white;
+        font-weight: normal;
+        margin: 2px 0;
+    }
+    a:hover {
+        color: #cecece;
+    }
+    div {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: radial-gradient(80% 96% at 120% 50%, #FFC700 0%, #FFEDAB 100%);
+        margin-top: 50px;
+    }
+</style>
+</head>
+<body>
+    <h1>Content delivery network of <a href="https://uploadcare.com/">Uploadcare</a></h1>
+    <p><a href="https://uploadcare.com/about/terms/#10-copyright-infringement-and-dmca-policy">Copyright infringement and DMCA policy</a></p>
+    <div></div>
+</body>
+</html>

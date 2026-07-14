@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MPD xmlns="urn:mpeg:dash:schema:mpd:2011" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:mpeg:dash:schema:mpd:2011 DASH-MPD.xsd" profiles="urn:mpeg:dash:profile:isoff-live:2011" minBufferTime="PT2S" type="static" mediaPresentationDuration="PT4.3S">
+  <Period id="0">
+    <AdaptationSet id="0" contentType="video" width="360" height="202" frameRate="15360/512" segmentAlignment="true" par="25:14">
+      <SupplementalProperty schemeIdUri="urn:mpeg:mpegB:cicp:TransferCharacteristics" value="1"/>
+      <Representation id="0" bandwidth="3056984" codecs="avc1.4d401e" mimeType="video/mp4" sar="1:1">
+        <SegmentTemplate timescale="15360" initialization="v0_init.m4v" media="v0_$Number$.m4v" startNumber="1">
+          <SegmentTimeline>
+            <S t="0" d="30720" r="1"/>
+            <S t="61440" d="4608"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+    </AdaptationSet>
+    <AdaptationSet id="1" contentType="audio" lang="ru" startWithSAP="1" segmentAlignment="true">
+      <Role schemeIdUri="urn:mpeg:dash:role:2011" value="main"/>
+      <Representation id="1" bandwidth="194446" codecs="mp4a.40.2" mimeType="audio/mp4" audioSamplingRate="48000">
+        <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+        <SegmentTemplate timescale="48000" initialization="a1_init.m4a" media="a1_$Number$.m4a" startNumber="1">
+          <SegmentTimeline>
+            <S t="1152" d="95028"/>
+            <S t="96180" d="96256"/>
+            <S t="192436" d="20940"/>
+          </SegmentTimeline>
+        </SegmentTemplate>
+      </Representation>
+    </AdaptationSet>
+  </Period>
+</MPD>

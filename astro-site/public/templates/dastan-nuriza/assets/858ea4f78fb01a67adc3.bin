@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html class="no-js" lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<script>document.documentElement.className=''</script>
+<title>Конкурс 2ГИС</title>
+<link rel="stylesheet" href="css/style.min.css?3">
+<link rel="stylesheet" href="frontend/frontend.css?4">
+
+<link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+<link rel="manifest" href="/favicons/site.webmanifest">
+<link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="shortcut icon" href="/favicons/favicon.ico">
+<meta name="msapplication-TileColor" content="#00aba9">
+<meta name="msapplication-config" content="/favicons/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+			new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+		'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KJTJ4W3M');</script>
+<!-- End Google Tag Manager -->
+
+</head>
+
+<body
+		x-data="friends"
+		x-bind:class="{
+		'_contestant': isParticipant && !hasEnded(),
+		'_ended': hasEnded(),
+		'_finished': hasEnded(),
+		'page-desktop': showQr(),
+		}"
+	 class="body-on-load _authed page-home">
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KJTJ4W3M"
+				  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<div class="main-wrapper">
+
+<header class="header ">
+	<div class="header__logo"><img src="img/logo-desktop.svg" alt=""></div>
+</header>
+
+
+
+
+<main class="home">
+	<div class="home__main">
+		<section class="home__intro">
+			<h1 class="home__intro-heading">Покажите Москву!</h1>
+			<p x-html="getIntroCopyText()" class="home__intro-copy"></p>
+		</section>
+
+		<div class="intro-image">
+			<img src="img/intro.jpg" alt="">
+		</div>
+
+		<section class="how-to">
+			<h2 x-html="getHowToHeading()"></h2>
+			<ol>
+				<li>Авторизуйтесь в&nbsp;2ГИС, чтобы на&nbsp;этой странице появилась кнопка «Участвовать». Нажмите на&nbsp;неё&nbsp;— и&nbsp;вы&nbsp;в&nbsp;деле!</li>
+				<li>Добавляйте видео, фото и&nbsp;отзывы с&nbsp;текстом в&nbsp;карточки мест Москвы и&nbsp;Московской области. Подойдут любые объекты и&nbsp;компании.</li>
+				<li>Поделитесь впечатлениями в&nbsp;карточках трёх, пяти или десяти мест и&nbsp;становитесь участником розыгрыша 65&nbsp;подарков. Чем больше контента, тем круче подарки!</li>
+				<li>Можно делиться только видео, только фото или отзывами&nbsp;— а&nbsp;можно всем сразу.</li>
+			</ol>
+		</section>
+
+		<section class="prizes superprizes">
+			<h2 class="prizes__heading">Мегаподарки за&nbsp;впечатления к&nbsp;десяти местам Москвы</h2>
+
+			<div class="prizes__slider">
+				<div class="swiper">
+					<div class="swiper-wrapper">
+						<template x-for="(prize, index) in superPrizes" :key="index">
+							<div class="swiper-slide">
+								<article class="prizes__slider-item">
+									<p class="prizes__slider-item-place">
+										<span x-html="printScore(prize.score)" x-bind:class="prize.score_color_class"></span>
+										<span x-show="prize.quantity" x-html="prize.quantity" class="_simple"></span>
+									</p>
+									<p class="prizes__slider-item-image">
+										<img x-bind:src="prize.image" alt="" loading="lazy">
+									</p>
+									<p class="prizes__slider-item-name" x-html="prize.name"></p>
+								</article>
+							</div>
+						</template>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="prizes guaranteedprizes">
+			<h2 class="prizes__heading">Суперподарки за&nbsp;впечатления к&nbsp;пяти местам Москвы</h2>
+
+			<div class="prizes__slider">
+				<div class="swiper">
+					<div class="swiper-wrapper">
+
+						<template x-for="(prize, index) in regularPrizes" :key="index">
+						<div class="swiper-slide _one">
+							<article class="prizes__slider-item">
+								<p class="prizes__slider-item-place">
+									<span x-html="printScore(prize.score)" x-bind:class="prize.score_color_class"></span>
+									<span x-show="prize.quantity" x-html="prize.quantity" class="_simple"></span>
+								</p>
+								<p class="prizes__slider-item-image">
+									<img x-bind:src="prize.image" alt="" loading="lazy">
+								</p>
+								<p class="prizes__slider-item-name" x-html="prize.name"></p>
+							</article>
+						</div>
+						</template>
+
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="prizes guaranteedprizes">
+			<h2 class="prizes__heading">Подарки за&nbsp;впечатления к&nbsp;трём местам Москвы</h2>
+
+			<div class="prizes__slider">
+				<div class="swiper">
+					<div class="swiper-wrapper">
+
+						<template x-for="(prize, index) in simplePrizes" :key="index">
+							<div class="swiper-slide _one">
+								<article class="prizes__slider-item">
+									<p class="prizes__slider-item-place">
+										<span x-html="printScore(prize.score)" x-bind:class="prize.score_color_class"></span>
+										<span x-show="prize.quantity" x-html="prize.quantity" class="_simple"></span>
+									</p>
+									<p class="prizes__slider-item-image">
+										<img x-bind:src="prize.image" alt="" loading="lazy">
+									</p>
+									<p class="prizes__slider-item-name" x-html="prize.name"></p>
+								</article>
+							</div>
+						</template>
+
+					</div>
+				</div>
+			</div>
+		</section>
+
+
+		<section x-show="showTimer()" class="timer" data-date="2025-07-29T23:59:00.000+03:00"><div class="timer__box">
+			<h2 class="timer__heading">До&nbsp;окончания конкурса осталось</h2>
+			<div class="timer__time">
+				<div class="timer__time-item _days">
+					<strong>0</strong>
+					<span>дней</span>
+				</div>
+				<div class="timer__time-item _hours">
+					<strong>0</strong>
+					<span>часов</span>
+				</div>
+				<div class="timer__time-item _mins">
+					<strong>0</strong>
+					<span>минут</span>
+				</div>
+			</div>
+		</div></section>
+
+		<section class="rules">
+			<h3>Кто может участвовать?</h3>
+			<p>Пользователи 2ГИС в&nbsp;России старше 14&nbsp;лет. Для участия надо авторизоваться.</p>
+			<h3>Когда?</h3>
+			<p>С&nbsp;00:00 9&nbsp;июля до&nbsp;23:59 29&nbsp;июля по&nbsp;московскому времени.</p>
+			<p>Итоги опубликуем 6&nbsp;августа в&nbsp;сторис приложения 2ГИС и&nbsp;в&nbsp;<a href="https://t.me/city_helpers_2gis?openInBrowser=true">телеграм-канале «2ГИС. Помогаем городу»</a>. Подарки отправим до&nbsp;29&nbsp;ноября 2025</p>
+			<h3>Как узнать свой прогресс?</h3>
+			<p>По&nbsp;понедельникам и&nbsp;пятницам вы&nbsp;будете получать письма о&nbsp;том, во&nbsp;сколько карточек вы&nbsp;добавили отзывы, фото и&nbsp;видео. <a href="https://help.2gis.ru/question/kak-dobavit-novyy-sposob-vhoda-vprofil-2gis">Добавьте e-mail в&nbsp;ваш профиль 2ГИС</a></p>
+			<h3>Как определят победителя?</h3>
+			<p>Победителей выберем случайным образом среди участников, которые загрузят видео, фото или отзывы с&nbsp;текстом к&nbsp;3, 5&nbsp;или 10&nbsp;разным местам Москвы и&nbsp;Московской области.</p>
+		</section>
+
+		<section class="prizes _hints" id="lifehacks">
+			<h2 class="prizes__heading">Лайфхаки</h2>
+			<div class="prizes__slider">
+				<div class="swiper">
+					<div class="swiper-wrapper">
+						<template x-for="(hint, index) in hints" :key="index">
+						<div class="swiper-slide">
+							<article class="prizes__slider-item">
+								<p class="prizes__slider-item-image">
+									<img x-bind:src="hint.img" alt="" loading="lazy">
+								</p>
+								<p class="prizes__slider-item-name" x-html="hint.text"></p>
+							</article>
+						</div>
+						</template>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="help">
+			<h2>Остались вопросы?</h2>
+			<p><a href="https://help.2gis.ru/question/kak-ostavit-svoy-otzyv-k-kompanii/ios">Как добавить отзыв</a></p>
+			<p><a href="https://help.2gis.ru/question/kak-dobavit-foto-k-kartochke-kompanii-ilizdaniya/ios">Как добавить фото</a></p>
+			<p><a href="https://help.2gis.ru/question/kak_dobavit_video_v_2gis/ios">Как добавить видео</a></p>
+			<p><a href="https://law.2gis.ru/giveaway-rules/">👉 А&nbsp;здесь&nbsp;— подробные правила</a></p>
+		</section>
+
+		<section class="telegram">
+			<h2 class="telegram__heading">Пишите нам</h2>
+			<p>Телеграм-канал <br>«2ГИС. Помогаем городу»</p>
+			<p class="telegram__cta">
+				<a href="https://t.me/city_helpers_2gis?openInBrowser=true" class="btn _min _white">Задать вопрос</a>
+			</p>
+		</section>
+	</div>
+</main>
+
+
+
+<main class="ranks">
+	<div x-show="!showWinners()" class="ranks__header">
+		<article class="ranks__list-item _user">
+			<div class="ranks__list-item-image">
+				<img x-bind:src="previewPicture(me.participant.avatar_preview_tpl)" alt="">
+			</div>
+			<div class="ranks__list-item-person">
+				<div class="ranks__list-item-person-name"><em>Я</em> · <span x-html="me.participant.name"></span></div>
+				<div class="ranks__list-item-person-points" x-html="printScore(me.score)"></div>
+			</div>
+		</article>
+		<div x-show="me.score && !hasEnded()" class="ranks__header-progress">
+			<p class="ranks__header-progress-heading">Вот сколько баллов <br>вы&nbsp;уже получили</p>
+			<p x-html="me.score" class="ranks__header-progress-points"></p>
+		</div>
+		<div x-show="hasEnded()" class="ranks__ended"><div class="ranks__ended-inner">
+			<div class="ranks__ended-body">
+				<h2>Конкурс завершён</h2>
+				<p>Мы&nbsp;всё тщательно проверим и&nbsp;объявим победителей 7&nbsp;мая. Будьте на&nbsp;связи!</p>
+				<p x-show="me.score > 0" class="ranks__ended-points">Вот сколько баллов вы&nbsp;получили:&nbsp;<span x-html="me.score"></span></p>
+			</div>
+		</div></div>
+	</div>
+
+	<section x-show="claimedPrizes.length === 1" class="prizes">
+		<h2 class="prizes__heading">Вы&nbsp;участвуете в&nbsp;розыгрыше</h2>
+		<div class="prizes__slider" x-show="claimedPrizes.length === 1">
+			<template x-for="(prize, index) in claimedPrizes" :key="`${index}-claimed-1`">
+				<article class="prizes__slider-item _big">
+					<p x-show="prize.country" class="prizes__slider-item-place"><span x-html="prize.country"></span></p>
+					<p class="prizes__slider-item-image">
+						<img x-bind:src="prize.image" alt="" loading="lazy">
+					</p>
+					<p class="prizes__slider-item-name" x-html="prize.name"></p>
+				</article>
+			</template>
+		</div>
+	</section>
+
+	<section x-show="claimedPrizes.length > 1" class="prizes">
+		<h2 class="prizes__heading">Вы&nbsp;участвуете в&nbsp;розыгрыше</h2>
+		<div class="prizes__slider">
+			<div class="swiper">
+				<div class="swiper-wrapper">
+					<template x-for="(prize, index) in claimedPrizes" :key="`${index}-claimed`">
+						<div class="swiper-slide">
+							<article class="prizes__slider-item ">
+								<p x-show="prize.country" class="prizes__slider-item-place"><span x-html="prize.country"></span></p>
+								<p class="prizes__slider-item-image">
+									<img x-bind:src="prize.image" alt="" loading="lazy">
+								</p>
+								<p class="prizes__slider-item-name" x-html="prize.name"></p>
+							</article>
+						</div>
+					</template>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+	<h1 x-show="showWinners()" class="ranks__heading">Победители</h1>
+	<p x-show="showWinners()" class="ranks__copy">Мы&nbsp;свяжемся с&nbsp;победителями до&nbsp;13&nbsp;августа. <br><a href="https://help.2gis.ru/question/kak-dobavit-novyy-sposob-vhoda-vprofil-2gis">Добавьте e-mail в&nbsp;профиль 2ГИС</a><br>и&nbsp;следите за&nbsp;входящими.</p>
+
+	<section x-show="showWinners()" class="ranks__list">
+		<h2 class="ranks__list-heading">Мегаподарки</h2>
+		<template x-for="(winner, index) in megaWinners" :key="`${index}-super-winners`">
+			<article
+					x-bind:class="(isCurrentUser(winner) ? ' _user' : '')"
+					class="ranks__list-item">
+				<div class="ranks__list-item-image">
+					<img x-bind:src="getPicture(winner)" alt="">
+				</div>
+				<div class="ranks__list-item-person">
+					<div x-html="printName(winner)" class="ranks__list-item-person-name"></div>
+					<div class="ranks__list-item-person-prize"><img x-bind:src="getWinnerPrizeImage(winner)" alt="" title=""></div>
+				</div>
+			</article>
+		</template>
+		<h2 class="ranks__list-heading">Суперподарки</h2>
+		<template x-for="(winner, index) in superWinners" :key="`${index}-super-winners`">
+			<article
+					x-bind:class="(isCurrentUser(winner) ? ' _user' : '')"
+					class="ranks__list-item">
+				<div class="ranks__list-item-image">
+					<img x-bind:src="getPicture(winner)" alt="">
+				</div>
+				<div class="ranks__list-item-person">
+					<div x-html="printName(winner)" class="ranks__list-item-person-name"></div>
+					<div class="ranks__list-item-person-prize"><img x-bind:src="getWinnerPrizeImage(winner)" alt="" title=""></div>
+				</div>
+			</article>
+		</template>
+		<h2 class="ranks__list-heading">Подарки</h2>
+		<template x-for="(winner, index) in winners" :key="`${index}-winners`">
+			<article
+					x-bind:class="(isCurrentUser(winner) ? ' _user' : '')"
+					class="ranks__list-item">
+				<div class="ranks__list-item-image">
+					<img x-bind:src="getPicture(winner)" alt="">
+				</div>
+				<div class="ranks__list-item-person">
+					<div x-html="printName(winner)" class="ranks__list-item-person-name"></div>
+					<div class="ranks__list-item-person-prize"><img x-bind:src="getWinnerPrizeImage(winner)" alt="" title=""></div>
+				</div>
+			</article>
+		</template>
+	</section>
+</main>
+
+
+<div class="popup__hidden">
+	<div x-ref="won" x-bind:class="{'won': hasEnded() && hasPrize()}">
+		<div class="won__inner">
+			<h1 class="won__heading">Ура, вы&nbsp;победили!</h1>
+			<div class="won__image"></div>
+			<h3 class="won__gratz">Поздравляем! Скоро мы&nbsp;свяжемся с&nbsp;вами и&nbsp;расскажем, как получить
+				подарок</h3>
+			<p class="won__copy">Добавьте актуальный e-mail в&nbsp;ваш профиль 2ГИС и&nbsp;следите за&nbsp;входящими.</p>
+		</div>
+	</div>
+</div>
+
+<footer class="footer">
+	<p class="footer__copy">©&nbsp;2025 2ГИС</p>
+
+	<p class="footer__legal"><a href="https://law.2gis.ru/giveaway-rules/">Полные правила акции в&nbsp;России</a>.&nbsp;0+.</p>
+
+	<div class="footer__logo"><img src="img/logo.svg" alt="2ГИС"></div>
+</footer>
+
+
+</div>
+<div class="footer__join"
+	 x-bind:class="{ 'visible' : isParticipateButtonVisible() }">
+
+	<a x-on:click="participate" href="#" class="btn">Участвовать</a>
+</div>
+
+<div class="footer__join" x-bind:class="{ 'visible' : isParticipantCaptionVisible() }">
+	<span class="btn _black _success"><img src="img/icons/success.svg" alt="">Вы участвуете в&nbsp;конкурсе</span>
+</div>
+
+<div class="footer__join" x-bind:class="{ 'visible': isAuthorizedButtonVisible() }">
+	<a x-show="getCookie('version') === null"
+	   href="dgis://2gis.ru/mapfriends/invite"
+	   class="btn">Авторизоваться</a>
+	<a x-show="getCookie('version') !== null"
+	   href="dgis://2gis.ru/mapfriends/contest"
+	   class="btn">Авторизоваться</a>
+</div>
+
+<!-- iOS 7.4 fallback -->
+<div class="footer__join _disabled visible" x-show="showIOSBlocked()">
+	Авторизуйтесь&nbsp;в&nbsp;2ГИС
+</div>
+
+
+<div class="footer__join" x-bind:class="{ 'visible': isTabsBlockVisible() }">
+	<div class="header__tabs">
+		<div x-ref="rules" class="header__tabs-item _active" data-rel="home">О конкурсе</div>
+		<div x-ref="rating" x-html="getRanksTabText" class="header__tabs-item" data-rel="ranks"></div>
+	</div>
+</div>
+<div class="main-desktop">
+	<div class="main-desktop__logo"><a href="https://2gis.ru/"><img src="img/logo-desktop.svg" alt=""></a></div>
+	<div class="main-desktop__body">
+		<div class="main-desktop__heading">Покажите Москву!</div>
+		<p class="main-desktop__copy">С&nbsp;9&nbsp;до&nbsp;29&nbsp;июля делитесь видео, фото и&nbsp;отзывами о&nbsp;местах столицы и&nbsp;выигрывайте подарки</p>
+		<p class="main-desktop__copy">Подробности конкурса смотрите на&nbsp;вкладке Друзья в&nbsp;мобильном приложении 2ГИС</p>
+	</div>
+	<div class="main-desktop__download">
+		<p class="main-desktop__download-copy only-desktop">
+			Скачивай приложение 2ГИС, чтобы участвовать
+		</p>
+
+		<p class="main-desktop__download-copy only-mobile">
+			Скачайте приложение 2ГИС или&nbsp;обновите до&nbsp;последней версии, чтобы участвовать
+		</p>
+		<div class="main-desktop__download-body">
+			<div class="main-desktop__download-code"><img src="img/qr.png?v1" alt=""></div>
+			<div class="main-desktop__download-apps">
+				<a href="https://apps.apple.com/ru/app/2%D0%B3%D0%B8%D1%81-%D0%BA%D0%B0%D1%80%D1%82%D1%8B-%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%82%D0%BE%D1%80-%D0%B4%D1%80%D1%83%D0%B7%D1%8C%D1%8F/id481627348"><img src="img/appstore.svg" alt=""></a>
+				<a href="https://play.google.com/store/apps/details?id=ru.dublgis.dgismobile&hl=ru"><img src="img/play.svg" alt=""></a>
+			</div>
+		</div>
+	</div>
+
+	<div class="main-desktop__footer">
+		©&nbsp;2025 2ГИС.
+		<a href="https://law.2gis.ru/giveaway-rules/">Полные правила акции в&nbsp;России</a>.&nbsp;0+.
+	</div>
+</div>
+
+
+<script src="js/f.min.js?0"></script>
+<script src="frontend/alpine.min.js" defer></script>
+<script>
+	if (typeof window.queueMicrotask !== "function") {
+		window.queueMicrotask = function (callback) {
+			Promise.resolve()
+					.then(callback)
+					.catch(e => setTimeout(() => { throw e; }));
+		};
+	}
+
+	document.addEventListener('alpine:init', () => {
+		Alpine.data('friends', () => ({
+			startDate: '2025-07-01T00:00:00.000+03:00',
+			winnersDate: true,
+			isDemo: false,
+			showTabs: true,
+			me: {
+				position: 0,
+				participant: {
+					public_user_id: '',
+					name: '',
+					avatar: '',
+					avatar_preview_tpl: ''
+				},
+				score: 0
+			},
+			hints: [
+				{
+					img: 'img/lifehacks/1.png',
+					text: 'Добавляйте видео, фото или отзывы к&nbsp;любым местам Москвы и&nbsp;Московской области.'
+				},
+				{
+					img: 'img/lifehacks/2.png',
+					text: 'Если хотите помочь большему количеству пользователей, добавляйте видео.',
+				},
+				{
+					img: 'img/lifehacks/3.png',
+					text: 'Фото и&nbsp;видео должны быть информативными&nbsp;— покажите атмосферу места, располо-жение входа или результат работы компании.',
+				},
+				{
+					img: 'img/lifehacks/4.png',
+					text: 'Оставляйте отзывы, только если вы&nbsp;клиент компании или бывали в&nbsp;выбранном месте.',
+				},
+				{
+					img: 'img/lifehacks/5.png',
+					text: 'Пишите подробные отзывы, расскажите, что вам понравилось, а&nbsp;что можно улучшить',
+				},
+
+			],
+			claimedPrizes: [
+			],
+			prizes: [
+			],
+			regularPrizes: [
+
+			],
+			simplePrizes: [
+
+			],
+			superPrizes: [
+
+			],
+			allPrizes: [
+
+				{
+					name: 'Промокод на&nbsp;30&nbsp;000&nbsp;₽ в&nbsp;сервис бронирования Отелло',
+					score: 5,
+					country: '',
+					score_color_class: '_blue',
+					image: 'img/prizes/prize-otello.png',
+					quantity: '10 суперподароков',
+					superPrize: false,
+					simplePrize: false,
+				},
+				{
+					name: 'Сертификат на&nbsp;2000&nbsp;₽ в&nbsp;Золотое Яблоко',
+					score: 3,
+					country: '',
+					score_color_class: '_blue',
+					image: 'img/prizes/prize-zy.png',
+					quantity: '50 подарков',
+					superPrize: false,
+					simplePrize: true,
+				},
+				{
+					name: 'Ноутбук Apple MacBook Air M4 13.6"',
+					score: 10,
+					country: '',
+					score_color_class: '_blue',
+					image: 'img/prizes/prize-1.png',
+					quantity: '1 мегаподарок',
+					superPrize: true,
+				},
+				{
+					name: 'Смартфон Apple iPhone16 Pro 128 ГБ',
+					score: 10,
+					country: '',
+					score_color_class: '_orange',
+					image: 'img/prizes/prize-2.png',
+					quantity: '1 мегаподарок',
+					superPrize: true,
+				},
+				{
+					name: 'Игровая консоль PlayStation 5 Slim',
+					score: 10,
+					country: '',
+					score_color_class: '_green',
+					image: 'img/prizes/prize-3.png',
+					quantity: '1 мегаподарок',
+					superPrize: true,
+				},
+				{
+					name: 'Фен Dyson Supersonic Professional HD18',
+					score: 10,
+					country: '',
+					score_color_class: '_blue',
+					image: 'img/prizes/prize-4.png',
+					quantity: '1 мегаподарок',
+					superPrize: true,
+				},
+				{
+					name: 'Электросамокат Xiaomi Mi Electric Scooter 4 Pro',
+					score: 10,
+					country: '',
+					score_color_class: '_purple',
+					image: 'img/prizes/prize-5.png',
+					quantity: '1 мегаподарок',
+					superPrize: true,
+				},
+			],
+			superWinners: [
+				{
+					"#": "1",
+					"prize": "Промокодов от Отелло",
+					"№": "438",
+					"ID": "78212306",
+					"name": "Алексей Красов",
+					"photo": "",
+					"public_user_id": "d2bcfbf65d4c43ec94890b9ed90bee19"
+				},
+				{
+					"#": "2",
+					"prize": "Промокодов от Отелло",
+					"№": "196",
+					"ID": "77747727",
+					"name": "Михаил Михаило бомбардило",
+					"photo": "https://i0.photo.2gis.com/images/profile/30258560247049762_1342.jpg",
+					"public_user_id": "a49c13d6b2ef48cbb711fee870162655"
+				},
+				{
+					"#": "3",
+					"prize": "Промокодов от Отелло",
+					"№": "169",
+					"ID": "57141717",
+					"name": "Олег Ивкин",
+					"photo": "",
+					"public_user_id": "caaf37d609dc4bb5a663f3b4fdad6a09"
+				},
+				{
+					"#": "4",
+					"prize": "Промокодов от Отелло",
+					"№": "464",
+					"ID": "79593571",
+					"name": "player-79593571",
+					"photo": "",
+					"public_user_id": "a67d6a985fa94d039bd67aa553de085e"
+				},
+				{
+					"#": "5",
+					"prize": "Промокодов от Отелло",
+					"№": "221",
+					"ID": "34489262",
+					"name": "Максим Мирошниченко",
+					"photo": "https://i2.photo.2gis.com/images/profile/30258560075591579_8340.jpg",
+					"public_user_id": "462379af204e4277800f411d34f87b81"
+				},
+				{
+					"#": "6",
+					"prize": "Промокодов от Отелло",
+					"№": "430",
+					"ID": "3966203",
+					"name": "Алла Б.",
+					"photo": "https://i1.photo.2gis.com/images/profile/30258560047953141_be31.jpg",
+					"public_user_id": "362772d37920445e8f016d86c2f7c36b"
+				},
+				{
+					"#": "7",
+					"prize": "Промокодов от Отелло",
+					"№": "79",
+					"ID": "19009382",
+					"name": "Aleksey Grishko",
+					"photo": "https://i5.photo.2gis.com/images/profile/844424971686525_14f9.jpg",
+					"public_user_id": "16fbdc5ae0264f4bbfe16f7aa46c95fc"
+				},
+				{
+					"#": "8",
+					"prize": "Промокодов от Отелло",
+					"№": "25",
+					"ID": "36877931",
+					"name": "Netta Chimitova",
+					"photo": "",
+					"public_user_id": "d379a9cebc3c4b7f87a31cfbbb563cd6"
+				},
+				{
+					"#": "9",
+					"prize": "Промокодов от Отелло",
+					"№": "412",
+					"ID": "63192954",
+					"name": "Андрей Коверсун",
+					"photo": "https://i8.photo.2gis.com/images/profile/30258560226672958_aa37.jpg",
+					"public_user_id": "bbace487ab904a1d891879a283ecc214"
+				},
+				{
+					"#": "10",
+					"prize": "Промокодов от Отелло",
+					"№": "8",
+					"ID": "53287723",
+					"name": "Varvara Spirina",
+					"photo": "https://i1.photo.2gis.com/images/profile/30258560182792426_2e8d.jpg",
+					"public_user_id": "445b4ec4b7a14574a2dc81d7cfd16616"
+				}
+			],
+			megaWinners: [
+				{
+					"#": "1",
+					"prize": "iPhone 16 Pro",
+					"№": "212",
+					"ID": "7859668",
+					"Имя": "Записки Сибирячки",
+					"photo": "https://i6.photo.2gis.com/images/profile/30258560174711333_71de.jpg",
+					"public_user_id": "fcebe55e2f394c2baffea623ebbba22f"
+				},
+				{
+					"#": "2",
+					"prize": "PlayStation 5 Slim",
+					"№": "69",
+					"ID": "19499174",
+					"Имя": "Юля .",
+					"photo": "https://i4.photo.2gis.com/images/profile/30258560221918243_bc1e.jpg",
+					"public_user_id": "14db57c71b544169b660cf9df7aae12d"
+				},
+				{
+					"#": "3",
+					"prize": "электросамокат Xiaomi",
+					"№": "324",
+					"ID": "13205706",
+					"Имя": "Алёна Куликова",
+					"photo": "https://i4.photo.2gis.com/images/profile/844424959569194_f26e.jpg",
+					"public_user_id": "389f700040de4c9f9d093e2690b8b718"
+				},
+				{
+					"#": "4",
+					"prize": "фен Dyson Pro",
+					"№": "29",
+					"ID": "10871973",
+					"Имя": "Kristy Uran",
+					"photo": "https://i2.photo.2gis.com/images/profile/844424950516738_ca6e.jpg",
+					"public_user_id": "6b13e2458fe548a58c729bf77dc2fd61"
+				},
+				{
+					"#": "5",
+					"prize": "MacBook Air M4",
+					"№": "229",
+					"ID": "32680531",
+					"Имя": "Екатерина Вилежанинова",
+					"photo": "img/user-empty-1.png",
+					"public_user_id": "1f618480d63b423eb878c51fcadd4bf4"
+				}
+			],
+			winners: [
+				{
+					"#": "1",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "33",
+					"ID": "14592631",
+					"name": "Mayrose *",
+					"photo": "https://i6.photo.2gis.com/images/profile/844424962297606_0b62.jpg",
+					"public_user_id": "72026e7afcfe4573b1cbe8354f109464"
+				},
+				{
+					"#": "2",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "34",
+					"ID": "65358284",
+					"name": "Maxim Dak",
+					"photo": "https://i0.photo.2gis.com/images/profile/30258560248168415_fbac.jpg",
+					"public_user_id": "ed795621c3524eae9c447af101d180c5"
+				},
+				{
+					"#": "3",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "36",
+					"ID": "12368563",
+					"name": "Mary Bondareva",
+					"photo": "https://i1.photo.2gis.com/images/profile/30258560054588243_4cbc.jpg",
+					"public_user_id": "85e034d2710443909a6b203154bac3a2"
+				},
+				{
+					"#": "4",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "54",
+					"ID": "30776007",
+					"name": "inusual fotos",
+					"photo": "https://i7.photo.2gis.com/images/profile/30258560091288265_f627.jpg",
+					"public_user_id": "b452c3e6c05c43dcb18bc23e8de32e67"
+				},
+				{
+					"#": "5",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "59",
+					"ID": "20462532",
+					"name": "I Allet",
+					"photo": "https://i7.photo.2gis.com/images/profile/844424974650527_e11c.jpg",
+					"public_user_id": "38171f0edc3c46889d6b6a313e82a250"
+				},
+				{
+					"#": "6",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "62",
+					"ID": "69060491",
+					"name": "Foggy Sociophobe",
+					"photo": "https://i6.photo.2gis.com/images/profile/30258560234753280_81ff.jpg",
+					"public_user_id": "d741098e50f5423ebb66fe9c3c39c2bd"
+				},
+				{
+					"#": "7",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "106",
+					"ID": "15911515",
+					"name": "Юлия Шкода",
+					"photo": "https://i1.photo.2gis.com/images/profile/30258560050941853_6256.jpg",
+					"public_user_id": "516656ae7e1e475192092a0e791cbd52"
+				},
+				{
+					"#": "8",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "69",
+					"ID": "31429607",
+					"name": "Dimitriy Prime",
+					"photo": "https://i8.photo.2gis.com/images/profile/30258560066832244_eff5.jpg",
+					"public_user_id": "ab5c49be31894321857c33b47cc9ab5e"
+				},
+				{
+					"#": "9",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "73",
+					"ID": "71083607",
+					"name": "BOBA KOPШYHOB",
+					"photo": "https://i9.photo.2gis.com/images/profile/30258560235744709_cf93.jpg",
+					"public_user_id": "38c1897fc529479f8535fad77799a65c"
+				},
+				{
+					"#": "10",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "93",
+					"ID": "6754504",
+					"name": "A n a s t a s i y a 🕊️",
+					"photo": "https://i1.photo.2gis.com/images/profile/30258560189874799_fd20.jpg",
+					"public_user_id": "5f7e4f6b83dd42058abf79c6bc9b5048"
+				},
+				{
+					"#": "11",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "118",
+					"ID": "56776576",
+					"name": "Эмиль Персон",
+					"photo": "https://i5.photo.2gis.com/images/profile/30258560235687566_fb20.jpg",
+					"public_user_id": "94868dbedfa244b7a03d20395c64784c"
+				},
+				{
+					"#": "12",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "123",
+					"ID": "46565202",
+					"name": "Царь Погъ |",
+					"photo": "https://i2.photo.2gis.com/images/profile/30258560195255082_aaee.jpg",
+					"public_user_id": "4f626e3cf99543eb96b7b66067bc4385"
+				},
+				{
+					"#": "13",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "197",
+					"ID": "18672954",
+					"name": "Ольга Колесова",
+					"photo": "https://i7.photo.2gis.com/images/profile/844424968422381_f720.jpg",
+					"public_user_id": "100b086296464778966e7b6d01a95c11"
+				},
+				{
+					"#": "14",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "128",
+					"ID": "78502570",
+					"name": "Тускер Оценивает",
+					"photo": "",
+					"public_user_id": "e5676826916c42aa85010d841995b673"
+				},
+				{
+					"#": "15",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "140",
+					"ID": "37356369",
+					"name": "Татьяна !",
+					"photo": "",
+					"public_user_id": "c6b533f7304243e7bde0ec61e951f211"
+				},
+				{
+					"#": "16",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "146",
+					"ID": "61847906",
+					"name": "Стас Михайлов",
+					"photo": "https://i6.photo.2gis.com/images/profile/30258560242444041_199e.jpg",
+					"public_user_id": "c029423157844fb590abda03cd0a8694"
+				},
+				{
+					"#": "17",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "147",
+					"ID": "34291462",
+					"name": "Станислав Фоменко",
+					"photo": "https://i4.photo.2gis.com/images/profile/30258560172197651_3fab.jpg",
+					"public_user_id": "95cf8e740c884072a077416741bad234"
+				},
+				{
+					"#": "18",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "166",
+					"ID": "19947506",
+					"name": "Светлана Молостова",
+					"photo": "https://i4.photo.2gis.com/images/profile/844424973643324_a5d1.jpg",
+					"public_user_id": "541b04ece8dc4b159f2c26363dbac186"
+				},
+				{
+					"#": "19",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "205",
+					"ID": "14118866",
+					"name": "Николь Егорова",
+					"photo": "https://i5.photo.2gis.com/images/profile/30258560059032940_dc8e.jpg",
+					"public_user_id": "d66bdc4d9755404baa1e547eae810c34"
+				},
+				{
+					"#": "20",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "175",
+					"ID": "65433131",
+					"name": "Роман",
+					"photo": "https://i0.photo.2gis.com/images/profile/30258560212912808_dd3c.jpg",
+					"public_user_id": "a460c5ac088d4669bcc2e3deeb8d48b7"
+				},
+				{
+					"#": "21",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "196",
+					"ID": "25066573",
+					"name": "Ольга Трофимова",
+					"photo": "https://i1.photo.2gis.com/images/profile/30258560051710991_6176.jpg",
+					"public_user_id": "dc82924c7c0d4e40867080531432bfc1"
+				},
+				{
+					"#": "22",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "202",
+					"ID": "30369092",
+					"name": "Олеся Б.",
+					"photo": "",
+					"public_user_id": "a06ef98736854a13bb304e7174bb9baa"
+				},
+				{
+					"#": "23",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "211",
+					"ID": "40539345",
+					"name": "Наталья Огнева",
+					"photo": "",
+					"public_user_id": "8a1489651ea543dba3424c1e6e0152a4"
+				},
+				{
+					"#": "24",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "212",
+					"ID": "14417629",
+					"name": "Наталья Н.",
+					"photo": "https://i5.photo.2gis.com/images/profile/30258560099282631_caf8.jpg",
+					"public_user_id": "c83d3c64d8ff42138895ac9550bdf48e"
+				},
+				{
+					"#": "25",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "262",
+					"ID": "77534001",
+					"name": "Марина Владимировна",
+					"photo": "",
+					"public_user_id": "50f741531a854c9ca2c64cf5989388e2"
+				},
+				{
+					"#": "26",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "269",
+					"ID": "11133506",
+					"name": "Максим Гаврилов",
+					"photo": "https://i5.photo.2gis.com/images/profile/844424955970975_2572.jpg",
+					"public_user_id": "e931f19846c54048827be3f7e234d21b"
+				},
+				{
+					"#": "27",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "413",
+					"ID": "74164722",
+					"name": "Давид Берлин",
+					"photo": "https://i3.photo.2gis.com/images/profile/30258560245864761_5699.jpg",
+					"public_user_id": "4bbe139ed6604c3e83457b7bad351026"
+				},
+				{
+					"#": "28",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "288",
+					"ID": "11949744",
+					"name": "Ксения Изотова",
+					"photo": "https://i0.photo.2gis.com/images/profile/30258560219556191_fe52.jpg",
+					"public_user_id": "c3f627c5687e424795eb0fcbc31d8c95"
+				},
+				{
+					"#": "29",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "304",
+					"ID": "13915588",
+					"name": "Ия Давыдова",
+					"photo": "https://i6.photo.2gis.com/images/profile/30258560080002181_eeeb.jpg",
+					"public_user_id": "29c96142148c475281b9b4be115cfc3b"
+				},
+				{
+					"#": "30",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "321",
+					"ID": "28825148",
+					"name": "Илья Л",
+					"photo": "https://i4.photo.2gis.com/images/profile/30258560233574659_da53.jpg",
+					"public_user_id": "88e7ce0b85b94e2486be6ff6d7911073"
+				},
+				{
+					"#": "31",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "324",
+					"ID": "16123543",
+					"name": "Илья Богатов",
+					"photo": "https://i5.photo.2gis.com/images/profile/844424965758405_606f.jpg",
+					"public_user_id": "dd153a310d944be8bc94994831904002"
+				},
+				{
+					"#": "32",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "363",
+					"ID": "78355324",
+					"name": "Екатерина Рахимова",
+					"photo": "",
+					"public_user_id": "22ceda700ada437c919367df1a60f785"
+				},
+				{
+					"#": "33",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "366",
+					"ID": "21379903",
+					"name": "Екатерина Кулакова",
+					"photo": "https://i0.photo.2gis.com/images/profile/844424976999010_29e9.jpg",
+					"public_user_id": "bc1aa6e1920f492ab1f6d6e01efa9798"
+				},
+				{
+					"#": "34",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "464",
+					"ID": "6006327",
+					"name": "Валерия К.",
+					"photo": "https://i2.photo.2gis.com/images/profile/30258560068348868_90c4.jpg",
+					"public_user_id": "cd6071a1c3d64da29e680c052aa1493b"
+				},
+				{
+					"#": "35",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "377",
+					"ID": "28840489",
+					"name": "Евгения С.",
+					"photo": "",
+					"public_user_id": "b8220f565a874c708f3d25f53f45d991"
+				},
+				{
+					"#": "36",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "387",
+					"ID": "43652788",
+					"name": "Ева И",
+					"photo": "https://i2.photo.2gis.com/images/profile/30258560200400505_07dd.jpg",
+					"public_user_id": "5e17a5e4eb5c4a4e91319a333b0e1b19"
+				},
+				{
+					"#": "37",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "389",
+					"ID": "79756455",
+					"name": "Дмитрий Хавалджи",
+					"photo": "",
+					"public_user_id": "b967b3158a014fa381eb55ba7ed18890"
+				},
+				{
+					"#": "38",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "395",
+					"ID": "26407728",
+					"name": "Дмитрий Бобровский",
+					"photo": "https://i6.photo.2gis.com/images/profile/30258560239903869_84cc.jpg",
+					"public_user_id": "ce7af5deaaa54263b5aad56fbdccd22d"
+				},
+				{
+					"#": "39",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "409",
+					"ID": "75445789",
+					"name": "Даня Катков",
+					"photo": "https://i6.photo.2gis.com/images/profile/30258560239284457_4670.jpg",
+					"public_user_id": "a6bceaf04d7f489b914df443fb72f3c6"
+				},
+				{
+					"#": "40",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "417",
+					"ID": "79055187",
+					"name": "Городской житель",
+					"photo": "",
+					"public_user_id": "98a16f9d00564267879acb7c3502ed30"
+				},
+				{
+					"#": "41",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "439",
+					"ID": "76921570",
+					"name": "Владимир Железнов",
+					"photo": "https://i5.photo.2gis.com/images/profile/30258560246926507_f7ea.jpg",
+					"public_user_id": "ca14b6a149ac4aecaa8260692ebdc268"
+				},
+				{
+					"#": "42",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "444",
+					"ID": "57387865",
+					"name": "Влада Че",
+					"photo": "https://i5.photo.2gis.com/images/profile/30258560204425300_576d.jpg",
+					"public_user_id": "cd5a3379e3964163b40ca8fa839952cb"
+				},
+				{
+					"#": "43",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "464",
+					"ID": "6006327",
+					"name": "Валерия К.",
+					"photo": "https://i2.photo.2gis.com/images/profile/30258560068348868_90c4.jpg",
+					"public_user_id": "cd6071a1c3d64da29e680c052aa1493b"
+				},
+				{
+					"#": "44",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "481",
+					"ID": "71210549",
+					"name": "Артём Воронцов",
+					"photo": "https://i1.photo.2gis.com/images/profile/30258560228940561_1642.jpg",
+					"public_user_id": "841655f3e06c427280230c40b544ab6d"
+				},
+				{
+					"#": "45",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "493",
+					"ID": "45395539",
+					"name": "Анна Кельнер",
+					"photo": "https://i1.photo.2gis.com/images/profile/30258560189656696_96f7.jpg",
+					"public_user_id": "ad86a458820d41b48ce669d42a1587ee"
+				},
+				{
+					"#": "46",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "504",
+					"ID": "29402022",
+					"name": "Андрей Б",
+					"photo": "",
+					"public_user_id": "66ce740ab06647bdb9e54718393bd24b"
+				},
+				{
+					"#": "47",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "522",
+					"ID": "69480399",
+					"name": "Алиса... 🫶",
+					"photo": "https://i8.photo.2gis.com/images/profile/30258560241799818_dda1.jpg",
+					"public_user_id": "91025166b8e54848bf6df38cd578ece3"
+				},
+				{
+					"#": "48",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "506",
+					"ID": "64211245",
+					"name": "Ангелина Клюкина",
+					"photo": "https://i1.photo.2gis.com/images/profile/30258560226068929_c605.jpg",
+					"public_user_id": "7a2978d0838f410da9faa789da7bf19c"
+				},
+				{
+					"#": "49",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "551",
+					"ID": "11980623",
+					"name": "Александр Б",
+					"photo": "https://i9.photo.2gis.com/images/profile/30258560104076941_e627.jpg",
+					"public_user_id": "0245a680a16b4cda9d21adf43b711fdf"
+				},
+				{
+					"#": "50",
+					"prize": "Сертификат в Золотое яблоко",
+					"№": "552",
+					"ID": "17028979",
+					"name": "Александр Аникушкин",
+					"photo": "https://i7.photo.2gis.com/images/profile/844424967368217_e004.jpg",
+					"public_user_id": "8233bd4fb85149b8b436f25f6e179cab"
+				}
+			],
+			accessToken: null,
+			ranks: [],
+			champion: {},
+			initialized: false,
+			isParticipant: false,
+
+			contestBasePath: '/bonuses/contests/contest2.0_series5',
+
+			showDefaultScoreText() {
+				const date = '2025-07-29T07:00:00.000+03:00';
+
+				return (new Date()) < (new Date(date));
+			},
+
+			hashString(str) {
+				let hash = 0;
+				for (let i = 0; i < str.length; i++) {
+					const char = str.charCodeAt(i);
+					hash = (hash << 5) - hash + char;
+					hash |= 0; // Convert to 32bit integer
+				}
+				return hash;
+			},
+
+			getRandomPicture(userName) {
+				const pictures = [
+					'img/user-empty-1.png',
+					'img/user-empty-2.png',
+					'img/user-empty-3.png',
+				];
+
+				const hash = this.hashString(userName);
+				const index = Math.abs(hash) % pictures.length;
+				return pictures[index];
+			},
+
+
+			getHowToHeading() {
+				if (this.hasEnded()) {
+					return 'Как нужно было играть?';
+				}
+
+				return 'Как играть?';
+			},
+
+			getHowToJoinHeading() {
+				if (this.hasEnded()) {
+					return 'Кто принимает участие?';
+				}
+
+				return 'Как присоединиться?';
+			},
+
+			getIntroCopyText() {
+				if (this.hasEnded()) {
+					return 'Конкурс завершён. Итоги&nbsp;— 6&nbsp;августа. Будьте на&nbsp;связи!<br><br>';
+				}
+
+				return 'С&nbsp;9&nbsp;до&nbsp;29&nbsp;июля делитесь видео, фото и&nbsp;отзывами о&nbsp;местах столицы и&nbsp;выигрывайте подарки';
+			},
+
+			getPicture(winner) {
+				const picture = winner['photo'];
+
+				if (! picture) {
+					return this.getRandomPicture(winner['name']);
+				}
+
+				return picture.replace(/_448x448\.jpg$/, '_200x200.jpg');
+			},
+			getWinnerPrizeImage(winner) {
+				const prize = winner['prize'];
+
+				if (prize === 'PlayStation 5 Slim') {
+					return 'img/icons/prize-ps5.svg';
+				}
+
+				if (prize === 'iPhone 16 Pro') {
+					return 'img/icons/prize-iphone.svg';
+				}
+
+				if (prize === 'фен Dyson Pro') {
+					return 'img/icons/prize-dyson.svg';
+				}
+
+				if (prize === 'MacBook Air M4') {
+					return 'img/icons/prize-macbook.svg';
+				}
+
+				if (prize === 'электросамокат Xiaomi') {
+					return 'img/icons/prize-samokat.svg';
+				}
+
+				if (prize === 'Сертификат в Золотое яблоко') {
+					return 'img/icons/prize-ga.svg';
+				}
+
+				if (prize === 'Промокодов от Отелло') {
+					return 'img/icons/prize-otello.svg';
+				}
+
+				return '';
+			},
+			getRanksTabText() {
+				return this.showWinners() ?
+						'Победители' :
+						'Мой результат';
+			},
+			showWinners() {
+				return true;
+			},
+			showTimer() {
+				return !this.hasEnded() && (new Date() > new Date(this.startDate));
+			},
+			progressWidth(targetScore) {
+				const percent = (this.me.score / targetScore) * 100;
+				return `${Math.round(percent)}%`;
+			},
+			progressText(targetScore) {
+				return `${this.me.score} / ${targetScore} мест`;
+			},
+			showZeroScoreText() {
+				return !this.me.score && this.initialized;
+			},
+			showNonZeroScoreText() {
+				return (this.me.score > 0) && this.initialized;
+			},
+			auth() {
+				window.location = this.getCookie('version') === null ?
+						'dgis://2gis.ru/mapfriends/invite' :
+						'dgis://2gis.ru/mapfriends/contest'
+				;
+			},
+			showQr(){
+				return (this.accessToken === null) && (this.getCookie('version') === null);
+			},
+			hasEnded() {
+				const endDateString = document.querySelector('.timer').getAttribute('data-date');
+				return new Date() > new Date(endDateString);
+			},
+			isAuthorized() {
+				return this.initialized && this.accessToken;
+			},
+			isObjectEmpty(object) {
+				return Object.keys(object).length === 0
+			},
+			getCookie(name) {
+				const cookies = document.cookie.split(';');
+				for (let cookie of cookies) {
+					const [cookieName, cookieValue] = cookie.trim().split('=');
+					if (cookieName === name) {
+						return decodeURIComponent(cookieValue);
+					}
+				}
+				return null;
+			},
+			previewPicture(templateUrl) {
+				if (!templateUrl) {
+					return 'img/blank.png';
+				}
+				return templateUrl.replace('{width}x{height}', '200x200');
+			},
+			isParticipateButtonVisible() {
+				/* убираем кнопку «Участвовать», если showIOSBlocked() = true */
+				return !this.isParticipant && this.initialized &&
+						!this.hasEnded()   && !this.showIOSBlocked();
+			},
+			isParticipantCaptionVisible () {
+				return this.initialized && this.isParticipant;
+			},
+			isAuthorizedButtonVisible() {
+				/* убираем кнопку «Авторизоваться», если showIOSBlocked() = true */
+				return this.initialized && !this.isAuthorized() &&
+						!this.showWinners() && !this.showIOSBlocked();
+			},
+			isTabsBlockVisible() {
+
+				if (! this.showTabs) {
+					return false;
+				}
+
+				return this.initialized &&
+						!this.isParticipateButtonVisible() &&
+						!this.isAuthorizedButtonVisible() &&
+						!this.showIOSBlocked() &&
+						!(this.hasEnded() && !this.isParticipant && !this.showWinners())
+					;
+			},isIOS74() {
+				const platform = this.getCookie('platform');
+				const version  = this.getCookie('version');
+				return platform === 'iOS' && /^7\.4/.test(version || '');
+			},
+			showIOSBlocked() {
+				/* true, если проблемная iOS + пользователь не залогинен */
+				return this.isIOS74() && !this.accessToken;
+			},
+			hasPrize() {
+				return this.me.claims_standard_prize;
+			},
+			initStickyUser() {
+				$('.ranks__list').each(function(){
+					$(this).find('.ranks__list-item-user-trigger').each(function(){
+						$(this).remove();
+					});
+
+					var list = $(this),
+							user = list.find('.ranks__list-item._user'),
+							trigger = $('<div class="ranks__list-item-user-trigger"></div>').insertAfter(user);
+
+
+					if (!user.length) return;
+
+					(new IntersectionObserver(function(entries, self) {
+						entries.forEach(function(entry) {
+							if (entry.isIntersecting) {
+								list.removeClass('_user-sticky');
+							} else {
+								list.addClass('_user-sticky');
+							};
+						});
+					}, {
+						rootMargin: '0px 0px -20px 0px',
+						threshold: 0
+					})).observe(trigger[0]);
+				});
+			},
+			plural(number, word1, word4, word5) {
+				if (number % 100 === 11 || number % 100 === 12 || number % 100 === 13 || number % 100 === 14) return word5;
+				if (number % 10 === 1) return word1;
+				if (number % 10 === 2 || number % 10 === 3 || number % 10 === 4) return word4;
+				return word5;
+			},
+			printScore(score) {
+				return score + this.plural(score, ' место', ' места', ' мест');
+			},
+			printScoreAndCountry(score, country) {
+				const printScore = this.printScore(score);
+
+				if (country) {
+					return `${printScore} (${country})`;
+				}
+
+				return printScore;
+			},
+			isCurrentUser(winner) {
+				return winner['public_user_id'] === this.me.participant.public_user_id;
+			},
+			printName(winner) {
+				const name = winner['Имя'] ?? winner['name'];
+				return this.isCurrentUser(winner) ?
+						`<em>Я</em> · ${name}`: name;
+			},
+			async participate() {
+				this.isParticipant = true;
+
+				this.$nextTick(() => {
+					if (this.showTabs) {
+						$(this.$refs.rating).click();
+					}
+
+					if (document.querySelector('body').classList.contains('_popup-show')) {
+						W.trigger('popup:hide');
+					}
+				});
+
+				await this.makeApiCall(
+						this.contestBasePath + '/participation',
+						'PUT'
+				);
+
+				this.processJsonResponse(await this.fetchRatingOrDemoData());
+
+				this.$nextTick(() => {
+					this.initStickyUser();
+				});
+			},
+			async makeApiCall(endPoint, method = 'GET', queryParameters = {}) {
+				let requestUrl = `https://bonuses.api.2gis.ru${endPoint}`;
+				const queryString = (new URLSearchParams(queryParameters).toString());
+
+				if (queryString) {
+					requestUrl += `?${queryString}`;
+				}
+
+				return await fetch(requestUrl, {
+					method,
+					headers: {
+						'Content-Type': 'application/json',
+						'Authorization': `Bearer ${this.accessToken}`
+					}
+				});
+			},
+			async fetchParticipationData() {
+				const response = await this.makeApiCall(
+						this.contestBasePath + '/participation'
+				);
+				const json = await response.json();
+				this.isParticipant = json.is_participant ?? false;
+			},
+			async fetchRating() {
+				const response = await this.makeApiCall(
+						this.contestBasePath + '/rating',
+						'GET',
+						{top: 1}
+				);
+				return await response.json();
+			},
+			async init() {
+				const qs = new URLSearchParams(window.location.search);
+				const brokenAndroid = qs.get('frtne') === 'true'
+				&& !(this.getCookie('platform') || this.getCookie('version') || this.getCookie('auth_access_token'));
+
+				if (brokenAndroid) {
+					location.replace(
+							'dgis://2gis.ru/webview?url=https%3A%2F%2Ffriends-contest.2gis.ru%2Fseries5%2F&send_cookies=true'
+					);
+					return;
+				}
+
+				this.accessToken = this.getCookie('auth_access_token');
+
+				this.accessToken = new URL(window.location.href).searchParams.get('access_token') ??
+						this.accessToken;
+
+				if (this.accessToken || this.isDemo) {
+					if (!this.isDemo) {
+						await this.fetchParticipationData();
+					}
+					this.processJsonResponse(await this.fetchRatingOrDemoData());
+				}
+
+				this.regularPrizes = this.allPrizes.filter(prize => (!prize.superPrize & !prize.simplePrize));
+				this.simplePrizes = this.allPrizes.filter(prize => (!prize.superPrize & prize.simplePrize) );
+				this.superPrizes = this.allPrizes.filter(prize => prize.superPrize);
+
+
+				if (!this.showWinners()){
+					this.prizes = this.allPrizes.filter(prize => this.me.score < prize.score);
+					this.claimedPrizes = this.allPrizes.filter(prize => this.me.score >= prize.score);
+				}
+
+				this.initialized = true;
+
+				this.$nextTick(() => {
+					this.showAuthButton();
+					this.showWonPopup();
+					this.setActiveTab();
+					this.renderPrizesSlider();
+					this.initStickyUser();
+				});
+
+			},
+			setActiveTab() {
+				if (! this.showTabs) {
+					return;
+				}
+
+				if (!this.hasEnded() && (!this.isAuthorized() || !this.isParticipant)) {
+					return;
+				}
+
+				if (this.hasEnded() && !this.isParticipant && !this.showWinners()) {
+					return;
+				}
+
+				$(this.$refs.rating).click();
+			},
+			processJsonResponse(json) {
+
+				this.me = json.me ?? this.me;
+
+				if (!json.top || !json.top.length) {
+					return;
+				}
+				let top = json.top;
+				top = top.filter((item) => {
+					return ((item.position >= 1) && (item.position <= 3)) ||
+						((item.position >= 98) && (item.position <= 100)) ||
+						((item.position >= 298) && (item.position <= 300)) ||
+						item.position === this.me.position
+					;
+				});
+
+				if (!this.isObjectEmpty(this.me)) {
+					const isMeInTop = top.some((item) => {
+						return item.participant.public_user_id === this.me.participant.public_user_id;
+					});
+
+					if (!isMeInTop) top.push(this.me);
+				}
+
+				if (this.hasEnded()) {
+					this.ranks = top;
+					return;
+				}
+
+				this.champion = top[0];
+				this.ranks = top.slice(1);
+			},
+			getDemoData() {
+				return {
+					top: [
+						{
+							"position": 1,
+							"participant": {
+								"public_user_id": "1",
+								"name": "Marina Ivanova",
+								"avatar": "http://mresizer.photo.2gis.com/images/profile/xxx.jpg",
+								"avatar_preview_tpl": "img/temp/rank1.jpg"
+							},
+							"score": 301
+						},
+						{
+							"position": 2,
+							"participant": {
+								"public_user_id": "2",
+								"name": "Konstantin Konstantinopolsky",
+								"avatar": "http://mresizer.photo.2gis.com/images/profile/xxx.jpg",
+								"avatar_preview_tpl": "img/temp/rank2.jpg"
+							},
+							"score": 290
+						},
+						{
+							"position": 3,
+							"participant": {
+								"public_user_id": "3",
+								"name": "Kristina Umova",
+								"avatar": "http://mresizer.photo.2gis.com/images/profile/xxx.jpg",
+								"avatar_preview_tpl": "img/temp/rank3.jpg"
+							},
+							"score": 240
+						},
+						{
+							"position": 55,
+							"participant": {
+								"public_user_id": "4",
+								"name": "Karina Abramova",
+								"avatar": "http://mresizer.photo.2gis.com/images/profile/xxx.jpg",
+								"avatar_preview_tpl": "img/temp/rank4.jpg"
+							},
+							"score": 254
+						},
+						{
+							"position": 98,
+							"participant": {
+								"public_user_id": "5",
+								"name": "Milena Kirova",
+								"avatar": "http://mresizer.photo.2gis.com/images/profile/xxx.jpg",
+								"avatar_preview_tpl": "img/temp/rank3.jpg"
+							},
+							"score": 230
+						},
+						{
+							"position": 99,
+							"participant": {
+								"public_user_id": "6",
+								"name": "Mark Petrov",
+								"avatar": "http://mresizer.photo.2gis.com/images/profile/xxx.jpg",
+								"avatar_preview_tpl": "img/temp/rank2.jpg"
+							},
+							"score": 230
+						},
+						{
+							"position": 100,
+							"participant": {
+								"public_user_id": "7",
+								"name": "Alina Vinorova",
+								"avatar": "http://mresizer.photo.2gis.com/images/profile/xxx.jpg",
+								"avatar_preview_tpl": "img/temp/rank4.jpg"
+							},
+							"score": 220
+						}
+					],
+					me: {
+						"position": 55,
+						"participant": {
+							"public_user_id": "02bc4d0b618e4eb19be6171bc5457999",
+							"name": "Karina Abramova",
+							"avatar": "http://mresizer.photo.2gis.com/images/profile/xxx.jpg",
+							"avatar_preview_tpl": "img/temp/rank4.jpg"
+						},
+						"score": 1
+					},
+					participants_count: 101,
+				};
+			},
+			showAuthButton() {
+				return;
+
+				document.querySelector('body').classList.remove('_authed');
+
+				let authPopup = `<div class="popup__hidden"><div class="auth-message">
+            <h2 class="auth-message__heading">Авторизуйтесь, чтобы участвовать</h2>
+            <p class="auth-message__copy">Нажмите кнопку «Включить Друзей», завершите настройку и&nbsp;возвращайтесь сюда, чтобы присоединиться к&nbsp;игре.</p>
+        </div></div>`;
+				authPopup = $(authPopup).appendTo('body').find('.auth-message');
+				W.trigger('popup:show',{
+					el: authPopup,
+					class: '_auth'
+				});
+
+				$('.header .header__tabs-item[data-rel="ranks"]').each(function() {
+					$(this).off('click');
+					$(this).on('click', function (){
+						W.trigger('popup:show',{
+							el: authPopup,
+							class: '_auth'
+						});
+					});
+				});
+			},
+			showWonPopup() {
+				if (!this.hasEnded() || !this.hasPrize()) {
+					return;
+				}
+
+				$('.ranks__list-item._user').on('click',() => {
+					W.trigger('popup:show',{
+						el: $(this.$refs.won)
+					});
+				});
+
+				W.trigger('popup:show',{
+					el: $(this.$refs.won)
+				});
+			},
+			async fetchRatingOrDemoData() {
+				return this.isDemo ?
+						this.getDemoData() :
+						await this.fetchRating();
+			},
+			renderPrizesSlider() {
+				$('.prizes').each(function(){
+					let p = $(this);
+					let length = p.find('.swiper-slide').length;
+
+					if (length <= 1) {
+						return;
+					}
+
+					p.find('.prizes__slider').append('<div class="slider-pagination"></div>');
+					let swiper = new Swiper(p.find('.swiper')[0],{
+						spaceBetween: 12,
+						slidesPerView: 'auto',
+						pagination: {
+							el: p.find('.slider-pagination')[0],
+							bulletClass: 'slider-pagination__item',
+							bulletActiveClass: '_active',
+							lockClass: '_hidden'
+						}
+					});
+				});
+			}
+		}));
+	});
+</script>
+
+
+</body></html>

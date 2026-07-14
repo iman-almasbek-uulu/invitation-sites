@@ -100,18 +100,22 @@ for (const [url, asset] of captured) {
   replacements.set(url, `assets/${file}`);
 }
 
-const rewrite = (text) => {
+const rewrite = (text, { fromAssetDirectory = false } = {}) => {
   let result = text;
   for (const [remote, local] of replacements) {
-    result = result.split(remote).join(local);
-    result = result.split(remote.replaceAll('&', '&amp;')).join(local);
+    // HTML lives in the template root, but a mirrored CSS file already lives in
+    // /assets. Its nested font/image URLs must therefore be sibling filenames,
+    // not /assets/assets/<file>.
+    const replacement = fromAssetDirectory ? path.basename(local) : local;
+    result = result.split(remote).join(replacement);
+    result = result.split(remote.replaceAll('&', '&amp;')).join(replacement);
   }
   return result;
 };
 
 for (const [url, asset] of captured) {
   if (!asset.contentType.includes('text/css')) continue;
-  await writeFile(path.join(root, replacements.get(url)), rewrite(asset.body.toString('utf8')));
+  await writeFile(path.join(root, replacements.get(url)), rewrite(asset.body.toString('utf8'), { fromAssetDirectory: true }));
 }
 
 const isolation = `<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; connect-src 'self'; img-src 'self' data: blob:; media-src 'self' data: blob:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; frame-src 'self';">\n<script>\n(() => {\n  const blocked = /(^|\\.)tilda(?:cdn|api)?\\.(?:one|cc|ws)$/i;\n  const isBlocked = (value) => { try { return blocked.test(new URL(String(value), location.href).hostname); } catch { return false; } };\n  const originalBeacon = navigator.sendBeacon?.bind(navigator);\n  if (originalBeacon) navigator.sendBeacon = (url, body) => isBlocked(url) ? true : originalBeacon(url, body);\n  const originalFetch = window.fetch?.bind(window);\n  if (originalFetch) window.fetch = (input, init) => isBlocked(input instanceof Request ? input.url : input) ? Promise.resolve(new Response('', { status: 204 })) : originalFetch(input, init);\n  const originalOpen = XMLHttpRequest.prototype.open;\n  XMLHttpRequest.prototype.open = function(method, url, ...args) {\n    return originalOpen.call(this, method, isBlocked(url) ? '/blocked-external-request' : url, ...args);\n  };\n})();\n</script>`;

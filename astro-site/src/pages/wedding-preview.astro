@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+---
+
+<BaseLayout title="Свадебное приглашение — визуальный прототип" description="Визуальный прототип свадебного сайта-приглашения.">
+  <main class="wedding-prototype" data-invitation>
+    <section class="hero" aria-labelledby="wedding-title">
+      <div class="grain" aria-hidden="true"></div>
+      <div class="botanical botanical--left" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="botanical botanical--right" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+
+      <a class="catalog-link" href={base}>← Каталог</a>
+      <div class="hero-copy">
+        <p class="kicker">Свадебное приглашение</p>
+        <div class="monogram" aria-hidden="true">W</div>
+        <h1 id="wedding-title">Имя <em>&</em> Имя</h1>
+        <span class="ornament" aria-hidden="true">✦</span>
+        <p class="hero-date">00 · 00 · 2026</p>
+        <p class="hero-note">Этот день — начало нашей новой истории.</p>
+      </div>
+
+      <button class="seal" type="button" data-open aria-expanded="false" aria-controls="invitation-letter">
+        <span>Открыть<br />приглашение</span>
+      </button>
+      <p class="tap-hint">Нажмите на печать</p>
+    </section>
+
+    <section class="letter" id="invitation-letter" aria-label="Содержимое приглашения">
+      <div class="letter-mark" aria-hidden="true">✦</div>
+      <p class="kicker">Дорогие гости</p>
+      <h2>Мы будем счастливы разделить этот день с вами</h2>
+      <p class="intro">Пока здесь нет реальных имён, даты или адреса — это чистый визуальный макет, в который позже подставляются данные пары.</p>
+
+      <div class="event-grid">
+        <article>
+          <span>Когда</span>
+          <strong>Дата<br />свадьбы</strong>
+        </article>
+        <article>
+          <span>Где</span>
+          <strong>Город<br />и площадка</strong>
+        </article>
+        <article>
+          <span>Время</span>
+          <strong>Встреча<br />гостей</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="chapter chapter--olive">
+      <p class="kicker">Атмосфера вечера</p>
+      <h2>Тёплая классика<br />с живыми деталями</h2>
+      <div class="palette" aria-label="Палитра дизайна">
+        <span style="--swatch:#2f3b31"></span><span style="--swatch:#a99262"></span><span style="--swatch:#f5efe5"></span><span style="--swatch:#c9b5a0"></span>
+      </div>
+      <p>Глубокий оливковый, тёплое золото и бумажный кремовый. В финальной версии здесь можно добавить фото, музыку, таймлайн и карту.</p>
+    </section>
+
+    <section class="chapter chapter--paper">
+      <p class="kicker">Программа</p>
+      <ol class="timeline">
+        <li><span>01</span><div><strong>Сбор гостей</strong><p>Время и приветственный напиток</p></div></li>
+        <li><span>02</span><div><strong>Церемония</strong><p>Главный момент дня</p></div></li>
+        <li><span>03</span><div><strong>Праздничный ужин</strong><p>Тосты, музыка и танцы</p></div></li>
+      </ol>
+    </section>
+
+    <footer class="closing">
+      <span class="ornament" aria-hidden="true">✦</span>
+      <p>С любовью ждём вас</p>
+      <strong>Имя & Имя</strong>
+      <a href="#wedding-title">Наверх ↑</a>
+    </footer>
+  </main>
+
+  <script>
+    const root = document.querySelector('[data-invitation]');
+    const openButton = document.querySelector('[data-open]');
+    openButton?.addEventListener('click', () => {
+      root?.classList.add('is-open');
+      openButton.setAttribute('aria-expanded', 'true');
+      document.querySelector('#invitation-letter')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  </script>
+</BaseLayout>
+
+<style>
+  :global(body) { margin: 0; background: #1f2921; }
+  .wedding-prototype { --ink:#29342b; --olive:#2f3b31; --gold:#aa9360; --paper:#f5efe5; --muted:#776f63; color:var(--ink); background:var(--paper); max-width:520px; min-height:100vh; margin:0 auto; overflow:hidden; font-family:Inter, sans-serif; }
+  .hero { min-height:100svh; position:relative; display:grid; align-content:center; justify-items:center; text-align:center; isolation:isolate; background:linear-gradient(145deg,#f8f4ed 0%,#e8dfcf 100%); padding:44px 26px 66px; box-sizing:border-box; overflow:hidden; }
+  .grain { position:absolute; inset:0; opacity:.18; z-index:-1; background-image:radial-gradient(#6e705b .7px,transparent .7px); background-size:5px 5px; mix-blend-mode:multiply; }
+  .catalog-link { position:absolute; top:24px; left:23px; color:var(--ink); text-decoration:none; font-size:10px; letter-spacing:.08em; text-transform:uppercase; opacity:.75; }
+  .hero-copy { animation:appear .9s ease both; }
+  .kicker { margin:0 0 17px; color:var(--gold); font-size:10px; font-weight:700; letter-spacing:.19em; text-transform:uppercase; }
+  .monogram { display:grid; place-items:center; width:55px; height:55px; margin:0 auto 22px; border:1px solid rgba(170,147,96,.75); border-radius:50%; font-family:'Cormorant Garamond',serif; color:var(--gold); font-size:34px; font-style:italic; }
+  h1,h2 { font-family:'Cormorant Garamond',serif; font-weight:500; }
+  h1 { max-width:350px; margin:0; color:var(--olive); font-size:clamp(52px,15vw,74px); line-height:.84; letter-spacing:-.05em; }
+  h1 em { display:block; color:var(--gold); font-size:.68em; font-weight:400; line-height:.9; }
+  .ornament { display:block; margin:23px auto 19px; color:var(--gold); font-size:18px; }
+  .hero-date { margin:0; font-size:11px; letter-spacing:.22em; color:var(--olive); }
+  .hero-note { max-width:210px; margin:24px auto 0; color:var(--muted); font-family:'Cormorant Garamond',serif; font-size:19px; line-height:1.15; }
+  .seal { width:96px; height:96px; position:absolute; bottom:37px; display:grid; place-items:center; border:0; border-radius:50%; background:radial-gradient(circle at 33% 25%,#cbb682 0 2%,#a78d58 35%,#78623c 100%); box-shadow:0 7px 15px #65543244,inset 0 0 0 2px #dfcd9c66; color:#fff8e9; font-family:'Cormorant Garamond',serif; font-size:15px; line-height:.9; cursor:pointer; transition:transform .3s ease,opacity .3s ease; }
+  .seal:active { transform:scale(.92); }
+  .tap-hint { position:absolute; bottom:16px; margin:0; color:#8c826f; font-size:9px; letter-spacing:.12em; text-transform:uppercase; }
+  .botanical { position:absolute; width:150px; height:230px; z-index:-1; opacity:.6; }
+  .botanical i { position:absolute; display:block; width:56px; height:17px; border:1px solid #68705a; border-radius:100% 0 100% 0; transform-origin:0 50%; }
+  .botanical i:nth-child(1){top:33px;left:26px;transform:rotate(32deg)} .botanical i:nth-child(2){top:72px;left:53px;transform:rotate(-11deg)} .botanical i:nth-child(3){top:108px;left:29px;transform:rotate(42deg)} .botanical i:nth-child(4){top:149px;left:52px;transform:rotate(-22deg)} .botanical i:nth-child(5){top:180px;left:24px;transform:rotate(30deg)}
+  .botanical--left { left:-72px; bottom:65px; transform:rotate(-15deg); }.botanical--right { right:-77px; top:60px; transform:rotate(154deg); }
+  .letter { padding:86px 28px 75px; background:#fbf8f2; text-align:center; transform:translateY(20px); opacity:.6; transition:transform .8s cubic-bezier(.2,.8,.2,1),opacity .8s ease; }
+  .is-open .letter { transform:none; opacity:1; }.is-open .seal { opacity:0; pointer-events:none; }
+  .letter-mark { color:var(--gold); font-size:25px; margin-bottom:22px; }.letter h2 { max-width:370px; margin:0 auto 21px; font-size:37px; line-height:.93; letter-spacing:-.03em; }.intro { max-width:345px; margin:0 auto; color:var(--muted); font-size:13px; line-height:1.65; }
+  .event-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:48px; padding-top:23px; border-top:1px solid #dcd3c4; }.event-grid article { min-width:0; }.event-grid span { display:block; margin-bottom:8px; color:var(--gold); font-size:9px; letter-spacing:.12em; text-transform:uppercase; }.event-grid strong { font-family:'Cormorant Garamond',serif; font-size:18px; line-height:.9; font-weight:600; }
+  .chapter { padding:83px 29px; text-align:center; }.chapter h2 { margin:0 auto 25px; font-size:43px; line-height:.87; letter-spacing:-.04em; }.chapter--olive { color:#f9f1e5; background:var(--olive); }.chapter--olive .kicker { color:#d7c491; }.chapter--olive p:last-child { max-width:333px; margin:0 auto; color:#dcd7c9; font-size:13px; line-height:1.7; }.palette { display:flex; justify-content:center; gap:10px; margin:31px 0; }.palette span { width:29px; height:29px; border:1px solid #ffffff55; border-radius:50%; background:var(--swatch); }
+  .chapter--paper { background:#eee5d8; text-align:left; }.chapter--paper .kicker { text-align:center; }.timeline { list-style:none; margin:30px 0 0; padding:0; }.timeline li { display:flex; gap:19px; padding:20px 0; border-top:1px solid #cfc3b2; }.timeline span { color:var(--gold); font-family:'Cormorant Garamond',serif; font-size:24px; }.timeline strong { display:block; font-family:'Cormorant Garamond',serif; font-size:25px; line-height:1; }.timeline p { margin:5px 0 0; color:var(--muted); font-size:12px; }
+  .closing { padding:76px 25px; color:#f8f1e6; background:#202a22; text-align:center; }.closing .ornament { margin-top:0; }.closing p { margin:0 0 8px; font-family:'Cormorant Garamond',serif; font-size:23px; }.closing strong { display:block; color:#d6c18b; font-family:'Cormorant Garamond',serif; font-size:39px; font-weight:500; }.closing a { display:inline-block; margin-top:38px; color:#ddd3bd; font-size:10px; letter-spacing:.12em; text-decoration:none; text-transform:uppercase; }
+  @keyframes appear { from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none} }
+  @media (min-width:521px) { .wedding-prototype { box-shadow:0 0 60px #0005; } }
+  @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; animation-duration:.01ms!important; transition-duration:.01ms!important; } }
+</style>

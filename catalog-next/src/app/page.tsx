@@ -23,7 +23,7 @@ export default function Home() {
     <main className={styles.page}>
       <header className={styles.intro}>
         <div className={styles.mark} aria-hidden="true"><i /><i /><i /><i /></div>
-        <h1>Выберите приглашение</h1>
+        <h1>Выберите приглашения</h1>
         <p>Готовые дизайны для вашего события</p>
       </header>
 
@@ -44,7 +44,6 @@ export default function Home() {
       <section className={styles.grid} aria-label="Готовые шаблоны">
         {visibleTemplates.map((template) => {
           const demoUrl = `${invitationsBase}${template.demoPath}`;
-          const briefUrl = `${invitationsBase}/brief/?template=${template.slug}`;
           return (
             <article className={styles.card} key={template.slug}>
               <a aria-label={`Открыть демо: ${template.name}`} className={`${styles.preview} ${styles[template.art]}`} href={demoUrl}>
@@ -55,7 +54,10 @@ export default function Home() {
               <div className={styles.cardBody}>
                 <a className={styles.name} href={demoUrl}>{template.name}</a>
                 <p className={styles.category}>{template.label}</p>
-                <a className={styles.select} href={briefUrl}>Выбрать</a>
+                <div className={styles.actions}>
+                  <a className={styles.view} href={demoUrl}>Посмотреть</a>
+                  <button className={styles.order} title="Способ связи будет добавлен позже" type="button">Заказать</button>
+                </div>
               </div>
             </article>
           );

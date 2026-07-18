@@ -90,30 +90,29 @@
 .party::before { background: linear-gradient(135deg, #d16b7b, #f0ad80); }
 .soft::before { background: linear-gradient(135deg, #cdb3b2, #ead9d1); }
 
-.cardBody { display: flex; min-height: 120px; flex: 1; flex-direction: column; padding: 10px 12px 12px; }
+.cardBody { display: flex; flex-direction: column; padding: 12px 12px 14px; }
 .name {
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  font-family: "Manrope", Arial, sans-serif;
-  font-size: 17px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 20px;
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1.02;
   letter-spacing: -.025em;
 }
-.category { margin: 3px 0 9px; overflow: hidden; color: var(--muted); font-size: 12px; line-height: 1.25; text-overflow: ellipsis; white-space: nowrap; }
+.category { margin: 7px 0 14px; overflow: hidden; color: var(--muted); font-size: 12px; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
 .select {
   display: grid;
   width: 100%;
   min-height: 44px;
-  margin-top: auto;
   place-items: center;
   border-radius: 10px;
   background: var(--accent);
   color: #fff;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 400;
   transition: background-color 160ms ease-out, transform 120ms ease-out;
 }
 .select:active { transform: scale(.985); }

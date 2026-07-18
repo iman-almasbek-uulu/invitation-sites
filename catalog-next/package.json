@@ -1,0 +1,28 @@
+{
+  "name": "catalog-next",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "sync:templates": "node scripts/sync-astro-templates.mjs",
+    "predev": "pnpm sync:templates",
+    "dev": "next dev",
+    "prebuild": "pnpm sync:templates",
+    "build": "next build",
+    "start": "next start",
+    "prelint": "pnpm sync:templates",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "next": "16.2.10",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.10",
+    "typescript": "^5"
+  }
+}

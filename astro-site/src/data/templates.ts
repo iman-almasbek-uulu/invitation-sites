@@ -40,7 +40,7 @@ export const templates = [
     packageLevel: 'premium',
     priceRange: 'Premium',
     previewImage: '/assets/placeholders/sanzhar-kasiet-wedding.jpg',
-    demoPath: 'https://wedding-invitation.vercel.app/',
+    demoPath: 'https://wedding-invitation-blue-beta.vercel.app/',
     tags: ['wedding', 'personal', 'mobile', 'music', 'countdown'],
     features: ['Мобильный формат', 'Музыка', 'Countdown', 'Карта', 'Контакты'],
     recommendedUse: 'Персональное свадебное приглашение для гостей Санжара и Касиет.',

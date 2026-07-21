@@ -5,7 +5,7 @@ export const astroCatalogTemplates = [
     "slug": "sanzhar-kasiet-wedding",
     "name": "Санжар & Касиет",
     "label": "Свадьба",
-    "demoPath": "https://wedding-invitation.vercel.app/",
+    "demoPath": "https://wedding-invitation-blue-beta.vercel.app/",
     "style": "luxury"
   }
 ] as const;

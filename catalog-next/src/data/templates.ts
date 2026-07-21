@@ -8,7 +8,7 @@ export type CatalogTemplate = {
   art: "royal" | "minimal" | "nikah" | "party" | "soft";
 };
 
-type TemplateStyle = (typeof astroCatalogTemplates)[number]["style"];
+type TemplateStyle = "luxury" | "minimal" | "elegant" | "party" | "soft";
 
 const artByStyle: Record<TemplateStyle, CatalogTemplate["art"]> = {
   luxury: "royal",

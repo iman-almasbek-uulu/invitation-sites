@@ -114,6 +114,23 @@ export const templates = [
     recommendedUse: 'Baby shower, gender reveal и нежные семейные мероприятия.',
     isReady: true,
   },
+  {
+    slug: 'sanzhar-kasiet-wedding',
+    name: 'Санжар & Касиет',
+    title: 'Персональное свадебное приглашение Санжара и Касиет',
+    category: 'wedding',
+    label: 'Свадьба',
+    description: 'Готовое мобильное свадебное приглашение: музыка, таймер, карта и контакты.',
+    style: 'luxury',
+    packageLevel: 'premium',
+    priceRange: 'Premium',
+    previewImage: '/assets/placeholders/sanzhar-kasiet-wedding.jpg',
+    demoPath: 'https://iman-almasbek-uulu.github.io/wedding-invitation/',
+    tags: ['wedding', 'personal', 'mobile', 'music', 'countdown'],
+    features: ['Мобильный формат', 'Музыка', 'Countdown', 'Карта', 'Контакты'],
+    recommendedUse: 'Персональное свадебное приглашение для гостей Санжара и Касиет.',
+    isReady: true,
+  },
 ] satisfies InvitationTemplate[];
 
 export const readyTemplates = templates.filter((template) => template.isReady);

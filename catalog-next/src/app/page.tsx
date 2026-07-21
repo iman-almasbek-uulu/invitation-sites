@@ -43,7 +43,9 @@ export default function Home() {
 
       <section className={styles.grid} aria-label="Готовые шаблоны">
         {visibleTemplates.map((template) => {
-          const demoUrl = `${invitationsBase}${template.demoPath}`;
+          const demoUrl = /^https?:\/\//.test(template.demoPath)
+            ? template.demoPath
+            : `${invitationsBase}${template.demoPath}`;
           return (
             <article className={styles.card} key={template.slug}>
               <a aria-label={`Открыть демо: ${template.name}`} className={`${styles.preview} ${styles[template.art]}`} href={demoUrl}>

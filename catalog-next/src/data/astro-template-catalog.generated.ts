@@ -35,5 +35,12 @@ export const astroCatalogTemplates = [
     "label": "Baby Shower",
     "demoPath": "/templates/baby-shower-01/",
     "style": "soft"
+  },
+  {
+    "slug": "sanzhar-kasiet-wedding",
+    "name": "Санжар & Касиет",
+    "label": "Свадьба",
+    "demoPath": "https://iman-almasbek-uulu.github.io/wedding-invitation/",
+    "style": "luxury"
   }
 ] as const;
